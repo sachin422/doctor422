@@ -1,0 +1,75 @@
+<!-- Profile Popup -->
+
+<div class="searchProfilePopup pop-pos-top" id="profilePopup-<?php echo $this->object->getId();?>"> <!--pop-pos-bot-->
+    <div class="header-pop-arr"><!--<div class="header-pop">--> </div>
+    <div class="content-pop">
+        <h2><a title="<?php echo $this->object->getFname(); ?>" href="<?php echo $this->profilePath; ?>"><?php echo $this->object->getFname(); ?></a></h2>
+
+        <div class="pop-top-left">
+            <div class="doc-img-pop ">
+                <a href="<?php echo $this->profilePath; ?>"><img width="140" alt="<?php echo $this->object->getFname(); ?>" title="<?php echo $this->object->getFname(); ?>" src="<?php echo $this->profileImage; ?>"></a>
+            </div>
+            <div class="pop-left-inner">
+                <h4><?php echo $this->categoryStr;?></h4>
+               
+                <div class="pop-doc-add"><?php echo $this->object->getStreet(); ?> <br><?php echo $this->object->getCity(); ?>, <?php echo $this->object->getState(); ?> <?php echo $this->object->getZipcode(); ?></div>
+            </div>
+            <div class="clear"></div>
+
+            <div class="pop-bot-left">
+                <h4>About Our Office:</h4>
+                <p>
+                    <?php echo substr($this->object->getAbout(), 0, 150); ?><span id="dotdotdot-400">...</span><a href="<?php echo $this->profilePath; ?>" title="Show more" style="text-decoration: underline;">more...</a>                                           </p>
+            </div>
+        </div>
+        <div class="pop-top-right">
+            <?php $ratingArray = $this->Reviews->getRatingReviews($this->object->getId());?>
+            <h4>Ratings:</h4>
+            <p><b><span class="sobi2Rating">
+                        <span class="sobiRating">
+                            <img alt="<?php echo $ratingArray['votes'];?>" src="<?echo $this->cdnUri()?>/images/Star-Rating/<?php echo $ratingArray['image'];?>-star.png">
+                        </span>
+                        Reviews: <?php echo $ratingArray['reviews']?></span>
+                </b></p>
+
+
+
+            <?php if($this->object->getEducation()!=''){?>
+            <div class="pop-bot-right">
+                <h4>Education:</h4>
+                <ul>
+                    <?php
+                    $Doctor = new Application_Model_Doctor();
+                    $eduArray = $Doctor->stringToArray($this->object->getEducation());
+                    $educount = count($eduArray);
+                    $count=0;
+                     foreach($eduArray as $key=>$value){
+                        if(strlen($value)>1 && $count<3){
+                            $more="";
+                            if(strlen($value)>50)
+                                $more="...";
+                                echo "<li>".substr($value,0,50).$more."</li>";
+                               
+                                    
+                        }
+                        $count++;
+                    }
+                    
+                    if($count>3)
+                    {
+                    ?>
+                    <a href="<?php echo $this->profilePath; ?>" title="Show more" style="text-decoration: underline;">more...</a> 
+                    <?php
+                    }
+                    ?>
+                </ul>
+            </div>
+            <?php }?>
+        </div>
+        <div class="clear"></div>
+        <div> <a class="detailed-profile" href="<?php echo $this->profilePath; ?>">Detailed Profile</a> </div>
+    </div>
+    <div class="footer-pop"><!--<div class="footer-pop-arr">-->
+
+    </div>
+</div>

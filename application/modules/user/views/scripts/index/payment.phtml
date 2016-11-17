@@ -1,0 +1,87 @@
+
+
+<div id="rightsidemain">
+  <div id="rightcontentpart">
+    <div id="rightsidecontentpart">
+      <h2 class="page-heading"><?php echo $this->lang[488]; ?></h2>
+      
+      <div class="appointment-content">
+        <?php
+
+  echo $this->partial("index/topmenu.phtml",array('active'=>'payment'));?>
+      </div>
+    </div>
+    <div class="edit-profile-tbl"> 
+      <!--Tab based changes has been done--> 
+      <span class='red'><?php echo $this->msg; ?></span>
+      <form method="post" action="<?php echo $this->form->action?>" enctype="multipart/form-data" name="frm_personalinfo" id="frm_personalinfo">
+        <input type="hidden" name ="frmposted" value="1">
+        <table cellpadding="0" cellspacing="0" border="0">
+          <tr>
+            
+            <td width="130" id="firstname-label"><label for="doctor_insurance"><?php echo $this->lang[464]; ?>:</label></td>
+            <td class="element" ><?php echo $this->form->doctor_insurance2;?></td>
+            <td><input type="button" onClick="updateLeftPlanOptions('doctor_insurance');JSwap('doctor_insurance','doctor_insurance2');updatePlanOptions();" name="addtolist" value=" &laquo; ">
+                <input type="button" onClick="JSwap('doctor_insurance2','doctor_insurance');updatePlanOptions();" name="removefromlist" value=" &raquo; "></td>
+            <td class="element"><?php echo $this->lang[465]; ?>:<br>
+            <?php echo $this->form->doctor_insurance;?></td>
+              
+          </tr>
+          <tr>
+            <td class="element" colspan="5"><?php echo $this->form->submit;?></td>
+          </tr>
+        </table>
+      </form>
+    </div>
+  </div>
+</div>
+</div>
+<script type="text/javascript">
+    
+
+
+
+  // option plan
+        function updatePlanOptions(){
+            var ids = Array();
+            var i = 0;
+            $('#doctor_insurance option').each(function(){
+                ids[i] = this.value;
+                i++;
+            })
+            var encoded = $.json.encode(ids)
+            $.post('/user/index/get-plan-options/', {
+                ids:encoded
+            },
+            function(html){
+                jQuery('#doctor_plan2').html(html);
+            });
+
+        }
+        function updateLeftPlanOptions(id){
+            var ids = Array();
+            var i = 0;
+
+            jQuery('#'+id+' option').each(function(){
+                if(this.selected){
+                    ids[i] = this.value;
+                    i++;
+//                    jQuery('#doctor_plan option[label="'+this.value+'"]').remove();// remove from source select box
+                }
+            });
+            var encoded = $.json.encode(ids)
+             $.post('/user/index/get-plan-options-ids/', {
+                ids:encoded
+            },
+            function(html){
+                var decoded = $.json.decode(html);
+                retIds = decoded['ids'];
+//                alert(decoded['ids']);return false;
+                if(retIds){
+                    for(var i in retIds){
+                        jQuery('#doctor_plan option[value="'+retIds[i]+'"]').remove();// remove from source select box
+                    }
+                }
+            });
+        }
+</script> 

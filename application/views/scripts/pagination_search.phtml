@@ -1,0 +1,44 @@
+<div id="pagination" class="clearfix">
+	<div class="right">
+        <!-- First page link -->
+        <?php
+       $arrayLink=array();
+       if(is_array($this->linkArray))
+       		$arrayLink=$this->linkArray;
+        ?>
+        <?php if (isset($this->previous)): ?>
+			<a href="<?= $this->url(array_merge(array('page' => $this->first),$arrayLink)); ?>"><span><?php echo $this->lang[428]; ?></span></a>
+        <?php else: ?>
+            <a href="#"><span class="disabled"><?php echo $this->lang[428]; ?></span></a>
+        <?php endif; ?>
+
+        <!-- Previous page link -->
+
+        <?php if (isset($this->previous)): ?>
+			<a href="<?= $this->url(array_merge(array('page' => $this->previous),$arrayLink)); ?>"><span><?php echo $this->lang[0]; ?></span></a>
+        <?php else: ?>
+            <a href="#"><span class="disabled"><?php echo $this->lang[0]; ?></span></a>
+        <?php endif; ?>
+        <!-- Numbered page links -->
+        <?php foreach ($this->pagesInRange as $page): ?>
+            <?php if ($page != $this->current): ?>
+				<a href="<?= $this->url(array_merge(array('page' => $page),$arrayLink)); ?>"><span><?= $page; ?></span></a>
+            <?php else: ?>
+				<a href="#" class="selected_pag"><span class="current"><?= $page; ?></span></a>
+            <?php endif; ?>
+        <?php endforeach; ?>
+        <!-- Next page link -->
+        <?php if (isset($this->next)): ?>
+				<a href="<?= $this->url(array_merge(array('page' => $this->next),$arrayLink)); ?>"><span><?php echo $this->lang[1]; ?></span></a>
+        <?php else: ?>
+				<a href="#"><span class="disabled"><?php echo $this->lang[1]; ?><?php echo $this->lang[427]; ?></span></a>
+        <?php endif; ?>
+        <!-- Last page link -->
+        <?php if (isset($this->next)): ?>
+				<a href="<?= $this->url(array_merge(array('page' => $this->last),$arrayLink)); ?>"><span><?php echo $this->lang[427]; ?></span></a>
+        <?php else: ?>
+				<a href="#"><span class="disabled"><?php echo $this->lang[427]; ?></span></a>
+        <?php endif; ?>
+       <!-- &nbsp; Page <?= $this->current; ?> of <?= $this->last; ?> -->
+    </div>
+ </div>

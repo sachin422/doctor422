@@ -1,0 +1,85 @@
+<script language = "javascript">
+$(document).ready(function(){
+
+	$("#checkboxall").click(function()
+	  {
+	   var checked_status = this.checked;
+	   count = document.getElementById("count").value;
+	   for(var i = 1;i<count;i++){
+		   var chk_email = "chk_email"+ i;
+		  // alert("ssdn");
+		   if(document.getElementById("checkboxall").checked == true){
+		  	   document.getElementById(chk_email).checked = true;
+		   }else{
+			   document.getElementById(chk_email).checked = false;
+		   }
+	   }
+	  });
+
+	});
+</script>
+
+<div id="rightsidemain">
+    <div id="rightcontentpart">
+        <div id="rightsideheading">
+            <img src="/images/admin-images/bl-tl.gif" align="left" /><img src="/images/admin-images/bl-tr.gif" align="right" />
+            <span style="margin: 0pt 15px 0pt 0pt; float: right;">
+                <a href="/admin/doctor" class="add">Back</a>
+            </span>
+	Email Campaigns - Send Email to doctors</div>
+        <div id="rightsidecontentpart">
+            <span class='red'><?php echo $this->msg; ?></span>
+
+            <form method="post" action="/admin/email-campaign/index"><table>
+
+                    <tr><td id="category-label"><label for="category" class="required">Select Member Level:</label></td>
+                        <td class="element"><?php echo $this->form->member_level;?></td>
+                    </tr>
+
+                    <tr><td></td>
+                        <td class="element"><?php echo $this->form->submit;?></td>
+                    </tr>
+                </table>
+                <input type = "hidden" name = "action" value = "display">
+          
+<div>
+
+      
+<?php 
+//echo count($this->object);
+if(isset($this->object)){           
+    echo "<table>";
+    echo "<tr><td class='element'>".$this->form->send_email."</td></tr>";
+    echo "<tr>";
+    echo "<td>S.No.</td>";
+    echo "<td>Name</td>";
+    echo "<td>Email</td>";
+    echo "<td><input type='checkbox' id = 'checkboxall' name = 'select_all' value = 'select_all'>Select All</td>";
+    echo "</tr>"; 
+    $i= 1;          
+//echo "<pre>";print_r($this->object);
+foreach($this->object as $object){
+	$User = new Application_Model_User();
+    $row = $User->find($object->getUserId());
+    if(isset($row) && !empty($row)){
+	    echo "<tr>";
+	    echo "<td>{$i}</td>";
+	    echo "<td>{$object->getFname()}</td>";
+	    echo "<td>".$row->getEmail()."</td>";
+	    echo "<td><input type = 'checkbox' name = 'chk_email{$i}' id= 'chk_email{$i}' value = '{$object->getId()}'></td>";
+	    echo "</tr>";
+	    $i++;
+    }
+    
+}
+echo "</table>";
+}
+?>
+<input type = "hidden" name = "action" value = "send_email">
+<input type = "hidden" name = "count" id = "count" value = "<?php echo $i;?>">
+</form>
+</div>
+        </div>
+    </div>
+    <div class="btm-curve"><img src="/images/admin-images/btm-r-l.gif" align="left" /><img src="/images/admin-images/btm-r-r.gif" align="right" /></div>
+</div>

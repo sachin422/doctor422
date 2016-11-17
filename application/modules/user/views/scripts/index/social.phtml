@@ -1,0 +1,182 @@
+<!--ADMIN CONTENT -->
+<div id="admin-content-inner">
+	<div class="dashboard-top">
+		<div class="social-section">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-sm-8">
+						<h2 class="title-heading">Social Widgets</h2>
+					</div>
+				</div>
+			</div>
+			<div class="container-fluid">
+				<iframe src="<?php echo Zend_Registry::get('siteurl'); ?>/profile/widget-profile/drid/<?php echo $this->doctorId; ?>" style="width:100%; height: 350px; overflow-x: hidden; overflow-y: hidden" marginheight="0" marginwidth="0" frameborder="0"  scrolling="no" id="doctorsProfileFrame"></iframe>
+
+				<div class="row">
+					<div class="col-sm-12">
+						<div class="whitebox">
+							<div class="container-fluid">
+								<div class="copypaste-text">
+									<p>Copy/Paste This Code into Your Website</p>
+									<p class="blue-text">&lt;iframe src="<?php echo Zend_Registry::get('siteurl'); ?>/profile/widget-profile/drid/<?php echo $this->doctorId; ?>" style="width:100%; height:350px; overflow-x: hidden; overflow-y: hidden;"  marginheight="0" marginwidth="0" frameborder="0"  scrolling="no" &gt;&lt;/ifarme&gt;</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-sm-12">
+						<div class="whitebox">
+							<div class="container-fluid">
+								<div class="row">
+									<div class="col-sm-6">
+										<div class="col-sm-6">
+											<p>Reviews for <span><?php echo $this->doctor->getFullName(); ?></span></p>
+										</div>
+									</div>
+									<div class="col-sm-6 pull-right">
+										<div class="sortbox-text pull-right">
+											Sort by:
+											<select name="">
+												<option value="Newest">Newest</option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-sm-12">
+						<div style="margin-top: 20px;">
+							<iframe src="<?php echo Zend_Registry::get('siteurl'); ?>/profile/widget-reviews-frame/drid/<?php echo $this->doctorId; ?>/sort/newest" style="width:100%; height: 415px; overflow-x: hidden; overflow-y: scroll" marginheight="0" marginwidth="0" frameborder="0" ></iframe>
+						</div>
+						<div class="row">
+							<div class="col-sm-12">
+								<div class="whitebox">
+									<div class="container-fluid">
+										<div class="copypaste-text">
+											<p>Copy/Paste This Code into Your Website</p>
+											<p class="blue-text">&lt;iframe src="<?php echo Zend_Registry::get('siteurl'); ?>/profile/widget-reviews-frame/drid/<?php echo $this->doctorId; ?>/sort/newest" style="width:100%; height:415px; overflow-x: hidden; overflow-y: scroll"  marginheight="0" marginwidth="0" frameborder="0" &gt;&lt;/ifarme&gt;</p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+			<form method="get" onsubmit="return saveSocialMediaIdentifier();">
+				<div class="row">
+					<div class="col-sm-6">
+						<div class="fb-sec">
+							<div class="fb-row">
+								<div class="fb-row-left">
+									<img alt="" src="/images/social/fb.png">
+								</div>
+								<div class="fb-row-right">
+									<!--<input type="text" value="" name="">-->
+									<?php echo $this->form->facebookLikesPage; ?>
+									<div class="fb-arrow"><img alt="" src="/images/social/arrow.png"></div>
+								</div>
+								<div class="clr"></div>
+							</div>
+							
+							<div class="fb-row">
+								<div class="fb-row-left">
+									<img alt="" src="/images/social/twit.png">
+								</div>
+								<div class="fb-row-right">
+									<!--<input type="text" value="" name="">-->
+									<?php echo $this->form->twittername; ?>
+									<div class="fb-arrow"><img alt="" src="/images/social/arrow.png"></div>
+								</div>
+								<div class="clr"></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-sm-6">
+						<div class="fb-sec">
+							<div class="fb-row">
+								<div class="fb-row-left">
+									<img alt="" src="/images/social/gplus.png">
+								</div>
+								<div class="fb-row-right">
+									<!--<input type="text" value="" name="">-->
+									<?php echo $this->form->googlePlusPage; ?>
+									<div class="fb-arrow"><img alt="" src="/images/social/arrow.png"></div>
+								</div>
+								<div class="clr"></div>
+							</div>
+							
+							<div class="fb-row">
+								<div class="fb-row-left">
+									<img alt="" src="/images/social/yelp.png">
+								</div>
+								<div class="fb-row-right">
+									<!--<input type="text" value="" name="">-->
+									<?php echo $this->form->yelpFollowupPage; ?>
+									<div class="fb-arrow"><img alt="" src="/images/social/arrow.png"></div>
+								</div>
+								<div class="clr"></div>
+							</div>
+						</div>
+					</div>  					
+				</div><input name="saveInfoBtn" type="submit" id="saveInfo" value="Save" />
+				<span id="message"></span>
+			</form>
+			</div>
+		</div>
+	</div>
+
+	<div class="container-fluid div-space">
+		<div class="row">
+			<div class="col-sm-6"> </div>
+			<div class="col-sm-6"> </div>
+		</div>
+	</div>
+<script>
+  $(function () {
+    $('#myTab a:first').tab('show')
+  });
+</script>
+<script>
+  $(function () {
+    $('#myTab01 a:first').tab('show')
+  });
+</script>
+<script>
+  $(function () {
+    $('#myTab02 a:first').tab('show')
+  });
+</script>
+<script>
+	//fix profile iframe height
+	$(document).ready(function() {
+		var frameHeight = $("#doctorsProfileFrame").contents()[0].body.scrollHeight;
+		$("#doctorsProfileFrame").css("height", frameHeight);
+	});
+	
+	function saveSocialMediaIdentifier(){
+		jQuery("#message").html('');
+		var twittername_val = jQuery("#twittername").val();
+		var facebookLikesPage_val = jQuery("#facebookLikesPage").val();
+		var googlePlusPage_val = jQuery("#googlePlusPage").val();
+		var yelpFollowPage_val = jQuery("#yelpFollowupPage").val();
+		jQuery.post('/user/index/save-social/', {twittername: twittername_val, facebookLikesPage: facebookLikesPage_val, googlePlusPage: googlePlusPage_val, yelpFollowupPage: yelpFollowPage_val},
+			function(data){
+				var decoded = jQuery.json.decode(data);
+				if ((decoded !== undefined) && (decoded !== null)) {
+					jQuery("#message").html(decoded["message"]);
+				}else{
+					jQuery("#message").html("Error saving Twitter name");
+				}
+			}, false);
+		return false;
+	}
+</script>
+</div>
+<!--/ADMIN CONTENT -->

@@ -1,0 +1,187 @@
+
+<div class="inner_wrapperReg" id="patientRegWrapper">
+	<div id="headerReg" class="clearfix">
+		<h1 class="left"><span><?php echo $this->lang[550]; ?></span></h1>
+	</div>
+	<div class="clearfix regDataArea">
+		<?php if($this->email!=''): ?><span class="thanks-heading"><?php echo $this->lang[183]; ?></span><?php endif;?>
+		<div class="login-box clearfix">
+	    <?php if($this->email!=''){
+                $path="/index/login/e/".$this->email;
+                $url = $this->SeoUrl($path);
+                ?>
+                <p id="justRegisteredText" class="left">
+	<?php echo $this->docId; ?><?php echo $this->msg; ?> <a href = "javascript:void();" onclick="window.location='<?php echo $url?>'"><?php echo $this->lang[181]; ?></a></p>
+                <p><br /><!-- input type="button" class="continue" onclick="window.location='/index/login/e/<?php echo $this->email?>'"--></p>
+		<?php }else{?>
+			<div class="login-box-cp preg-height left">
+                <?php $errors = $this->form->getErrorMessages();?>
+                <form class="login_form jqtransform" id="login" name="login" method="post" action="<?php echo $this->form->action ?>">
+					<table id="regTable">
+						<tbody>
+							<tr>
+								<td>
+									<label for="first_name"><?php echo $this->lang[112]; ?></label><br/>
+									<input type="text" class="textField" tabindex="1" value="" id="first_name" name="first_name" />
+								</td>
+								<td>
+									<label for="last-name"><?php echo $this->lang[143]; ?></label><br/>
+									<input type="text" class="textField" tabindex="2" value="" id="last_name" name="last_name" />
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<label><?php echo $this->lang[113]; ?></label><br/>
+									<input type="text" class="textField" tabindex="7" value="" id="phone" name="phone" />
+								</td>
+								<td>
+									<label><?php echo $this->lang[104]; ?></label><br/>
+									<?php echo $this->form->email; ?>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<label><?php echo $this->lang[105]; ?> <span><?php echo $this->lang[184]; ?></span></label><br/>
+									<?php echo $this->form->password; ?>
+								</td>
+								<td>
+									<label><?php echo $this->lang[185]; ?></label><br/>
+									<input type="password" class="textField" tabindex="10" value="" id="confirmPassword" name="confirmPassword" />
+								</td>
+							</tr>
+							<tr>
+								<td colspan=2>
+									<div class="left">
+										<?php
+										require_once($_SERVER['DOCUMENT_ROOT'].'/recaptcha/recaptchalib.php');
+										$publickey = "6LfYG84SAAAAACkpy8673PiYAny4bZPOTnE1Dcgs"; // you got this from the signup page
+										echo recaptcha_get_html($publickey);
+										?>
+									</div>
+									<div class="right">
+										<?php echo $this->form->terms; ?><p class="left terms"> <?php echo $this->lang[108]; ?> <a href="<?php echo $this->seoUrl('/index/terms');?>" target="_blank"><?php echo $this->lang[109]; ?></a><?php echo $this->lang[186]; ?> <a href="<?php echo $this->seoUrl('/index/privacy-policy');?>"  target="_blank"><?php echo $this->lang[38]; ?></a></p>
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="2">
+									<ul class="errors">
+										<?php
+										$errors = $this->form->getErrorMessages();
+										if (!empty($errors))
+											foreach ($errors as $error)echo "<li>" . $error . "</li>";
+										?>
+									</ul>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="2" id="subWrap">
+									<input type="submit" onclick="return submitAppointmentForm()" tabindex="12" class="preg-btn" value="" id="reg_submit_btn" name="submit">
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</form>
+                
+            </div>
+            <?php }?>
+			
+		</div>
+	</div>
+	
+</div>
+<div id="error" style="display:none">
+	<span id="errorMessage"></span>
+</div>
+<a href="#error" id="errorLauncher"></a>
+
+<script language="javascript">//<![CDATA[
+    
+    $(document).ready(function()
+    {
+		$('form.jqtransform').jqTransform();
+        
+    });
+
+    function submitAppointmentForm()
+    {
+        
+        var first_name = $('#first_name').val();
+        var last_name = $('#last_name').val();
+        //var zip_code  = $('#zipcode'). val();
+      //  var birth_date = $('#birth_date'). val();
+        var phone = $('#phone'). val();
+        var email = $('#email'). val();
+        var password = $('#password'). val();
+        var confirmPassword = $('#confirmPassword'). val();
+        var terms  = $('#terms'). attr('checked');
+       /*  var month_dob = $('#month_dob'). val();
+        var date_dob = $('#date_dob'). val();
+        var year_dob = $('#year_dob'). val(); */
+    
+        var error_flag = 0;
+        var filter=/^.+@.+\..{2,3}$/
+       // var phone_filter =  /^[1-9]\d{2}\-\d{3}\-\d{4}$/;
+       	var phone_filter =  /^[0-9-()]+$/;
+        var error_msg = "<div id='errorbox'><h4><?php echo $this->lang[148]; ?></h4><ul id='errorList'>";
+        if(first_name=="" )	{ error_msg += "<li><?php echo $this->lang[149]; ?></li>";	error_flag = 1; }
+        //if(zip_code=="" || isNaN(zip_code))	{ error_msg += "\n - Valid Zipcode";	error_flag = 1; }
+        // if(birth_date=="" )	{ error_msg += "\n - Date of Birth";	error_flag = 1; }
+		/* if(month_dob=="" || date_dob=="" || year_dob=="")
+        { error_msg += "<li><?php echo $this->lang[114]; ?></li>";	error_flag = 1; }
+		*/
+        if(phone=="" || !phone.match(phone_filter))	{ error_msg += "<li><?php echo $this->lang[191]; ?></li>"; error_flag = 1; }
+        if(email=="" )	{ error_msg += "<li><?php echo $this->lang[162]; ?></li>";	error_flag = 1; }
+        else if(!filter.test(email))	{ error_msg += "<li><?php echo $this->lang[151]; ?></li>"; error_flag = 1; }
+  
+        if(password=="")	{ error_msg += "<li><?php echo $this->lang[155]; ?></li>";	error_flag = 1; }
+        if(password.length< 6 && password!="")	{ error_msg += "<li><?php echo $this->lang[192]; ?></li>";	error_flag = 1; }
+        if(password!=confirmPassword)	{ error_msg += "<li><?php echo $this->lang[193]; ?></li>";	error_flag = 1; }
+        if(!terms )	{ error_msg += "<li> <?php echo $this->lang[194]; ?></li>";	error_flag = 1; }
+		if(!validateCaptcha()) { error_msg += "<li> <?php echo $this->lang[552]; ?></li>";	error_flag = 1; }       
+		error_msg +="</ul></div>";
+        if(error_flag) { 
+			//alert(error_msg); 
+			$("#errorMessage").html(""); //clean any previous messages
+			$("#errorMessage").html(error_msg);
+			$("#errorLauncher").fancybox({
+				'width' : 250,
+				'height' : 300,
+				'autoScale' : true,
+				'transitionIn' : 'none',
+				'transitionOut' : 'none',
+				'autoDimensionst' : false,
+				'hideOnContentClick': true,
+				'content': error_msg
+			});
+			$("#errorLauncher").click();
+			
+			return false; 
+		} else {
+            return true;
+        }
+    
+    }
+
+    //]]>
+	//Validate the Recaptcha' Before continuing with POST ACTION
+	function validateCaptcha() {
+		challengeField = $("input#recaptcha_challenge_field").val();
+		responseField = $("input#recaptcha_response_field").val();
+		var answer = $.ajax({
+			type: "POST",
+			url: "/recaptcha/ajax_recaptcha.php",
+			data: "recaptcha_challenge_field=" + challengeField + "&recaptcha_response_field=" + responseField,
+			async: false
+		}).responseText;
+		//console.log( answer );
+		if(answer == "success") {
+			return true;
+		} else {
+			Recaptcha.reload();
+			console.log(answer);
+			return false;
+		}
+	}
+	
+	</script>

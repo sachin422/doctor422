@@ -1,0 +1,48 @@
+<?php
+$this->headLink()->appendStylesheet('/style/general_pages.css');
+?>
+<div class="container">
+	<div class="row">
+    	<div class="col-sm-12">
+        	<div class="white-bg patient-registration shadow-box clearfix">
+            	<div class="col-sm-6">
+                	<div class="box-choose text-center">
+                    	<p>Looking to make an appointment with one of doctors's Doctors or Dentists in your<br> area?</p>
+                    </div>
+                    <p class="text-center">
+                    	<a href="<?php echo $this->seoUrl('/index/patient-registration')?>"><img src="images/looking-doctor.png" alt="looking doctor"></a>
+                    </p>
+                </div>
+                <div class="col-sm-6">
+                	<div class="box-choose01 text-center">
+                    	<p>Looking to become a member of doctors network or practioners?<br>
+                    		Sign up to start taking appointments 
+                    	</p>
+                    </div>
+                    <p class="text-center">
+            <a href="/index/dcotor-registration-step-one"><img src="images/iamdoctor.png" alt="looking doctor"></a>        	<!--<a href="<?php echo $this->seoUrl('/index/doctor-registration')?>"><img src="images/iamdoctor.png" alt="looking doctor"></a>-->
+                    </p>
+                </div>
+            </div>
+            <div class="white-bg patient-registration shadow-box clearfix">
+            	<div class="container-fluid">
+                	<div class="row">
+                    	<div class="col-sm-6">
+                        	<div class="policy-box">Read our <a href="/terms-of-use-and-disclaimers">Privacy Policy</a> to learn more</div>
+                        </div>
+                        <div class="col-sm-6">
+                        	<div class="secure-box pull-right">You are now on a SECURE PAGE</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+	jQuery(document).ready(function(){
+		Cufon.replace('.regText h2', { fontFamily: 'Futura', hover: true });
+		//$('form#login').jqTransform();
+	});
+</script>
+

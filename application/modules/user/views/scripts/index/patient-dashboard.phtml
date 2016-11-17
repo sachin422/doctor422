@@ -1,0 +1,291 @@
+<?php 
+$settings = new Admin_Model_GlobalSettings();
+$locale = $settings->settingValue('locale');
+setlocale(LC_ALL, $locale);
+
+$hours = $settings->settingValue('hours');
+if($hours) {
+	$timeFormat = "%I:%M %P";
+} else {
+	$timeFormat = "%H:%M";
+}
+?>
+<link href="/style/tour/introjs.css" rel="stylesheet"></link>
+<div id="admin-content-inner">
+  
+  
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-sm-4"><h1 class="extraspace"><img src="/images/custom/dashboard-large.png" alt="Dashboard"> Dashboard</h1>
+			  
+		    </div>
+		    <div class="col-sm-8">
+		    	<div class="toplink">
+		        	<ul>
+		            	<li><a href="/"><img src="/images/custom/schedule-btn.png" alt="Refer"></a></li>
+		            	<!--<li><a href="#"><img src="/images/custom/refer-btn.png" alt="Refer"></a></li>-->
+		            </ul>
+		        </div>
+		    </div>
+		</div>
+	</div>
+  
+  
+  
+	<div class="container-fluid">
+		<div class="row">
+			<?php if($this->Patient->firstLogin==0){?><a  href="javascript:void(0);" onclick="startIntro();" id="foo"></a><?php } ?>
+			<div class="col-sm-6">
+
+				<div class="white-short-bg">
+            		<h2>Upcoming Appontments</h2>
+            		<div class="container-fluid">
+	        			<?php 
+	        			$Doctor = new Application_Model_Doctor();
+	        			foreach($this->newappObject as $appointment_request) { 
+	        				$doctor = $Doctor->find($appointment_request->getDoctorId());
+	        				?>
+							<div class="row">
+		                    	<div class="col-sm-5 nbf">
+		                        	<img src="<?php echo $doctor->getImage(); ?>" alt="" class="border-img patientDashboardImage">
+		                        </div>
+		                        <div class="col-sm-7 nbf">
+		                        	<div class="name-brief clearfix">
+		                            	<div class="nicon">
+		                                	<img src="/images/patient/name-icon.png" alt="">
+		                                </div>
+		                                <div class="ndesc">Doctor Name: <span><?php echo $doctor->getFullName(); ?></span>
+		                                </div>
+		                            </div>
+		                            <div class="name-brief clearfix">
+		                            	<div class="nicon">
+		                                	<img src="/images/patient/calender-icon.png" alt="">
+		                                </div>
+		                                <div class="ndesc">Date: <?php echo $newDate = date("F, j, Y", strtotime($appointment_request->getAppointmentDate())); ?>
+		                                </div>
+		                            </div>
+		                            <div class="name-brief clearfix">
+		                            	<div class="nicon">
+		                                	<img src="/images/patient/clock-icon.png" alt="">
+		                                </div>
+		                                <div class="ndesc">Time: <?php echo $time_in_12_hour_format  = date("g.i A", strtotime($appointment_request->getAppointmentTime())); ?>
+		                                </div>
+		                            </div>
+		                            <div class="name-brief clearfix">
+		                            	<div class="nicon">
+		                                	<img src="/images/patient/location-icon.png" alt="">
+		                                </div>
+		                                <div class="ndesc">Location : <span><?php echo $doctor->getStreet(); ?>, <?php echo $doctor->getZipcode(); ?>, <?php echo $doctor->getState(); ?></span>
+		                                </div>
+		                            </div>
+		                        </div>
+		                   	</div>
+	                    <?php } ?>
+	                </div>
+	            </div>
+
+
+				<div class="favourite-section">
+					<h3>Favorite Doctors :</h3>
+					
+					<?php
+					$Doctor=new Application_Model_Doctor();
+					if(count($this->favourites)>0) {
+						foreach($this->favourites as $row) {	
+							$docObject=$Doctor->find($row->doctorId); ?>
+					<div class="favourite-section01 clearfix">
+						<div class="favourite-section01-left">
+							<img src="<?php echo $docObject->getImage(); ?>" alt="<?php echo $docObject->getFullName(); ?>" title="<?php echo $docObject->getFullName(); ?>" class="patientDashboardImageSmall">
+						</div>
+						<div class="favourite-section01-right">
+							<h5><?php echo $docObject->getFullName(); ?></h5>
+							<h6><a href="<?php echo $docObject->getUrl(); ?>"><img src="/images/custom/img/schedule-btn.png" alt="Show profile"></a></h6>
+						</div>
+					</div>
+					<?php 
+						}
+					} ?>
+				</div><?php if($this->Patient->firstLogin==0){?><a  href="javascript:void(0);" onclick="startIntro();" id="foo"></a><?php } ?>
+			</div>
+
+
+			<div class="col-sm-6">
+        	<div class="white-short-bg">
+            	<h2>Recent Appointments</h2>
+                <div class="container-fluid">
+            	<?php 
+            	foreach($this->pastAppointments as $appointment_request) { 
+        			$doctor = $Doctor->find($appointment_request->getDoctorId()); ?>
+                	<div class="row">
+                    	<div class="col-sm-5 nbf">
+                        	<img src="<?php echo $doctor->getImage(); ?>" alt="" class="border-img patientDashboardImage">
+                        </div>
+                        <div class="col-sm-7 nbf">
+                        	<div class="name-brief clearfix">
+                            	<div class="nicon">
+                                	<img src="/images/patient/name-icon.png" alt="">
+                                </div>
+                                <div class="ndesc">Doctor Name: <span><?php echo $doctor->getFullName(); ?></span>
+                                </div>
+                            </div>
+                            <div class="name-brief clearfix">
+                            	<div class="nicon">
+                                	<img src="/images/patient/calender-icon.png" alt="">
+                                </div>
+                                <div class="ndesc">Date: <?php echo $newDate = date("F, j, Y", strtotime($appointment_request->getAppointmentDate())); ?>
+                                </div>
+                            </div>
+                            <div class="name-brief clearfix">
+                            	<div class="nicon">
+                                	<img src="/images/patient/clock-icon.png" alt="">
+                                </div>
+                                <div class="ndesc">Time: <?php echo $time_in_12_hour_format  = date("g.i A", strtotime($appointment_request->getAppointmentTime())); ?>
+                                </div>
+                            </div>
+                            <div class="name-brief clearfix">
+                            	<div class="nicon">
+                                	<img src="/images/patient/location-icon.png" alt="">
+                                </div>
+                                <div class="ndesc">Location: <span><?php echo $doctor->getStreet(); ?>, <?php echo $doctor->getZipcode(); ?>, <?php echo $doctor->getState(); ?></span>
+                                </div>
+                            </div>
+                        </div>
+                        <h5><a href="<?php echo "/index/review/appointmentid/".$appointment_request->getId()."/doctorid/".$appointment_request->getDoctorId(); ?>" target="_blank">Write Review</a></h5>
+                    </div>
+                   <?php } ?>
+                </div>
+            </div>
+            
+            <!--referral-section -->
+            <!--
+            <div class="referral-section">
+              <div class="referral-section-left"><img src="img/blue-new-icon.png" alt=""></div>
+              <div class="referral-section-right">
+               <h6><a href="#">Referral Points</a></h6>
+               
+                <div class="referral-section-right01">9</div>
+                
+              </div>
+              <div class="clr"></div>
+            </div>
+        -->
+            <!--/referral-section -->
+
+
+
+        </div>
+
+		</div>
+	</div>
+</div>
+
+<div class="container-fluid div-space">
+	<div class="row">
+		<div class="col-sm-6">
+		</div>
+		<div class="col-sm-6">
+		</div>
+	</div>
+</div>
+  
+<script>
+  $(function () {
+    $('#myTab a:first').tab('show')
+  })
+</script> 
+<script>
+  $(function () {
+    $('#myTab01 a:first').tab('show')
+  })
+</script>
+<script>
+  $(function () {
+    $('#myTab02 a:first').tab('show')
+  })
+</script>  
+</div>
+<script type="text/javascript" language="javascript">
+    function confirm_cancel() {
+        var answer=confirm("<?php echo $this->lang[518]; ?>");
+        if(answer) {
+			return true;
+		} else {
+			return false;
+		}
+    }
+	
+	
+</script>
+<script src="/js/tour/intro_patient.js"></script>
+	
+	<script type="text/javascript">
+      function startIntro(){
+        var intro = introJs();
+          intro.setOptions({
+            steps: [
+              {
+                element: '#step1',
+                intro: '<h2>Dashboard</h2>    <p>Snapshot of all your health activities</p><p><img alt="" src="/images/linee.png"></p>',
+				position:'bottom-middle-aligned'
+              },
+              {
+                element: '#step2',
+                intro: '<h2>My Appointments</h2>    <p>All your upcoming, past and cancelled appointments </p><p><img alt="" src="/images/linee.png"></p>',
+				position:'bottom-middle-aligned'
+               
+              } ,
+				/* {
+                element: '#step3',
+                intro: '<h2>Referrals</h2>    <p>Earn referral points by referring your friends and family to our favorite doctors!</p><p><img alt="" src="/images/linee.png"></p>',
+				position:'bottom-middle-aligned'
+                
+              }
+			  ,*/
+              {
+                element: '#step4',
+                intro: '<h2>Doctor Reviews</h2>    <p>Write reviews about your favorite doctors</p><p><img alt="" src="/images/linee.png"></p>',
+				position:'bottom-middle-aligned'
+               
+              }
+			  ,
+              
+              /*{
+                element: '#step6',
+                intro: '<h2>Secure Messages</h2>    <p>Send and receive secure messages with your doctors 24 hours a day! Need a test report? Message your doctor</p><p><img alt="" src="/images/linee.png"></p>',
+				position:'bottom-middle-aligned'
+              }
+			  ,*/
+			  /*{
+                element: '#step7',
+                intro: '<h2>Medical Expenses</h2>    <p>Track your recent and upcoming medical expenses</p><p><img alt="" src="/images/linee.png"></p>',
+				position:'bottom-middle-aligned'
+              },*/
+			    {
+                element: '#step8',
+                intro: '<h2>Favorite Doctors</h2>    <p>See all your favorite doctors in one place! </p><p><img alt="" src="/images/linee.png"></p>',
+				position:'bottom-middle-aligned'
+              },
+			  
+			    {
+                element: '#step9',
+                intro: '<h2>Medical History</h2>    <p>Fill in your medical history once and share it with any doctor without filling out new paperwork everytime! </p><p><img alt="" src="/images/linee.png"></p>',
+				position:'bottom-middle-aligned'
+              },
+			  {
+                element: '#step5',
+                intro: '<h2>My Profile</h2>    <p>Update your account information anytime</p><p><img alt="" src="/images/linee.png"></p>',
+				position:'bottom-middle-aligned'
+              },
+			    {
+                element: '#step10',
+                intro: '<h2>Customer Service</h2>    <p>Submit a ticket or contact us from the help page </p><p><img alt="" src="/images/linee.png"></p>',
+				position:'bottom-middle-aligned'
+              },
+            ]
+          });
+
+          intro.start();
+      }
+	   $( "#foo" ).trigger( "click" );
+    </script>
+

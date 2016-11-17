@@ -1,0 +1,237 @@
+<div class="container-fluid">
+		 <div class="row">
+		<div class="col-sm-12">
+	    	<div class="whitebox clearfix">
+				<div class="reviews01 clearfix">
+					<div class="clearfix">
+						<div class="reviews01-left">
+							<h4><span><?php echo round($this->averageReviews["recomendation"]*100/5, 2); ?>% </span> Recomendation Rate.</h4>
+						</div>
+						<div class="reviews01-right">
+							<a href="#"><img src="/images/user/book.png" alt=""></a>
+						</div>
+						<div class="clr"></div>
+					</div>	 
+					<div class="reviews05 clearfix">
+					 	<div class="reviews05-img">
+					    	<img src="<?php echo $this->doctor->getImage(); ?>" alt="<?php echo $this->doctor->getFullName(); ?>">
+					    </div>
+					    <div class="reviews05-text">
+					    	<h3><?php 
+									$doctorprefix = substr($this->doctor->getFullName(),0,2);
+									if(strtolower($doctorprefix)=='dr'){
+										echo $this->doctor->getFullName(); 
+									}else{
+										echo 'Dr. '.$this->doctor->getFullName(); 
+									}
+					    	?><br>
+				    		<span>
+				    			<?php
+	    						$DocCategory = new Application_Model_DoctorCategory();
+								$categoryArr = $DocCategory->getDoctorCategories("doctor_id='{$this->doctor->getId()}'");
+								asort($categoryArr);
+								$specialties = "";
+								if(!empty($categoryArr)){
+									foreach($categoryArr as $catname): 
+										$specialties .= $catname." ";
+									endforeach;
+									echo $specialties;
+								}
+								?>
+							</span>
+					        </h3>
+					        <p><?php 
+					        $Review = new Application_Model_DoctorReview();
+					        $featured = $Review->fetchRow("doctor_id=".$this->doctor->getId()." AND admin_approved=1 AND status=1");
+					        if($featured) {
+						        echo $featured->getReview(); 
+						    }?></p>
+					        
+					    </div>
+					    <div class="reviews05-start">
+							<h3><?php echo $this->total;?> Reviews</h3>
+							<ul>
+								<li><a href="#"><img src="/images/user/start01.png" alt=""></a></li>
+								<li><a href="#"><img src="/images/user/start01.png" alt=""></a></li>
+								<li><a href="#"><img src="/images/user/start01.png" alt=""></a></li>
+								<li><a href="#"><img src="/images/user/start01.png" alt=""></a></li>
+								<li><a href="#"><img src="/images/user/start01.png" alt=""></a></li>
+								<?php echo $this->starsCount5; ?> Reviews 
+				    		</ul>
+				    		<ul>
+								<li><a href="#"><img src="/images/user/start01.png" alt=""></a></li>
+								<li><a href="#"><img src="/images/user/start01.png" alt=""></a></li>
+								<li><a href="#"><img src="/images/user/start01.png" alt=""></a></li>
+								<li><a href="#"><img src="/images/user/start01.png" alt=""></a></li>
+								<li><a href="#"><img src="/images/user/start02.png" alt=""></a></li>
+								<?php echo $this->starsCount4; ?> Reviews
+							</ul>
+							<ul>
+								<li><a href="#"><img src="/images/user/start01.png" alt=""></a></li>
+								<li><a href="#"><img src="/images/user/start01.png" alt=""></a></li>
+								<li><a href="#"><img src="/images/user/start01.png" alt=""></a></li>
+								<li><a href="#"><img src="/images/user/start02.png" alt=""></a></li>
+								<li><a href="#"><img src="/images/user/start02.png" alt=""></a></li>
+								<?php echo $this->starsCount3; ?> Reviews 
+							</ul>
+							<ul>
+								<li><a href="#"><img src="/images/user/start01.png" alt=""></a></li>
+								<li><a href="#"><img src="/images/user/start01.png" alt=""></a></li>
+								<li><a href="#"><img src="/images/user/start02.png" alt=""></a></li>
+								<li><a href="#"><img src="/images/user/start02.png" alt=""></a></li>
+								<li><a href="#"><img src="/images/user/start02.png" alt=""></a></li>
+								<?php echo $this->starsCount2; ?> Reviews
+							</ul>
+							<ul>
+								<li><a href="#"><img src="/images/user/start01.png" alt=""></a></li>
+								<li><a href="#"><img src="/images/user/start02.png" alt=""></a></li>
+								<li><a href="#"><img src="/images/user/start02.png" alt=""></a></li>
+								<li><a href="#"><img src="/images/user/start02.png" alt=""></a></li>
+								<li><a href="#"><img src="/images/user/start02.png" alt=""></a></li>
+								<?php echo $this->starsCount1; ?> Reviews
+							</ul>
+						</div>
+						<div class="clr"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="container-fluid">
+     	 <div class="row">
+        	<div class="col-sm-12">
+		    	<div class="whitebox clearfix">
+		    		
+		    		<div class="clr"></div>
+
+		    		<div class="reviews06 clearfix">
+		    		 	<div class="reviews06-left">
+		    		    	<p>Sort Reviews By: <a href="/profile/widget-reviews-frame/drid/<?php echo $this->doctorId; ?>/sort/date"><span>Date</span></a> Or <a href="/profile/widget-reviews-frame/drid/<?php echo $this->doctorId; ?>/sort/rating"><span>Rating</span></a></p>
+		    		    </div>
+
+
+		    			<?php 
+		    			if($this->paginator) {
+		    				$currPage = $this->paginator->getCurrentPageNumber();
+		    			} else { 
+		    				$currPage = 1;
+		    			} ?>
+		    			<div class="reviews06-right">
+		    				<ul>Page:
+		    					<?php for ($i=1; $i <= $this->paginator->count(); $i++) { ?>
+		    					<li><a href="/profile/widget-reviews-frame/drid/<?php echo $this->doctorId; ?>/page/<?php echo $i; ?>&amp;sort=<?php echo $this->sort; ?>" class="<?php if($currPage == $i) echo 'currentPage'; ?>"><?php echo $i; ?></a></li>
+		    					<?php } ?>
+		    				</ul>
+		    			</div>
+		    			<div class="clr"></div>
+		    		</div>
+
+		    		<?php 
+		    		$Doctor = new Application_Model_Doctor();
+		    		$Appointment = new Application_Model_Appointment();
+		    		$User = new Application_Model_User();
+		    		$Review = new Application_Model_DoctorReview();
+
+		    		if($this->paginator) {
+		    			$sno=0;
+		    			foreach($this->paginator as $row) {
+		    				 $sno++;
+		    				$docObject = $Doctor->fetchRow("id='{$row['doctor_id']}'");
+		    				if($row['appointment_id']) {
+			    				$appointmentObject = $Appointment->fetchRow("id='{$row['appointment_id']}'");	
+			    			}
+		    				
+		    				$reviewObj = $Review->find($row['id']);
+		    				$patientUserid = $reviewObj->getUserId();	
+		    				if($patientUserid) {
+			    				$patientUser = $User->find($patientUserid);
+			    			} else {
+			    				$patientUser = "";
+			    			}
+		    				?>
+		    		<div class="reviews07 clearfix">
+		    			<div class="reviews07-img">
+		    				<img src="/images/user/man02.png" alt="">
+		    			</div>
+		    			<div class="reviews07-text">
+		    				<ul>
+		    					<?php if($row['recommendation']==1){ ?>
+		    					<li><a href="#"><img src="/images/user/staricon01.png" alt=""></a></li>
+		    					<li><a href="#"><img src="/images/user/staricon02.png" alt=""></a></li>
+		    					<li><a href="#"><img src="/images/user/staricon02.png" alt=""></a></li>
+		    					<li><a href="#"><img src="/images/user/staricon02.png" alt=""></a></li>
+		    					<li><a href="#"><img src="/images/user/staricon02.png" alt=""></a></li>
+		    				<?php } else if($row['recommendation']==2){ ?>
+		    					<li><a href="#"><img src="/images/user/staricon01.png" alt=""></a></li>
+		    					<li><a href="#"><img src="/images/user/staricon01.png" alt=""></a></li>
+		    					<li><a href="#"><img src="/images/user/staricon02.png" alt=""></a></li>
+		    					<li><a href="#"><img src="/images/user/staricon02.png" alt=""></a></li>
+		    					<li><a href="#"><img src="/images/user/staricon02.png" alt=""></a></li>
+		    				<?php } else if($row['recommendation']==3){  ?>
+		    					<li><a href="#"><img src="/images/user/staricon01.png" alt=""></a></li>
+		    					<li><a href="#"><img src="/images/user/staricon01.png" alt=""></a></li>
+		    					<li><a href="#"><img src="/images/user/staricon01.png" alt=""></a></li>
+		    					<li><a href="#"><img src="/images/user/staricon02.png" alt=""></a></li>
+		    					<li><a href="#"><img src="/images/user/staricon02.png" alt=""></a></li>
+		    					<?php } else if($row['recommendation']==4){  ?>
+		    					<li><a href="#"><img src="/images/user/staricon01.png" alt=""></a></li>
+		    					<li><a href="#"><img src="/images/user/staricon01.png" alt=""></a></li>
+		    					<li><a href="#"><img src="/images/user/staricon01.png" alt=""></a></li>
+		    					<li><a href="#"><img src="/images/user/staricon01.png" alt=""></a></li>
+		    					<li><a href="#"><img src="/images/user/staricon02.png" alt=""></a></li>
+		    					<?php } else if($row['recommendation']==5){  ?>
+		    					<li><a href="#"><img src="/images/user/staricon01.png" alt=""></a></li>
+		    					<li><a href="#"><img src="/images/user/staricon01.png" alt=""></a></li>
+		    					<li><a href="#"><img src="/images/user/staricon01.png" alt=""></a></li>
+		    					<li><a href="#"><img src="/images/user/staricon01.png" alt=""></a></li>
+		    					<li><a href="#"><img src="/images/user/staricon01.png" alt=""></a></li>
+		    					<?php } 
+		    					 echo $row['review'];
+		    					?>
+		    				</ul>
+		    				<p><span><?php if($patientUser) { echo $patientUser->getFirstName()." ".substr($patientUser->getLastName(), 0, 1)."."; } else { echo $reviewObj->getUsername(); } ?></span> </p>
+		    				
+		    				<?php if($reviewObj->getDocterReply()) { ?>
+		    				<p><b>Doctor's reply:</b> <?php echo $reviewObj->getDocterReply(); ?></p>
+		    				<?php } ?>
+		    			</div>
+		    			<div class="reviews07-date">
+		    				<p>
+		    					<img src="/images/user/date.png" alt=""> &nbsp; <?php echo date('F j, Y',$reviewObj->getAddedOn()); ?>
+		    				</p>
+		    			</div>
+		    		</div>
+
+		    	<?php } 
+		    	} else { ?>
+		    		<div class="reviews07">
+		    			<p>No reviews yet.</p>
+		    		</div>
+		    	<?php } ?>
+		    		 
+		    		<div class="reviews06 clearfix">
+		    		 	<div class="reviews06-left">
+		    		    	<p>Sort Reviews By: <a href="/profile/widget-reviews-frame/drid/<?php echo $this->doctorId; ?>/sort/date"><span>Date</span></a> Or <a href="/profile/widget-reviews-frame/drid/<?php echo $this->doctorId; ?>/sort/rating"><span>Rating</span></a></p>
+		    		    </div>
+
+
+		    			<?php 
+		    			if($this->paginator) {
+		    				$currPage = $this->paginator->getCurrentPageNumber();
+		    			} else { 
+		    				$currPage = 1;
+		    			} ?>
+		    			<div class="reviews06-right">
+		    				<ul>Page:
+		    					<?php for ($i=1; $i <= $this->paginator->count(); $i++) { ?>
+		    					<li><a href="/profile/widget-reviews-frame/drid/<?php echo $this->doctorId; ?>/page/<?php echo $i; ?>&amp;sort=<?php echo $this->sort; ?>" class="<?php if($currPage == $i) echo 'currentPage'; ?>"><?php echo $i; ?></a></li>
+		    					<?php } ?>
+		    				</ul>
+		    			</div>
+		    			<div class="clr"></div>
+		    		</div>
+		    	</div>
+		    </div>
+		</div>
+    </div>

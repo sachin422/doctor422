@@ -1,0 +1,164 @@
+<!-- add rating -->
+<div class="dataSegment">
+	<h3><?php echo $this->lang[557]; ?></h3>
+	<form class="rateForm" >
+		<div class="clearfix">
+			<label class="required" for="rvote" id="rvoteLabel"><?php echo $this->lang[558]; ?></label> &nbsp;
+			<select class="inputbox" id="rvote"  size="1" name="rvote">
+				<option value="1">1</option>
+				<option value="2">2</option>
+				<option value="3">3</option>
+				<option value="4">4</option>
+				<option value="5">5</option>
+				<option selected="selected" value=""><?php echo $this->lang[559]; ?></option>
+			</select>
+			<img id="revVotePrev" alt="0" src="/images/Star-Rating/00-0-star.png"/>
+		</div>
+		<div class="clearfix">
+			<label for="uname"><?php echo $this->lang[112]; ?></label>
+			<input type="text" name="uname" id="uname"/>
+		</div>
+		<div class="clearfix">
+			<label for="srAuthorMail"><?php echo $this->lang[104]; ?></label>
+			<input type="text" name="umail" id="umail"/>
+		</div>
+		<div class="clearfix">
+			<label for="revTitle"><?php echo $this->lang[560]; ?></label>
+			<input type="text" name="revTitle" id="revTitle"/>
+		</div>
+		<div class="clearfix">
+			<label for="sobireview"><?php echo $this->lang[561]; ?></label><br/>
+			<textarea cols="50" rows="10" class="inputbox" id="sobireview" name="sobireview"></textarea>
+		</div>
+		<div class="clearfix">
+			<input type="button" value="<?php echo $this->lang[562]; ?>" id="revSendButton" class="button" />
+		</div>
+	</form>
+	<div id="thanx" style="display:none;">
+	<?php echo $this->lang[566]; ?>
+	</div>
+	<!-- Reviews Listing Start -->
+	<h3><?php echo $this->lang[585]; ?></h3>
+	<div id="reviewsCont">
+		<?php
+		$config = new Zend_Config_Ini(APPLICATION_PATH.'/configs/'.APPLICATION_INI, APPLICATION_ENV);
+		?>
+		<ul>
+		<?php foreach ($this->reviewobjectdata as $reviewdata): ?>
+			<li itemscope itemtype="http://data-vocabulary.org/Review" class="clearfix">
+				<h4 class="revTitle" itemprop="summary">"<?php echo $reviewdata->getTitle(); ?>"</h4>
+				
+				<?php $stars = $reviewdata->getVote(); ?>
+				<img class="revVotePrev" alt="<?php echo $stars; ?> stars" src="/images/Star-Rating/0<?php echo $stars; ?>-0-star.png" class="clearfix"/>
+				<meta itemprop="ratingValue" content="<?php echo $stars; ?>" />
+				<h5 class="revAuthor" itemprop="reviewer">
+					<?php echo $this->lang[563]; ?> <?php echo $reviewdata->getUsername(); ?> 
+				</h5>
+				<h5><span class="revDate" itemprop="dtreviewed" datetime="<?php echo date("Y-m-d", $reviewdata->getAddedOn()); ?>"> <?php echo $this->lang[564]; ?> <?php echo date("F j, Y", $reviewdata->getAddedOn()); ?></span></h5>
+				<span style="display:none;" itemprop="itemreviewed"><?php echo $this->profiledata->getFname();?></span>
+				
+				<p class="revHeader" itemprop="description" ><?php echo stripslashes($reviewdata->getReview()); ?></p>
+			</li>
+		<?php endforeach; ?>
+		</ul>
+	</div>
+	<!-- Reviews Listing End -->
+</div>
+<div id="error" style="display:none">
+	<span id="errorMessage"></span>
+</div>
+<a href="#error" id="errorLauncher"></a>
+<script language="javascript">
+
+    //------------------------------------------- Patient Review Js --------------------------------------------
+
+    jQuery(document).ready(function(){
+    
+        jQuery('#rvote').change(function(){
+            $.post('/profile/rating-image/', {
+                vote:$(this).val()
+            },
+            function(html){
+                var decoded = $.json.decode(html);
+                jQuery('#revVotePrev').attr('src','<? echo $this->cdnUri() ?>/images/Star-Rating/'+decoded['image']+'-star.png');
+                jQuery('#revVotePrev').attr('alt',decoded['vote']);
+            });
+        });
+
+
+        jQuery('#revSendButton').click(function(){
+			var uname = jQuery.trim($("input#uname").val());
+            var umail = jQuery.trim($("input#umail").val());
+            var rvote = jQuery.trim($("select#rvote").val());
+            var revTitle = jQuery.trim($("input#revTitle").val());
+            var sobireview = jQuery.trim($("textarea#sobireview").val());
+
+			var errormsg ="<div id='errorbox'><h4><?php echo $this->lang[148]; ?></h4><ul id='errorList'>";
+			var haserror = false;
+			
+            if(rvote==''){
+                errormsg+='<li><?php echo $this->lang[567]; ?></li>';
+				haserror = true;                
+            }
+            if(uname==''){
+                errormsg+='<li><?php echo $this->lang[568]; ?></li>';
+				haserror = true;
+            }
+            if(umail==''){
+                errormsg+='<li><?php echo $this->lang[569]; ?></li>';
+				haserror = true;                
+            }
+            if(!isEmail(umail)){
+                errormsg+='<li><?php echo $this->lang[570]; ?></li>';
+				haserror = true;
+            }
+            if(revTitle==''){
+				errormsg+='<li><?php echo $this->lang[571]; ?></li>';
+				haserror = true;             
+            }
+            if(sobireview==''){
+                errormsg+='<li><?php echo $this->lang[572]; ?></li>';
+				haserror = true;
+            }
+			errormsg += "</ul></div>";
+			if(haserror) {
+				console.log("error");
+				$("#errorMessage").html(""); //clean any previous messages
+				$("#errorMessage").html(errormsg);
+				$("#errorLauncher").fancybox({
+					'width' : 200,
+					'height' : 300,
+					'autoScale' : true,
+					'transitionIn' : 'none',
+					'transitionOut' : 'none',
+					'autoDimensionst' : false,
+					'hideOnContentClick': true,
+					'content': errormsg
+				});
+				$("#errorLauncher").click();
+				return false;
+			} else {
+				console.log("noterror");
+				$.post('/profile/add-review/', {
+					drid:<?php echo $this->profiledata->getId() ?>,
+					rvote:rvote,
+					revTitle:revTitle,
+					sobireview:sobireview,
+					uname:uname,
+					umail:umail
+				},
+				function(html){
+					var decoded = $.json.decode(html);
+					jQuery('#review_msg').html(decoded['msg']).fadeIn();
+					jQuery('#reviewFormBox').fadeOut();
+					jQuery('#revVotePrev').attr('src','<? echo $this->cdnUri() ?>/images/Star-Rating/'+decoded['image']+'-star.png');
+					jQuery('#revVotePrev').attr('alt',decoded['votes']);
+					jQuery('.rateForm').fadeOut('fast', 'linear');
+					jQuery('#thanx').show();
+				});
+			}
+        });
+
+
+    });
+</script>

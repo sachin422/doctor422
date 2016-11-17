@@ -1,0 +1,47 @@
+<?php
+if(isset($_GET['newDoctor'])) {
+	$newDoc = true;
+} else {
+	$newDoc = false;
+}
+?>
+<div class="sign-reg-box">
+	<div class="admin-logo"><a href="/"><img src="/images/doctors-admin-logo.png" alt="doctors"></a></div>
+	<h1 class="formname text-center" id="forgotTitle"><?php if($newDoc) { ?><?php echo $this->lang[155]; ?><?php } else { ?><?php echo $this->lang[156]; ?> <?php } ?></h1>
+	<?php
+	if($this->email == '') { ?>
+		<?php 
+		if($newDoc) {
+		?> 
+		<p class="formname"><?php echo $this->lang[157]; ?></p>
+		<?php
+		} else {
+		?>
+		<p class="formname"><?php echo $this->lang[158]; ?></p>
+		<?php } ?>
+		<form class="login_form clearfix" id="forgot" name="forgot" method="post" action="<?php echo $this->form->getAction(); ?>" >
+			<div class="clearfix">
+				<?php echo $this->form->email; ?>
+				<input type="submit" class="email-my-password" tabindex="20" value="OK" id="forgotSubmit" name="submit" />
+			</div>
+		</form>
+		<?php $errors = $this->form->getErrorMessages();
+			if(!empty($errors)) {
+				echo "<ul class='error'>";
+				foreach($errors as $error) {
+					echo $error;
+				}
+				echo "</ul>";
+			}
+		?>
+	<?php } else { 
+		if($newDoc) { ?> 
+		<p id="forgtoSuccessMsg" class="formname"><?php echo $this->lang[159]; ?></p>
+	<?php } else { ?> 
+		<p id="forgtoSuccessMsg" class="formname"><?php echo $this->lang[160]; ?></p>
+	<?php }	?> 
+		<p class="formname">You can now <a href="/login">login</a> with your new password.</p>
+	<?php } ?>
+</div>
+<p class="center-boldtext">Don't have an account?  <a href="/register">Sign up now for free</a></p>
+<p class="copyright-text">Copyright © A1 Healthcare Technologies LLC 2015. All rights reserved.</p>

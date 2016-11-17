@@ -1,0 +1,301 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta name="viewport" content="320, initial-scale=1.0"/>
+	<meta name="viewport" content="width=320,user-scalable=false, minimum-scale=1.0, maximum-scale=1.0" />
+	<title>doctors</title>
+	<?php
+	echo $this->headTitle();
+	echo $this->headMeta();
+	$this->headLink()->appendStylesheet('/style/new_review/css/style.css');
+	$this->headLink()->appendStylesheet('/style/new_review/css/responsive.css');
+	//$this->headLink()->appendStylesheet('/style/app-scr.css');
+	?>
+	<!--[if IE]><script src="js/html5.js"></script><![endif]-->
+	<?php
+	echo $this->headLink();
+	$this->headScript()->appendFile('/js/jquery_new.js');
+	$this->headScript()->appendFile('/js/jquery.raty.js');
+	echo $this->headScript();
+	?>
+</head>
+
+<body>
+<div class="wraper">
+	<div class="main-sec">
+    	<div class="top-sec">
+        	Please Leave a Review for Your Doctor (<?php echo $this->doctor->fname;?>)
+        </div>
+        
+        <div class="main-row">
+        	
+            <div class="left-sec">
+            	<form class="rateForm" >
+	                <h5>Leave a review</h5>
+	                <h6>Your rating</h6>
+	                <div class="star-row">
+	                	<div class="star-row-left">
+	                    	<p><span>Bedside Manner</span></p>
+	                        <ul>
+		                    	<li><div id="bedside" ></div></li>
+		                    </ul>
+		                    <p>Choose One </p>
+	                    </div>
+	                    
+	                    <div class="star-row-left">
+	                    	<p><span>Wait Time</span></p>
+	                        <ul>
+		                   		<li><div id="waittime" ></div></li>
+		                    </ul>
+		                 	<p>Choose One </p>
+	                    </div>
+	                    
+	                    <div class="star-row-left">
+	                    	<p><span>Recommendation </span></p>
+	                        <ul>
+	                     		<li><div id="recommended" ></div></li>
+	                 		</ul>
+	                        <p>Choose One </p>
+	                    </div>
+	                    
+	                    <div class="clr"></div>
+	                </div>
+	                
+
+                    <div class="star-row02">
+                    	<p><span>Your Review</span></p>
+                        <!--<input type="text" name="revTitle" id="revTitle"><br>-->	
+    					<input type="hidden" name="uname" id="uname" value="<?php if($this->appointment->fname!=""){echo $this->appointment->fname;} if($this->patient->firstName!=""){echo $this->patient->firstName;}?>">
+    					<input type="hidden" name="uemail" id="uemail" value="<?php if($this->appointment->email!=""){echo $this->appointment->email;} if($this->patient->email!=""){echo $this->patient->email;}?>">
+    					<input type="hidden" name="appointment_id" id="appointment_id" value="<?php echo $this->appointment->id;?>">
+    					<input type="hidden" name="user_id" id="user_id" value="<?php echo $this->userid; ?>">
+    					<textarea name="sobireview" id="sobireview"></textarea>
+    					<p>Reviews are published on the Web, Please don’t share any private information, addersses, or phone numbers.</p>
+    				</div>
+
+
+    				<div class="star-row03">
+    				 	<p><span>Overall Feedback</span></p>
+    				     <p>How likely are you to recommend Referral Your Friends and Family to a friends or colleague?</p>
+    				     <ul>
+    				     	<li><div id="vote"></div></li>
+    				     </ul>
+    				</div>
+    				<p>By Submitting this review you agree to the <a href="#">doctors review policies.</a></p>
+    				<div class="star-row04">
+    					<a href="#" id="revSendButton">Publish My Review</a>
+    				</div>
+				</form>
+				<div id="thanx" style="display:none; padding: 60px 20px 20px;">
+					<img src="/images/thankyou.png" alt="<?php echo $this->lang[566]; ?>" id="reviewThankYou" style="max-width:100%;"/>
+					<p>Your Review has been submitted</p>
+				</div>
+				<div id="thanx-awesome" style="display:none; padding: 60px 20px 20px;">
+					<img src="/images/thankyou.png" alt="<?php echo $this->lang[566]; ?>" id="reviewThankYou" style="max-width:100%;"/>
+					<br />
+					<h3 style="font-size:14px;">Thank you for the awesome review! Please also post the review on the following pages by clicking on the links below!</h3>
+					<br />
+					<p><center>
+						<?php $extensions = array('http','https');?>
+						<?php if($this->doctor->getFacebookLikesPage()){
+							$explode_fb = explode('/',trim($this->doctor->getFacebookLikesPage()));
+							$fb_url = trim($explode_fb[0]);
+							if(in_array(substr($fb_url, 0, -1),$extensions)){
+								$fb_page = trim($this->doctor->getFacebookLikesPage());
+							}else{
+								$fb_page = 'http://'.trim($this->doctor->getFacebookLikesPage());
+							}
+						?>
+						<a href="<?php echo $fb_page;?>" target="_blank"><img src="/images/social/fb.png" alt="fb-review" /></a>
+						<?php }?>
+						
+						<?php if($this->doctor->getGooglePlusPage()){
+							$explode_gplus = explode('/',trim($this->doctor->getGooglePlusPage()));
+							$g_url = trim($explode_gplus[0]);
+							if(in_array(substr($g_url, 0, -1),$extensions)){
+								$gplus_page = trim($this->doctor->getGooglePlusPage());
+							}else{
+								$gplus_page = 'http://'.trim($this->doctor->getGooglePlusPage());
+							}
+						?>
+						<a href="<?php echo $gplus_page;?>" target="_blank"><img src="/images/social/gplus.png" alt="g-plus-review" style="margin-left:15px;" /></a>
+						<?php }?>
+						<?php if($this->doctor->getYelpFollowupPage()){
+							$explode_yelp = explode('/',trim($this->doctor->getYelpFollowupPage()));
+							$yelp_url = trim($explode_yelp[0]);
+							if(in_array(substr($yelp_url, 0, -1),$extensions)){
+								$yelp_page = trim($this->doctor->getYelpFollowupPage());
+							}else{
+								$yelp_page = 'http://'.trim($this->doctor->getYelpFollowupPage());
+							}
+						?>
+						<a href="<?php echo $yelp_page;?>" target="_blank"><img src="/images/social/yelp.png" alt="yelp-review" style="margin-left:15px;"/></a>
+						<?php }?>
+						</center>
+						</p>
+				</div>
+   
+            </div>
+	            
+            <div class="right-sec">
+                <div class="content-frame">
+                    <div class="reviewInfo">
+						<h2><?php echo $this->doctor->getFname(); ?></h2>
+						<h4>
+							<?php
+    						$DocCategory = new Application_Model_DoctorCategory();
+							$categoryArr = $DocCategory->getDoctorCategories("doctor_id='{$this->doctor->getId()}'");
+							asort($categoryArr);
+							$specialties = "";
+							if(!empty($categoryArr)){
+								foreach($categoryArr as $catname): 
+									$specialties .= $catname." ";
+								endforeach;
+								echo $specialties;
+							}
+							?>
+						</h4>
+					</div>
+                    <?php 
+					$DoctorReviews = new Application_Model_DoctorReview();
+					$existingReviews = $DoctorReviews->getRatingReviews($this->doctor->id);
+					?>
+					<div class="pastReviews">
+						<img alt="<?php echo $existingReviews["image"]; ?>" src="/images/Star-Rating/<?php echo $existingReviews['image'];?>-star.png">
+						<span style="color: #fff;">
+						<?php
+						echo $existingReviews["reviews"]." reviews";
+						?>
+						</span>
+					</div>
+					<p>
+						Address:<br/> <?php echo $this->doctor->getStreet()." ".$this->doctor->getCity()." ".$this->doctor->getZipcode()." ".$this->doctor->getState();?>
+					</p>
+					<p>
+						Phone:<br/> <?php echo $this->doctor->getActualPhone();?>
+					</p>
+					<p>
+						Email:<br/> <?php echo $this->user->email;?>
+					</p>
+					<p><?php echo $this->doctor->officeHours;?></p>
+                </div>
+                <div class="profile"><img src="<?php echo $this->doctor->getImage();?>" alt="<?php echo $this->doctor->fname;?>" /></div>
+            </div>
+            <div class="clr"></div>
+        </div>
+        <div class="bottom-sec">
+        	
+        </div>
+    </div>
+</div>
+
+
+	
+	<script>
+	jQuery.noConflict();
+	jQuery(document).ready(function(){
+
+		
+		jQuery('#revSendButton').click(function(){
+			var uname = jQuery.trim(jQuery("input#uname").val());
+			var umail = jQuery.trim(jQuery("input#umail").val());
+			var user_id = jQuery.trim(jQuery("input#user_id").val());
+			var appointment_id = jQuery.trim(jQuery("input#appointment_id").val());
+			var recommendation = jQuery.trim(jQuery("input[name$='recommended']").val());
+			var bedside = jQuery.trim(jQuery("input[name$='bedside']").val());
+			var waittime = jQuery.trim(jQuery("input[name$='waittime']").val());
+			var vote = jQuery.trim(jQuery("input[name$='vote']").val());
+			//var revTitle = jQuery.trim(jQuery("input#revTitle").val());
+			var sobireview = jQuery.trim(jQuery("textarea#sobireview").val());
+			var errormsg ="<div id='errorbox'><h4><?php echo $this->lang[148]; ?></h4><ul id='errorList'>";
+			var haserror = false;
+			if(vote==''){
+				errormsg+='<li><?php echo $this->lang[567]; ?></li>';
+				haserror = true;
+			}
+			if(bedside==''){
+				errormsg+='<li><?php echo "Please select the bedside rating"; ?></li>';
+				haserror = true;
+			}
+			if(waittime==''){
+				errormsg+='<li><?php echo "Please select the waittime rating"; ?></li>';
+				haserror = true;
+			}
+			if(recommendation==''){
+				errormsg+='<li><?php echo "Please select the recommendation rating"; ?></li>';
+				haserror = true;
+			}
+			/*if(revTitle==''){
+			errormsg+='<li><?php echo $this->lang[571]; ?></li>';
+			haserror = true;
+			}*/
+			if(sobireview==''){
+				errormsg+='<li><?php echo $this->lang[572]; ?></li>';
+				haserror = true;
+			}
+			errormsg += "</ul></div>";
+			if(haserror) {
+				console.log("error");
+				jQuery("#errorMessage").html(""); //clean any previous messages
+				jQuery("#errorMessage").html(errormsg);
+				/*$("#errorLauncher").fancybox({
+				'width' : 200,
+				'height' : 300,
+				'autoScale' : true,
+				'transitionIn' : 'none',
+				'transitionOut' : 'none',
+				'autoDimensionst' : false,
+				'hideOnContentClick': true,
+				'content': errormsg
+				});*/
+				jQuery("#errorLauncher").html(errormsg);
+				return false;
+			} else {
+				console.log("noterror");
+				jQuery.post('/profile/add-review/', {
+					drid:<?php echo $this->doctor->getId() ?>,
+					vote:vote,
+					//revTitle:revTitle,
+					sobireview:sobireview,
+					recommendation:recommendation,
+					bedside:bedside,
+					waittime:waittime,
+					uname:uname,
+					umail:umail,
+					user_id:user_id,
+					appointment_id:appointment_id
+				},
+				function(html){
+					/*alert(html);
+					/*var decoded = $.json.decode(html);
+					jQuery('#review_msg').html(decoded['msg']).fadeIn();
+					jQuery('#reviewFormBox').fadeOut();
+					jQuery('#revVotePrev').attr('src','<? echo $this->cdnUri() ?>/images/Star-Rating/'+decoded['image']+'-star.png');
+					jQuery('#revVotePrev').attr('alt',decoded['votes']);*/
+					jQuery('.rateForm').fadeOut('fast', 'linear');
+					//jQuery('#thanx').show();
+					if(vote >=4){
+						jQuery('#thanx-awesome').show();
+					}else{
+						jQuery('#thanx').show();
+					}
+				});
+			}
+		});
+	});
+	//var $=jQuery.noConflict();
+	jQuery.fn.raty.defaults.path = '/images/Star-Rating/';
+	jQuery(function() {
+		// alert("aa");
+		jQuery('#recommended').raty({ scoreName: 'recommended' });
+		jQuery('#bedside').raty({ scoreName: 'bedside' });
+		jQuery('#waittime').raty({ scoreName: 'waittime' });
+		jQuery('#vote').raty({ scoreName: 'vote' });
+	});
+</script>
+</body>
+</html>

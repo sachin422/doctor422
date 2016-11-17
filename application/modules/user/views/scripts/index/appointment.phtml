@@ -1,0 +1,84 @@
+<div id="admin-content-inner">
+	<div class="dashboard-top">
+		<div class="calender-secton">
+			
+			<div class="container-fluid">
+				<div class="row">
+					<h2><img src="/images/user/date-icon.png" alt="">My Calendar</h2>
+				</div>
+				<div class="row calendersteps">
+					<div class="col-sm-4">
+						<div class="calender-btn <?php if($this->tab=='day' || $this->tab=='')echo 'current';?>">
+							<a class="<?php if($this->tab=='day' || $this->tab=='')echo 'selected';?> opentab" rel="daily" href="#">Daily View</a>
+						</div>
+					</div>
+					<div class="col-sm-4">
+						<div class="calender-btn <?php if($this->tab=='week')echo 'current';?>">
+							<a class="<?php if($this->tab=='week')echo 'selected';?> opentab" rel="weekly" href="#" class="">Weekly View</a>
+						</div>
+					</div>
+					<div class="col-sm-4">
+						<div class="calender-btn <?php if($this->tab=='month')echo 'current';?>">
+							<a class="<?php if($this->tab=='month')echo 'selected';?> opentab" rel="monthly" href="#" class="">Monthly View</a>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="container-fluid">
+				<div class="tabcontent" id="daily" style="display: <?php if($this->tab=='day' || $this->tab=='')echo 'block';else echo 'none';?>;">
+					<?php echo $this->render('index/daily.phtml');?>
+				</div>
+				<div class="tabcontent" id="weekly" style="display: <?php if($this->tab == 'week')echo 'block';else echo 'none';?>">
+					<?php echo $this->render('index/weekly.phtml');?>
+				</div>
+				<div class="tabcontent" id="monthly" style="display: <?php if($this->tab=='month')echo 'block';else echo 'none';?>;">
+					<?php echo $this->render('index/monthly.phtml');?>
+				</div>
+			</div>
+		</div>
+
+		<div class="container-fluid div-space">
+			<div class="row">
+				<div class="col-sm-6">
+				</div>
+				<div class="col-sm-6">
+				</div>
+			</div>
+		</div>
+		<script>
+		  $(function () {
+		    $('#myTab a:first').tab('show')
+		  })
+		</script> 
+		<script>
+		  $(function () {
+		    $('#myTab01 a:first').tab('show')
+		  })
+		</script>
+		<script>
+		  $(function () {
+		    $('#myTab02 a:first').tab('show')
+		  })
+		</script>  
+	</div>
+</div>
+<script type="text/javascript">
+    jQuery(document).ready(function(){
+        jQuery('.opentab').click(function(){
+            if(jQuery(this).hasClass('selected'))return false;
+            
+            var id = jQuery(this).attr('rel');
+            jQuery('.opentab').removeClass('selected');
+            jQuery(this).addClass('selected');
+            
+            jQuery('.current').removeClass('current');
+            jQuery(this).closest(".calender-btn").addClass('current');
+
+
+            jQuery('.tabcontent').hide(10, function(){
+                jQuery('#'+id).show(10);
+            });
+        })
+    });
+</script>

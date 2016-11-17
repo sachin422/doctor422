@@ -1,0 +1,323 @@
+<script language="javascript">
+    $(document).ready(function()
+    { 
+        $("#checkall").click(function()
+        {
+            var checked = false;
+            if(this.checked)checked = true;
+            
+            $("input:checkbox.cid").each(function()
+            {
+                this.checked = checked;
+            });
+        });
+        
+        $(".actions").click(function()
+        {
+            var ids = Array();
+            var i = 0;
+            $("input:checkbox.cid").each(function()
+            {
+                if(this.checked==true){
+                    ids[i] = this.value;
+                    i++;
+                }
+            });
+            if(ids.length < 1){alert('Please make a selection from the list for '+$(this).attr('title')+'.');return false;}
+            $("#ids").val(ids);
+            if($(this).attr('rel')=='delete'){
+                if(!confirm("Are you sure you want to delete the record(s)?")){
+                    return false;
+                }
+            }
+            if($(this).attr('rel')=='cancel'){
+               
+                return false;
+            }
+            $("#multiaction").attr('action', '/admin/appointment/'+$(this).attr('rel')).submit();
+
+        });
+    });
+
+    function setFormAction()
+    {
+        var doctor_name = $('#doctor_name').val();
+        var gender = $("#gender").val();
+        var status = $("#status").val();
+        var approved = $("#approved").val();
+        var type = $("#type").val();
+        
+        var urlparam="";
+
+        if(doctor_name!="")
+            {
+                urlparam="/doctor_name/"+doctor_name;
+            }
+         if(gender!="")
+             {
+                 urlparam+="/gender/"+gender;
+             }
+        if(status!="")
+         {
+             urlparam+="/status/"+status;
+         }
+         if(approved!="")
+         {
+             urlparam+="/approved/"+approved;
+         }
+         if(type!="")
+         {
+             urlparam+="/type/"+type;
+         }
+         if(urlparam=="")
+             {
+             alert("Please enter any search criteria");
+         return false;
+             }
+         var action = "/admin/appointment/index"+urlparam;
+        $('#multiaction').attr('action',action);
+        $('#multiaction').submit();
+            return true;
+
+    }
+</script>
+
+<?php $page = $this->paginator->getCurrentPageNumber();?>
+
+<div id="rightsidemain">
+    <div id="rightcontentpart">
+        <div id="rightsideheading">
+            <img src="/images/admin-images/bl-tl.gif" align="left" /><img src="/images/admin-images/bl-tr.gif" align="right" />
+
+
+
+	Appointment - <span class='msg'>Total <?php echo $this->total ?> Record(s) found! </span>
+                  
+                   <span style="margin: 0pt 15px 0pt 0pt; float: right;"><a class="add" href="/admin/appointment/export/page/<?php echo $page?>">Export</a></span>
+        </div>
+<form id="multiaction" action="" method="post">
+        <div style="text-align:center;background-color: #fff;">
+            
+                <input type="hidden" name="ids" id="ids" />
+                <input type="hidden" name="page" value="<?php echo $page?>" />
+                <!--img border="0" class="actions" style="cursor: pointer" title="Publish" rel="publish" src="/images/admin-images/true.gif">&nbsp;&nbsp;
+                <img border="0" class="actions" style="cursor: pointer" title="Unpublish" rel="unpublish" src="/images/admin-images/false.gif">&nbsp;&nbsp;-->
+                <img border="0" class="actions" style="cursor: pointer" title="Delete" rel="delete" src="/images/admin-images/delete.gif">&nbsp;
+                <img border="0" class="actions" style="cursor: pointer" title="SetCalled" rel="set_as_called" width = "17" height = "24" src="/images/admin-images/called_status.png">&nbsp;
+           
+        </div>
+        <div id="rightsidecontentpart">
+            <div class="search_box">
+                Search for (e.g. Patient Name, Dr. Name, Specialty):<input name="doctor_name" id="doctor_name" type="text" value="<?php echo $this->search_text; ?>" onkeydown="if(event.keyCode==13)setFormAction()">
+                Gender: <select name="gender" id="gender">
+                    <option value="">All</option>
+                    <option value="m" <?php echo ($this->gender=="m")?" selected":"";?>>Male</option>
+                    <option value="f" <?php echo ($this->gender=="f")?" selected":"";?>>Female</option>
+                </select>
+                Status: <select name="status" id="status">
+                    <option value="">All</option>
+                    <option value="n" <?php echo ($this->status=="n")?" selected":"";?>>New</option>
+                    <option value="e" <?php echo ($this->status=="e")?" selected":"";?>>Existing</option>
+                </select>
+                Approved: <select name="approved" id="approved">
+                    <option value="">All</option>
+                    <option value="0" <?php echo ($this->approved=="0")?" selected":"";?>>Unapproved</option>
+                    <option value="1" <?php echo ($this->approved=="1")?" selected":"";?>>Approved</option>
+                </select>
+                Appointment Type:
+                <select name="type" id="type">
+                    <option value="">All</option>
+                    <option value="0" <?php echo ($this->type=="0")?" selected":"";?>>Generic</option>
+                    <option value="1" <?php echo ($this->type=="1")?" selected":"";?>>Specific</option>
+                </select>
+                <input type="button" name="button" value="Submit" onclick="return setFormAction()">
+                <?php
+if(!empty($this->search_text) || !empty($this->gender) || !empty($this->status) || !empty($this->approved) || !empty($this->type) )
+        echo "<a href='/admin/appointment/'>view all</a>";
+?>
+            </div>
+            <?php
+            if ($this->total > 0) {
+            ?>
+                <br><span class='red'>
+                <? echo $this->msg; ?>
+            </span>
+                
+            <br>
+            <?= $this->paginationControl($this->paginator, 'Sliding', 'pagination.phtml'); ?>
+                <br>
+
+                <table width='100%' border='0' class='dataTable' cellspacing='0' cellpadding='0'>
+                    <tr>
+                        <th>#</th>
+                        <th><input type="checkbox" name="checkall" id="checkall" value="" /></th>
+                        <th>Name</th>
+                        <th>Dr Name/Specialty</th>
+                        <th>Phone</th>
+                        <th>Email</th>
+                        <th>Age</th>
+                        <th>Gender</th>
+                        <th>Status</th>
+                        <th>Needs</th>
+                        <th>Date/Time</th>
+                        <th>Booking Date</th>
+                        <th>Status</th>
+                       <th style="width: 10%;">Action</th>
+                       
+                    </tr>
+
+                <?php
+                $sno = 0;
+                
+                $items_per_page = $this->paginator->getItemCountPerPage();
+                if ($page > 1) {
+                    $sno = $items_per_page * $page - $items_per_page;
+                }
+                $rowClass = 'trbg1';
+
+                $Doctor = new Application_Model_Doctor();
+                $Appointment = new Application_Model_Appointment();
+                foreach ($this->paginator as $row) {
+                    $sno++;
+
+                    $DocObject = $Doctor->find($row['doctor_id']);
+                    $gender = $Appointment->getFullGender("id={$row['id']}");
+                    $patient_status = $Appointment->getFullPatientStatus("id={$row['id']}");
+                    if ($rowClass == "trbg1")
+                        $rowClass = 'trbg';
+                    else
+                        $rowClass='trbg1';
+
+                ?>
+                    <tr class='<?= $rowClass ?>'>
+                        <td><?php echo $sno;
+                        if($row['mail_counter_for_doctor']>0)
+                            echo "<img src='/images/admin-images/mail_sent.png' alt='Appoint mail has been sent to doctor' title='Appoint mail has been sent to doctor'>";
+                        ?>
+                        </td>
+                        <td><input type="checkbox" name="cid[]" class="cid" id="cid<?php echo $row['id']?>"value="<?= $row['id'] ?>" /></td>
+                        <td><?php echo  stripslashes(wordwrap($row['fname'], 25, "\n", true)); ?></td>
+                        <td><?php
+                        if(!empty($DocObject))
+                        echo stripslashes($DocObject->getFname());
+                        ?></td>
+
+                        <td><?php echo $row['phone']; ?></td>
+                        <td><?php echo $row['email']; ?></td>
+                        <td><?php echo $row['age']; ?></td>
+                        <td><?php echo $gender; ?></td>
+                        <td><?php echo $patient_status; ?></td>
+                        <td></td>
+                        <td><?php echo date($this->dateFormat,strtotime($row['appointment_date']))." ".$row['appointment_time']?></td>
+                        <td><?php echo date($this->dateFormat,$row['booking_date'])?></td>
+                        <?php 
+						if($row['approve'] == -1) {
+							$status = "Unapproved";
+						}elseif($row['approve'] == 0) {
+							$status = "New";
+						}elseif($row['approve'] == 1) {
+							$status = "Approved";
+						}elseif($row['approve'] == 2) {
+							$status = "Cancelled";
+						}
+                                                elseif($row['approve'] == 3) {
+							$status = "Send to doc";
+						}
+					//echo "<pre>";print_r($row);
+					?>
+					<td><?php echo $status;?></td>
+                        <td>
+                        <?php
+                        $published = "false.gif";
+                        $published_action = "publish";
+                        $published_title = "Approve";
+                        if ($row['approve'] == 1) {
+                            $published = "true.gif";
+                            $published_title = "Unapprove";
+                            $published_action = "unpublish";
+                        }
+                        if ($row['approve'] == 2) {
+                            $published = "true.gif";
+                            $published_title = "Cancel";
+                            $published_action = "cancel";
+                        }
+                        ?>
+                            
+                        <?php 
+                        if($row['approve'] != 2) {
+                        	?>
+                               <a class="signup" onclick="if(confirm(' Do you want to cancel this appointment ?')){ window.location.href = '/admin/appointment/cancel/id/<?php echo $row['id']?>'; return true;}else{ return false;}"><img src ="/images/cancel.png" alt="cancel" title="cancel"></a>
+                        <?php
+                        }
+                        if($row['approve'] != 1) {
+                        ?>
+                        	<a class="actions" onclick ='document.getElementById("cid<?php echo $row['id']; ?>").checked=true;' rel="publish" ><img src='/images/admin-images/true.gif' border='0' title='Approve'/></a>
+                        	<!--<a class="actions" onclick ='document.getElementById("cid<?php echo $row['id']; ?>").checked=true;' rel="unpublish" ><img src='/images/admin-images/false.gif' border='0' title='Unapprove'/></a>>
+                        	<a class="signup" onclick="if(confirm(' Do you want to cancel this appointment ?')){ window.location.href = '/admin/appointment/cancel/id/<?php echo $row['id']?>'; return true;}else{ return false;}">cancel</a-->
+                        	<?php 
+                        }
+                        /*if($row['approve'] == 0){
+                        	?>
+                                <a class="signup" onclick="if(confirm(' Do you want to send this appointment to doctor ?')){ window.location.href = '/admin/appointment/sendtodoctor/ids/<?php echo $row['id']?>'; return true;}else{ return false;}"><img src ="/images/send-app-doc.png" alt="send appointment to doctor" title="send appointment to doctor"></a>
+                        	<!--a class="actions" onclick ='document.getElementById("cid<?php echo $row['id']; ?>").checked=true;' rel="unpublish" ><img src='/images/admin-images/false.gif' border='0' title='Unapprove'/></a>
+                        	<a class="signup" onclick="if(confirm(' Do you want to cancel this appointment ?')){ window.location.href = '/admin/appointment/cancel/id/<?php echo $row['id']?>'; return true;}else{ return false;}">cancel</a-->
+                        	<?php 
+                        }elseif($row['approve'] == -1){
+                        	?>                        	
+                        	<!--a class="actions" onclick ='document.getElementById("cid<?php echo $row['id']; ?>").checked=true;' rel="publish" ><img src='/images/admin-images/true.gif' border='0' title='Approve'/></a>
+                        	<a class="signup" onclick="if(confirm(' Do you want to cancel this appointment ?')){ window.location.href = '/admin/appointment/cancel/id/<?php echo $row['id']?>'; return true;}else{ return false;}">cancel</a-->
+                        	<?php 
+                        }*/
+                        ?>
+                        <?php if($row['called_status'] != 'Y'){ ?>
+                        <a class="actions" onclick ='document.getElementById("cid<?php echo $row['id']; ?>").checked=true;' rel="set_as_called" ><img border="0" title="SetCalled" width = "17" height = "24" src="/images/admin-images/called_status.png"></a>&nbsp;
+                        <?php }else{ ?>
+                        <img border="0" title="Already Called" width = "17" height = "24" src="/images/admin-images/already_called.png">&nbsp;
+                        <?php }?>
+                        <!-- a class="actions" onclick ='document.getElementById("cid<?php echo $row['id']; ?>").checked=true;' rel="<?php echo $published_action?>" ><img src='/images/admin-images/<?php echo $published ?>' border='0' title='<?php echo $published_title ?>'/></a-->&nbsp;&nbsp;
+                        
+                        <a href='/admin/appointment/delete/ids/<?= $row['id'] ?>/page/<?= $page ?>' onclick="if(!confirm('Are you sure you want to delete?'))return false;"><img src='/images/admin-images/delete.gif' border='0' title='Delete'/></a>&nbsp;&nbsp;
+                        <a href='/admin/appointment/viewdetail/ids/<?= $row['id'] ?>/page/<?= $page ?>' ><img src="/images/admin-images/view-icon.png" border="0" alt="View Detail" title="View Detail"/></a>&nbsp;&nbsp;
+                        
+                    </td>
+					
+                </tr>
+                <?
+                    }
+                ?>
+                </table><br />
+            <?= $this->paginationControl($this->paginator, 'Sliding', 'pagination.phtml'); ?><br /><br />
+            <?
+                }
+                else
+                {
+            ?>
+            <table width='100%' border='0' class='dataTable' cellspacing='0' cellpadding='0'>
+                    <tr>
+                        <th>#</th>
+                        <th><input type="checkbox" name="checkall" id="checkall" value="" /></th>
+                        <th>Name</th>
+                        <th>Dr Name/Specialty</th>
+                        <th>Phone</th>
+                        <th>Email</th>
+                        <th>Age</th>
+                        <th>Gender</th>
+                        <th>Status</th>
+                        <th>Needs</th>
+                        <th>Date/Time</th>
+                        <th>Booking Date</th>
+                        <th>Status</th>
+                       <th style="width: 10%;">Action</th>
+                    </tr>
+                    <tr>
+                        <td colspan="14" align="center">No Record found</td>
+                    </tr>
+             </table>
+            <?php
+                }
+            ?>
+        </div> </form>
+
+    </div>
+    <div class="btm-curve"><img src="/images/admin-images/btm-r-l.gif" align="left" /><img src="/images/admin-images/btm-r-r.gif" align="right" /></div>
+</div>

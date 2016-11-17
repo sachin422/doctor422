@@ -1,0 +1,153 @@
+<form method="post" action="<?php echo $this->form->action;?>"  enctype="multipart/form-data">
+	<div id="admin-content-inner">
+		<div class="row">
+			<div class="col-sm-8">
+	            <h2 class="newprofile-titel">Patient Profile</h2>
+	        </div>
+	        <div class="col-sm-4 text-right">
+	        	<a href="/user/index/doctor-patient-details?patid=<?php echo $this->id; ?>" class="backButton" title="back to patient details">Back</a>
+	        </div>
+	    </div>
+		<span><?php echo $this->msg; ?></span>
+		<span class='red'><?php echo $this->emailerror; ?></span>
+		<div class="profile-section">
+			<div class="profile-section-top">
+				<div class="profile-section-top02 clearfix">
+					<div>
+						<img src="<?php echo $this->profileimage; ?>" alt="profile image" class="fullborder-img">
+					</div>
+					<div>
+						<a href="#" class="uplode"><img src="/images/user/uplode-icon-new.png" alt="">Upload Picture</a>
+						<?php echo $this->form->profileimage;?>
+						<div class="address-section05">
+							<input name="" type="submit" value="Save Image">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="profile-section">
+			<div class="profile-section-top">
+				<div class="row" style="font-size:13px !important;font-weight:normal !important;">
+					<div class="col-md-4"><img src="/images/patient/img/nameicon.png" alt=""> First Name: <?php echo $this->form->first_name;?></div>
+					<div class="col-md-3">Last Name:	<?php echo $this->form->last_name;?></div>
+					<div class="col-md-5"><img src="/images/patient/img/date-small.png" alt=""> Date Of Birth:
+							<?php echo $this->form->month_dob . "&nbsp;" . $this->form->date_dob . "&nbsp;" . $this->form->year_dob; ?> </div>
+				</div>
+				<div class="row" style="font-size:13px !important;font-weight:normal !important;margin-top:2%;">
+					<div class="col-md-4"><img src="/images/patient/location-icon.png" alt=""> Street: <?php echo $this->form->street;?></div>
+					<div class="col-md-3">City: <?php echo $this->form->city;?></div>
+					<div class="col-md-3">State: <?php echo $this->form->state;?></div>
+					<div class="col-md-2">Zip: <?php echo $this->form->zipcode;?></div>
+				</div>
+
+				<div class="address-section04">
+					<p>
+						<img src="/images/patient/img/phone-icon.png" alt=""> Phone Number: <?php echo $this->form->mobile;?> <?php echo $this->form->phone;?>
+					</p>
+				</div>
+				<!--<div class="address-section04">
+
+					<p>
+
+						Enable Text SMS and Email Communication: <?php //echo 
+
+						//$this->form->enable_communication;?>
+
+					</p>
+
+				</div>
+				-->
+				<div class="address-section04">
+					<h2>Turn On/Off options for communication</h2> 
+				</div>
+				<div class="address-section04">
+
+					<p>
+
+						Communication Via <strong>Phone:</strong> <?php echo 
+
+						$this->form->communication_via_phone;?> <strong>Text SMS:</strong> <?php echo 
+
+						$this->form->communication_via_text;?> <strong>Email:</strong> <?php echo 
+
+						$this->form->communication_via_email;?>
+
+					</p>
+
+				</div>
+				<div class="address-section05">
+					<input name="" type="submit" value="Save Changes">
+				</div>
+			</div>
+
+			<div class="profile-section-bottom clearfix">
+				<div class="profile-section-bottom-left">
+					<h3>Edit email address</h3>
+					<?php echo $this->form->email; ?>
+		     		<input name="" type="submit" value="Save Email Address">
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
+
+
+<div class="container-fluid div-space">
+    <div class="row">
+      <div class="col-sm-6">
+        
+      </div>
+      <div class="col-sm-6">
+        
+      </div>
+    </div>
+  </div>
+
+<link rel="stylesheet" type="text/css" href="/css/bootstrap-toggle.min.css" />
+<script type="text/javascript" src="/js/bootstrap-toggle.min.js"></script>
+  
+  
+  <script>
+  $(function () {
+    $('#myTab a:first').tab('show')
+  })
+</script> 
+<script>
+  $(function () {
+    $('#myTab01 a:first').tab('show')
+  })
+</script>
+<script>
+  $(function () {
+    $('#myTab02 a:first').tab('show')
+  })
+</script>  
+
+<script type="text/javascript">
+	$(document).ready(function(){
+
+		var phone_status = "<?php echo (trim($this->communication_via_phone) && trim($this->communication_via_phone)==1) ? trim($this->communication_via_phone) : 0;?>";
+		if(phone_status > 0 ){
+			$('#communication_via_phone').bootstrapToggle('on');
+		}else{
+			$('#communication_via_phone').bootstrapToggle('off');
+		}
+		
+		var text_status = "<?php echo (trim($this->communication_via_text) && trim($this->communication_via_text)==1) ? trim($this->communication_via_text) : 0;?>";
+		if(text_status > 0 ){
+			$('#communication_via_text').bootstrapToggle('on');
+		}else{
+			$('#communication_via_text').bootstrapToggle('off');
+		}
+		
+		var email_status = "<?php echo (trim($this->communication_via_email) && trim($this->communication_via_email)==1) ? trim($this->communication_via_email) : 0;?>";
+		if(email_status > 0 ){
+			$('#communication_via_email').bootstrapToggle('on');
+		}else{
+			$('#communication_via_email').bootstrapToggle('off');
+		}
+	});
+</script>
+
+</div>

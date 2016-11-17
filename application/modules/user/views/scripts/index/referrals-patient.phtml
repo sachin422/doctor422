@@ -1,0 +1,353 @@
+<!--/ADMIN BAR --> 
+<!--ADMIN CONTENT -->
+<link href="/css/bootstrap.css" rel="stylesheet">
+<link href="/css/bootstrap-theme.css" rel="stylesheet">
+<link href="/css/style.css" rel="stylesheet" type="text/css">
+<link href="/css/patient-referral.css" rel="stylesheet" type="text/css">
+<link href="/css/font-awesome.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/js/jquery-ui.js"></script>
+<script type="text/javascript" src="/js/jquery.ui.touch-punch.min.js"></script>
+<div id="admin-content-inner">
+  <div class="dashboard-top">
+    <div class="patientreff-section">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-sm-8">
+            <h2 class="title-heading"><img src="/img/refresh-icon.png" alt="">Patient Referrals</h2>
+          </div>
+        </div>
+      </div>
+      <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-6">
+            <div class="whitebox avg-review">
+                <div class="whitebox-title clearfix"><h3>This Month's Referrals :</h3>
+           </div>  
+       <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+
+
+  <!-- Wrapper for slides -->
+         <div class="carousel-inner" role="listbox">
+
+
+
+
+
+
+
+
+
+
+    <div class="item active">
+        <div class="container-fluid">
+                    <div class="col-sm-3"><img src="/img/months-refferal.png" alt=""></div>
+                    <div class="col-sm-9">
+                        <div class="referralnumber">
+                            <div class="reff-number clearfix">
+                                <div class="number-left"><?php echo date("F"); ?> : </div><div class="number-right">
+                                     <?php    
+                                   $monthrecordno1=$this->monthrecordno ;  
+                                 foreach($monthrecordno1 as $monthrecordno2){
+                                   echo $monthrecordno2->month_record  ; ?>
+                                   <?php
+                                    }
+                                   ?>
+
+
+                                </div>
+                            </div>  
+                        </div>
+                    </div>  
+                </div>
+    </div>
+
+    
+  </div>
+
+  <!-- Controls -->
+</div>
+                
+                
+                
+                
+                
+                
+            </div>
+            </div>
+            <div class="col-sm-6">
+            <div class="whitebox">
+                <div class="whitebox-title clearfix"><h3>Total Referrals :</h3>
+                    
+                </div>  
+                <div class="container-fluid">
+                    <div class="col-sm-3"><img src="/img/total-refferal.png" alt=""></div>
+                    <div class="col-sm-9">
+                        <div class="totalreferralnumber">
+                            <div class="reff-number clearfix">
+                                <div class="number-left"><?php echo date("Y"); ?>: </div>
+                                <div class="number-right">
+                                 <?php    
+                                   $yearrecordno1=$this->yearrecordno ;  
+                                 foreach($yearrecordno1 as $yearrecordno2){
+                                   echo $yearrecordno2->year_record  ; ?>
+                                   <?php
+                                    }
+                                   ?>
+
+                               </div>
+                            </div>  
+                        </div>
+                    </div>  
+                </div>
+            </div>
+            </div>  
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+            <div class="whitebox avg-review">
+                <div class="whitebox-title clearfix">
+                  <h3>Most Recent Referrals :</h3>
+                    
+                </div>  
+                
+                
+                
+         <!--  code for most recent referrals start                                          -->       
+                <div id="carousel-example-generic1" class="carousel slide" data-ride="carousel">
+                 <div class="carousel-inner" role="listbox">
+  <?php
+            $mostrecentrecorddetail1=$this->mostrecentrecorddetail ;
+            $i=1;
+            foreach($mostrecentrecorddetail1 as $patientdetail){
+            if($i==1){
+           
+  ?>
+    <div class="item active">
+      <div class="container-fluid">
+                    <div class="col-sm-3"><img src="/img/referral-icon.png"  alt=""></div>
+                    <div class="col-sm-9">
+                      
+                       <div class="referral">
+                          <p><img src="/img/usericon01.png" alt="">Patient name: <span><?php  echo $patientdetail->fname." ".$patientdetail->lname ;?> </span></p>
+                            <p><img src="/img/mailicon01.png" alt="">Email: <span><?php echo $patientdetail->email ;?></span></p>
+                            <p><img src="/img/callicon01.png" alt="">Phone: <span><?php echo $patientdetail->phone ;?></span></p>
+                       </div>
+                    
+                    </div>  
+        </div>
+    </div>
+
+
+
+       <?php
+          }else{
+          ?>
+    <div class="item">
+      <div class="container-fluid">
+                    <div class="col-sm-3"><img src="/img/referral-icon.png"  alt=""></div>
+                    <div class="col-sm-9">
+                      
+                       <div class="referral">
+                          <p><img src="/img/usericon01.png" alt="">Patient name: <span><?php  echo $patientdetail->fname." ".$patientdetail->lname ;?> </span></p>
+                            <p><img src="/img/mailicon01.png" alt="">Email: <span><?php echo $patientdetail->email ;?></span></p>
+                            <p><img src="/img/callicon01.png" alt="">Phone: <span><?php echo $patientdetail->phone ;?></span></p>
+                       </div>
+                    
+                    </div>  
+        </div>
+    </div>
+      <?php
+          }
+          $i=$i+1;
+        }
+      ?>
+   </div>
+
+<!--  code for most recent referrals end -->
+
+  <!-- Controls -->
+  <a class="left carousel-control" href="#carousel-example-generic1" role="button" data-slide="prev" style="height:0px;">
+    <img src="/img/slide-before.png" alt="">
+  </a>
+  <a class="right carousel-control" href="#carousel-example-generic1" role="button" data-slide="next" style="height:0px;">
+    <img src="/img/slide-after.png" alt="">
+  </a>
+</div>
+                
+                
+                
+                
+            </div>
+            </div>
+            <div class="col-sm-6">
+            <div class="whitebox reviewbox">
+                <div class="whitebox-title clearfix">
+                  <?php echo $this->msg ;  ?>
+                  <h3>New Referral Email :</h3>
+                    
+                </div>  
+                <div class="container-fluid">
+                    <div class="referral-mail">
+
+                   
+
+
+
+
+
+                      <form id="patientf" name="patientf" action="/user/index/referrals-patient" method="post" onsubmit="return patientform(this);" enctype="multipart/formdata">
+                   
+                        <input type="text" placeholder="Enter Patient Name Here" name="referralname" id="referralname" required>
+                        <input type="email" style="border:1px solid #cccccc;margin-bottom:8px;"  placeholder="Enter Patient Email Here" name="referralemail" id="referralemail" required>  
+                        <textarea rows="10" cols="10" placeholder="Enter Text Here" name="referraltext" id="referraltext" required></textarea>   
+                        <input type="submit" value="Submit">
+                    </form>
+                    </div>       
+                </div>
+            </div>
+            </div>  
+        </div>
+        
+        <div class="row">
+            <div class="col-sm-12">
+            <div class="whitebox">
+            <h3>List of Referring Patients :</h3>
+            <div class="container-fluid">
+                <div class="col-sm-1"><img src="/img/patients-icon01.png"  alt=""></div>
+                <div class="col-sm-11">
+                   
+                    <div class="patientlist-table">
+                        <div class="tableheader clearfix">
+                            <div class="tableheaderblock">Referring Patient</div>
+                            <div class="tableheaderblock">New Patient</div>
+                            <div class="tableheaderblock">Email</div>
+                            <div class="tableheaderblock">Phone</div>
+                    </div>
+                    
+                    <div class="tablefixedbody">
+                    <div class="tablebody">
+                           <?php
+                                
+                              
+                            if($this->total!=0) {
+
+                                $referralspatientList=$this->paginator ;
+                                 
+                                foreach($referralspatientList as $patientList){
+                              //  echo "shahsi" ;  print_r($patientList);
+                    
+                             ?>
+                      
+            <div class="tablerow clearfix">
+                <div class="tablecell" style="width:20%;"><?php echo $patientList->name ;?></div>
+                <div class="tablecell"  style="width:20%;"><?php echo $patientList->fname." ".$patientList->lname ;?> </div>
+                <div class="tablecell"  style="width:40%;"><?php echo $patientList->email ;?></div>
+                <div class="tablecell" style="width:20%;"><?php echo $patientList->phone;?></div>
+            </div>
+           <?php
+            } 
+         ?>
+           </div>
+         </div>
+      </div>
+    </div>  
+  </div>
+</div>
+           <?php if($this->paginator) {
+              $currPage = $this->paginator->getCurrentPageNumber();
+            } else { 
+              $currPage = 1;
+            } ?>
+                      <div class="pagination-patient" style="border:1px solid;">
+                        <ul>
+                          <?php if($this->prevUrl !='') { ?>
+                            <li><a href="/user/index/referrals-patient?<?php echo $this->prevUrl; ?>"><img src="/images/user/prev-icon.png" alt="Previous"></a></li>
+                            <?php } ?>
+                            <?php for ($i=1; $i <= $this->paginator->count(); $i++) { ?>
+                              <li><a href="/user/index/referrals-patient?page=<?php echo $i; ?>" class="<?php if($currPage == $i) echo 'currentPage'; ?>"><?php echo $i; ?></a></li>
+                            <?php } ?>
+                            <?php if($this->nextUrl !='') { ?>
+                              <li><a href="/user/index/referrals-patient?<?php echo $this->nextUrl; ?>"><img src="/images/user/next-icon.png" alt="Next"></a></li>
+                              <?php } ?>
+                          </ul>
+                      </div> 
+          <?php
+          }else{
+            ?>
+             <div class="whitebg clearfix text-center">
+                        No patients yet.
+                      </div>
+      <?php
+          }
+       ?>
+            </div>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p>&nbsp;</p>
+<div class="container-fluid div-space">
+  <div class="row">
+    <div class="col-sm-6"> </div>
+    <div class="col-sm-6"> </div>
+  </div>
+</div>
+<script>
+  $(function () {
+    $('#myTab a:first').tab('show')
+  })
+</script>
+<script>
+  $(function () {
+    $('#myTab01 a:first').tab('show')
+  })
+</script>
+<script>
+  $(function () {
+    $('#myTab02 a:first').tab('show')
+  })
+</script>
+</div>
+<!--/ADMIN CONTENT -->
+<script src="/js/menu-collapsed.js" type="text/javascript"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/docs.min.js"></script>
+<style>
+  .pagination-patient {
+    background: #fff none repeat scroll 0 0;
+    border-radius: 5px;
+    box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.34);
+    display: table;
+    margin: 45px auto;
+    padding: 10px 5px;
+}
+.pagination-patient ul {
+    list-style: outside none none;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+.pagination-patient ul li {
+    float: left;
+    margin: 0;
+    padding: 0;
+}
+.pagination-patient ul li a.currentPage {
+    color: #22a4e9;
+}
+.pagination-patient ul li a {
+    color: #373737;
+    font-size: 17px;
+    padding: 0 25px;
+}
+a {
+    color: #474747;
+    text-decoration: none;
+}
+a, a:hover, a:active, a:focus {
+    outline: 0 none;
+}
+</style>

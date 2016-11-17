@@ -1,0 +1,11 @@
+<?php
+/*
+	combines index.phtml, default.phtml, search.phtml
+*/
+$this->headScript()->appendFile('/js/autosuggest/jquery.autocomplete.min.js');
+$this->headLink()->appendStylesheet('/js/autosuggest/jquery.autocomplete.css');
+?>
+
+<div id="header">
+	<?php echo $this->render("/search/newSearch.phtml"); ?> 
+</div>

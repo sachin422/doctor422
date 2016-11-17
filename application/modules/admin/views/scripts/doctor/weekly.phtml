@@ -1,0 +1,125 @@
+<?php
+$Calendar = new Zend_Session_Namespace("calendar");
+$usersNs = new Zend_Session_Namespace("members");
+$start = $Calendar->TODAY;
+if (date('N', $Calendar->TODAY) != 7)
+    $start = $start - (date('N', $start) * 24 * 60 * 60);
+$end = $start + (7 * 24 * 60 * 60);
+
+$weeek_days = array();
+for ($i = 0; $i < 7; $i++) {
+    $weeek_days[] = date('Y-m-d', $start + ($i * 24 * 60 * 60));
+}
+
+if ($this->tab != '') {
+    $Calendar->BACKPAGE = $_SERVER['QUERY_STRING'];
+} else {
+    $Calendar->BACKPAGE = $_SERVER['QUERY_STRING'] . '/tab/week';
+}
+$Doctor = new Application_Model_Doctor();
+$docObject = $Doctor->fetchRow("id='{$this->docid}'");
+$Appointment = new Application_Model_Appointment();
+
+$PHPCalendar = new Base_PHPCalendar();
+$DocAppointment = new Application_Model_DoctorAppointmentCal();
+$nextWeek = strtotime('+1 week', $Calendar->TODAY);
+$prevWeek = strtotime('-1 week', $Calendar->TODAY);
+?>
+<div id="divWeek">
+    <!-- WEEK_DATA -->
+    <div class="cal-navi">
+        <div class="f-left">
+
+            <a href="#" class="smallButton left" id="nextButton" onclick="nextDay('/admin/doctor/ajax-appointment/today/<?php print $prevWeek; ?>/docid/<?php echo $this->docid; ?>/tab/week','<?php print $prevWeek; ?>');return false;" > « </a>
+            <a href="" class="smallButton left" id="prevButton" onclick="nextDay('/admin/doctor/ajax-appointment/today/<?php print $nextWeek; ?>/docid/<?php echo $this->docid; ?>/tab/week','<?php print $nextWeek; ?>');return false;" > » </a>
+
+            <span class="date"><?php print strftime('%d ', $start); ?>
+                <?php
+                if (date('m', $start) == date('m', $end - 86400)) {
+                    print strftime('- %d %b, %Y', $end - 86400);
+                } else {
+					print strftime('%b - ', $start);
+                    print strftime('%d %b, %Y ', $end - 86400);
+                }
+                ?>
+            </span>
+        </div>
+        <div class="f-right"><img src="/images/color-menu.png" alt="" /></div>
+    </div>
+    <table width="100%" border="0" cellpadding="0" cellspacing="0" class="weekly-view">
+        <tr>
+            <th width="10%" class="null">&nbsp;</th>
+            <th width="13%" <?php if (date('D', $Calendar->TODAY) == 'Sun')
+                    print 'class="th-current"'; ?>><span style="float:left"><?php print strftime('%d', $start); ?></span><?php print strftime('%A', $start); ?></th>
+            <th width="13%" <?php if (date('D', $Calendar->TODAY) == 'Mon')
+                    print 'class="th-current"'; ?>><span style="float:left"><?php print strftime('%d', $start + 86400); ?></span><?php print strftime('%A', $start + 86400); ?></th>
+            <th width="13%" <?php if (date('D', $Calendar->TODAY) == 'Tue')
+                    print 'class="th-current"'; ?>><span style="float:left"><?php print strftime('%d', $start + 86400 * 2); ?></span><?php print strftime('%A', $start + 86400 * 2); ?></th>
+            <th width="13%" <?php if (date('D', $Calendar->TODAY) == 'Wed')
+                    print 'class="th-current"'; ?>><span style="float:left"><?php print strftime('%d', $start + 86400 * 3); ?></span><?php print strftime('%A', $start + 86400 * 3); ?></th>
+            <th  width="13%" <?php if (date('D', $Calendar->TODAY) == 'Thu')
+                    print 'class="th-current"'; ?>><span style="float:left"><?php print strftime('%d', $start + 86400 * 4); ?></span><?php print strftime('%A', $start + 86400 * 4); ?></th>
+            <th width="13%" <?php if (date('D', $Calendar->TODAY) == 'Fri')
+                    print 'class="th-current"'; ?>><span style="float:left"><?php print strftime('%d', $start + 86400 * 5); ?></span><?php print strftime('%A', $start + 86400 * 5); ?></th>
+            <th width="13%" <?php if (date('D', $Calendar->TODAY) == 'Sat')
+                    print 'class="th-current"'; ?> style="padding-right:10px;">
+                <span style="float:left"><?php print strftime('%d', $start + 86400 * 6); ?></span>
+<?php print strftime('%A', $start + 86400 * 6); ?>
+            </th>
+        </tr>
+    </table>
+    <div class="scrollweekview">
+        <table width="100%" border="0" cellpadding="0" cellspacing="0" class="weekly-view">
+            <tr>
+                <td rowspan="2" class="weekly-week-heading" width="10%"><?php echo $this->lang[30]; ?></td>
+                    <?php foreach ($weeek_days as $date) {
+                    
+ ?>
+                    <td width="13%" style='vertical-align: top'>
+                    <?php
+                        $slotsAvailable = array();
+                        $slotObject = $DocAppointment->fetchAll("slot_date='" . $date . "' AND  doctor_id='{$docObject->getId()}'", "slot_time");
+                        if(empty($slotObject)){
+                            $TimeSlot = new Base_Timeslot();
+                            $slotsAvailable = $TimeSlot->getDoctorTimeSlots($docObject->getId(), $date);
+							//print_r($slotsAvailable);
+                        }else{
+                            foreach ($slotObject as $s => $slot) {
+                                $slotsAvailable[] = strftime("%H:%M %P", strtotime($date . " " . $slot->getSlotTime()));
+                            }
+                        }
+                        if(!empty($slotsAvailable)){
+                        //if (isset($appointments[$day]) && !empty($appointments[$day])) {
+                            echo "<table border='0' cellpadding='0' cellspacing='0' width='100%'>";
+                            foreach ($slotsAvailable as $slotTime) {
+                                $class = 'daily-default1';
+                                //$class = 'monthly-selected';
+//                                $appObj = $Appointment->fetchRow("appointment_date='" . $date . "' AND appointment_time='{$slotTime}' AND doctor_id='{$docObject->getId()}' AND approve NOT IN ('0','2') AND deleted!=1");
+                                $appObj = $Appointment->fetchRow("appointment_date='" . $date . "' AND appointment_time='{$slotTime}' AND doctor_id='{$docObject->getId()}' AND approve NOT IN ('2') AND deleted!=1");
+                                if(!empty($appObj)){
+                                    $link = "<a href='/admin/doctor/view-appointment/appid/" . $appObj->getId() . "/tab/week/docid/".$this->docid."'>{$slotTime}<br />" . $appObj->getFname() . "</a>";
+                                    if($appObj->getApprove()=="0"){
+                                        $class = 'busy';
+                                    } elseif($appObj->getApprove()=="1"){
+                                        $class = 'daily-approved';
+                                    } elseif($appObj->getApprove()=="2"){
+                                        $class = 'daily-unapproved';
+                                    } else {
+										$class = 'daily-unapproved';
+									}
+                                }else{
+                                    //$link = "<a href='/user/index/book-appointment/time/{$slotTime}/date/" . $date . "/tab/week'>{$slotTime} </a>";
+                                    $link = "<a href='/admin/doctor/new-appointment/time/{$slotTime}/date/" . $date . "/tab/week/docid/".$this->docid."'><strong>{$slotTime} </strong>".$this->lang[604]."</a>";
+                                }
+                                echo "<tr><td class='{$class}'>{$link}</td></tr>";
+                            }
+                            echo "</table>";
+                        }
+                    ?>
+                        </td>
+<?php } ?>
+            </tr>
+        </table>
+    </div>
+    <!-- WEEK_DATA -->
+</div>

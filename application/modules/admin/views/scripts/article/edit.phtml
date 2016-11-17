@@ -1,0 +1,115 @@
+<?php
+$this->custom_head .= "<link type='text/css' rel='stylesheet' href='/js/calendar/src/css/jscal2.css' />";
+$this->custom_head .= "<link type='text/css' rel='stylesheet' href='/js/calendar/src/css/border-radius.css' />";
+$this->custom_head .= "<link id='skin-win2k' title='Win 2K' type='text/css' rel='alternate stylesheet' href='/js/calendar/src/css/win2k/win2k.css' />";
+$this->custom_head .= "<script language='javascript' type='text/javascript' src='/js/calendar/src/js/jscal2.js'></script>";
+$this->custom_head .= "<script language='javascript' type='text/javascript' src='/js/calendar/src/js/lang/en.js'></script>";
+?>
+<div id="rightsidemain">
+    <div id="rightcontentpart">
+        <div id="rightsideheading">
+            <img src="/images/admin-images/bl-tl.gif" align="left" /><img src="/images/admin-images/bl-tr.gif" align="right" />
+            <span style="margin: 0pt 15px 0pt 0pt; float: right;">
+                <a href="/admin/article" class="add">Back</a>
+            </span>
+	Article - Add/Edit</div>
+        <div id="rightsidecontentpart">
+            <span class='red'><?php echo $this->msg; ?></span>
+
+            <form enctype="application/x-www-form-urlencoded" method="post" action=""><table>
+
+                    <tr><td id="title-label"><label for="title" class="optional">Title:</label></td>
+                        <td class="element"><?php echo $this->form->title;?></td>
+                    </tr>
+
+                    <tr><td id="summary-label"><label for="summary" class="required">Summary:</label></td>
+                        <td class="element"><?php echo $this->form->summary;?></td>
+                    </tr>
+
+                    <tr><td id="content-label"><label for="content" class="required">Description:</label></td>
+                        <td class="element"><?php echo $this->form->content;?></td>
+                    </tr>
+
+                    <tr><td id="publishedDate-label"><label for="publishedTime" class="optional">Publish Date:</label></td>
+                        <td class="element"><?php echo $this->form->publishedTime;?>&nbsp;<input type="button" name="clickPublish" id="clickPublish" value="Publish Date" />
+                            &nbsp;<input type="button" class="clear" alt="publishedTime" value="Clear Date" /></td>
+                    </tr>
+
+                    <tr><td id="unpublishedDate-label"><label for="unpublishedTime" class="optional">Unpublish Date:</label></td>
+                        <td class="element"><?php echo $this->form->unpublishedTime;?>&nbsp;<input type="button" name="clickUnpublish" id="clickUnpublish" value="Unpublish Date" />
+                         &nbsp;<input type="button" class="clear" alt="unpublishedTime" value="Clear Date" /></td>
+                    </tr>
+
+                    <tr><td id="displayDate-label"><label for="displayTime" class="optional">Display Date:</label></td>
+                        <td class="element"><?php echo $this->form->displayTime;?>&nbsp;<input type="button" name="clickDisplay" id="clickDisplay" value="Display Date" />
+                         &nbsp;<input type="button" class="clear" alt="displayTime" value="Clear Date" /></td>
+                    </tr>
+
+                    <tr><td id="category-label"><label for="category" class="required">Category:</label></td>
+                        <td class="element"><?php echo $this->form->category;?></td>
+                    </tr>
+
+                    <tr><td></td>
+                        <td class="element"><?php echo $this->form->submit;?></td>
+                    </tr>
+                </table>
+            </form>
+            <input type="hidden" name="hidden1" id="hidden1" value="<?php if($this->PublishedTime!=0)echo date('Y-m-d',$this->PublishedTime);else echo date('Y-m-d');?>">
+            <input type="hidden" name="hidden2" id="hidden2" value="<?php if($this->UnpublishedTime!=0)echo date('Y-m-d',$this->UnpublishedTime);else echo date('Y-m-d');?>">
+            <input type="hidden" name="hidden3" id="hidden3" value="<?php if($this->DisplayTime!=0)echo date('Y-m-d',$this->DisplayTime);else echo date('Y-m-d');?>">
+        </div>
+    </div>
+    <div class="btm-curve"><img src="/images/admin-images/btm-r-l.gif" align="left" /><img src="/images/admin-images/btm-r-r.gif" align="right" /></div>
+</div>
+
+<script type="text/javascript">//<![CDATA[
+
+    var cal = Calendar.setup({
+        showTime     : 12,
+        onSelect: function(cal) {
+            updateFields(cal);
+            cal.hide(); },
+        onTimeChange : updateFields
+    });
+
+
+    cal.manageFields("clickPublish", "hidden1", "%Y-%m-%d %k-%M");
+    cal.manageFields("clickUnpublish", "hidden2", "%Y-%m-%d %k-%M");
+    cal.manageFields("clickDisplay", "hidden3", "%Y-%m-%d %k-%M");
+
+
+    function updateFields(cal){
+        var date = cal.selection.get();
+        if (date) {
+            date = Calendar.intToDate(date);
+            date = Calendar.printDate(date, "%Y-%m-%d");
+
+            var h = cal.getHours(), m = cal.getMinutes();
+            // zero-pad them
+            if (h < 10) h = "0" + h;
+            if (m < 10) m = "0" + m;
+
+            if(cal.inputField.getAttribute('id')=='hidden1'){
+                document.getElementById("publishedTime").value = date + " " + h +":"+ m;
+                document.getElementById("hidden1").value = date ;
+            }
+            else if(cal.inputField.getAttribute('id')=='hidden2'){
+                document.getElementById("unpublishedTime").value = date + " " + h +":"+ m;
+                document.getElementById("hidden2").value = date ;
+            }else if(cal.inputField.getAttribute('id')=='hidden3'){
+                {
+                    document.getElementById("displayTime").value = date;
+                    document.getElementById("hidden3").value = date ;
+                }
+            }
+        }
+    }
+
+    jQuery(document).ready(function(){
+
+        jQuery('input.clear').click(function(){
+            jQuery('#'+jQuery(this).attr('alt')).val('');
+        })
+    });
+
+    //]]></script>

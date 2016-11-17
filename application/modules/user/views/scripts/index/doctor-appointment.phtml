@@ -1,0 +1,1846 @@
+<?php 
+$settings = new Admin_Model_GlobalSettings();
+
+$locale = $settings->settingValue('locale');
+
+setlocale(LC_ALL, $locale);
+
+
+
+$hours = $settings->settingValue('hours');
+
+if($hours) {
+
+	$timeFormat = "%I:%M %P";
+
+} else {
+
+	$timeFormat = "%H:%M";
+
+}
+
+?>
+
+<!--ADMIN CONTENT -->
+
+<div id="admin-content-inner">
+
+  
+
+<div id="loading"></div>
+
+  <div class="appointment-all">
+
+    	<div class="container-fluid">
+
+        	<div class="row">
+
+            	<div class="col-sm-6">
+
+                	<div class="appo-heading">My Appointments</div>
+
+                </div>
+
+                <div class="col-sm-6">
+
+                	<div class="schl-right pull-right">
+
+                    	<div class="schbtn">
+
+                    		<a href="JavaScript:Void(0);" class="welcome"><img src="/images/custom/img/newapp-btn.png" alt="New app"></a>
+
+							<div class="account"o>
+
+								<div class="dropmenu-head">Add New Patients</div>
+
+								<div class="dropform">
+
+									<form method="post">
+
+										<p>Name :</p>
+
+										<?php echo $this->form->name; ?>
+
+										<p>Lastname :</p>
+
+										<?php echo $this->form->lastname; ?>
+
+										<p>Email :</p>
+
+										<?php echo $this->form->email; ?>
+
+										<p>Mobile:</p>
+
+										<?php echo $this->form->mobile; ?>
+										
+										<p>Home Phone:</p>
+
+										<?php echo $this->form->phone; ?>
+
+
+										<p>Procedure :</p>
+
+										<?php echo $this->form->procedure; ?>
+
+										<p>Street :</p>
+
+										<?php echo $this->form->street; ?>
+
+										<p>City :</p>
+
+										<?php echo $this->form->city; ?>
+
+										<p>ZIP code :</p>
+
+										<?php echo $this->form->zipcode; ?>
+
+										<p>State :</p>
+
+										<?php echo $this->form->state; ?>
+
+										<p>Date:</p>
+
+										<div class="daterow clearfix">
+
+											<div class="dateimg"><img src="/images/user/calendershort.png" alt="Date"></div>
+
+											<div class="fulldateContainer">
+
+												<?php echo $this->form->fulldate; ?>
+
+											</div>
+
+										</div>
+
+
+
+										<p>Time:</p>
+
+										<div class="timerow clearfix">
+
+											<div class="timeclock"><img src="/images/user/clocksmall-icon.png" alt="">
+
+											</div>
+
+											<div class="timein">
+
+												<?php echo $this->form->hour; ?>:<?php echo $this->form->minutes; ?><?php echo $this->form->am; ?>
+
+											</div>
+							
+										</div>
+										<!--
+											<p><?php //echo $this->form->preventative_maintenance_other; ?></p>
+											
+											<p><br />Ada Code :</p>
+											<br />
+											<p>	
+											<?php //echo $this->form->ada_code; ?>
+											</p>
+											<br />-->
+											<input name="" type="image" src="/images/user/save.png" id="savePatientBtn">
+
+											<span id="message"></span>
+
+									</form>
+
+								</div>
+
+							</div>
+
+                        </div>
+
+
+
+                    	<div class="icon">
+
+                        	<img src="/images/custom/img/exam-icon.png" alt="doctors">
+
+                        </div>
+
+                        
+
+                    </div>
+
+                </div>
+
+
+
+            </div>
+
+            <!-- btn added here  start -->
+
+          <div class="row">
+
+            <?php
+
+             if($this->color=='diff1') {
+
+             ?> 
+
+            <div class="col-sm-2" style="width:14.667%">
+
+                 <div class="ico">
+					
+					<a  style="color:#FFFFFF;" onclick="showUpcoming(); return false;" href="#" >
+						<div class="orange-btn" id="upcoming-btn">Upcoming</div>
+					</a>
+                </div>
+
+           </div>
+
+            <?php
+
+             }else{
+
+            ?>
+
+                 <div class="col-sm-2" style="width:14.667%">
+
+                 <div class="ico">
+					
+					<a  style="color:#FFFFFF;" onclick="showUpcoming(); return false;" href="#" >
+                   <div class="blue-btn" id="upcoming-btn">
+
+                     Upcoming
+
+                  </div>
+				</a>	
+                </div>
+
+           </div>
+
+            <?php
+
+             }
+
+            ?>
+
+            <?php
+
+             if($this->color=='diff2') {
+
+             ?> 
+
+            <div class="col-sm-2" style="width:14.667%">
+
+                     <div class="ico">
+						<a style="color:#FFFFFF;" onclick="showPast(); return false;" href="#">
+                       <div class="orange-btn" id="past-btn">
+
+                         Past
+
+                      </div>
+                      </a>
+
+                    </div>
+
+            </div>
+
+            <?php
+
+            }else{
+
+            ?> 
+
+            <div class="col-sm-2" style="width:14.667%">
+
+                     <div class="ico">
+						
+						<a style="color:#FFFFFF;" onclick="showPast(); return false;" href="#">
+                       <div class="blue-btn" id="past-btn">
+
+                         Past
+
+                      </div>
+                      </a>
+
+                    </div>
+
+            </div>
+
+           <?php
+
+            }
+
+            ?>
+
+           <?php
+
+             if($this->color=='diff3') {
+
+             ?> 
+
+            <div class="col-sm-2" style="width:14.667%">
+
+                    <div class="ico">
+						<a style="color:#FFFFFF;" onclick="showCancel(); return false;" href="#">
+                       <div class="orange-btn" id="cancel-btn">
+
+                       Cancelled
+
+                   </div>
+                   </a>
+
+                 </div>
+
+            </div>
+
+            <?php
+
+           }else{
+
+            ?>
+
+             <div class="col-sm-2" style="width:14.667%">
+
+                    <div class="ico">
+						<a style="color:#FFFFFF;" onclick="showCancel(); return false;" href="#">
+                       <div class="blue-btn" id="cancel-btn">
+
+                       Cancelled
+
+                   </div>
+                   </a>
+
+                 </div>
+
+            </div>
+
+           
+
+          <?php
+
+          }
+
+           ?>
+
+     
+
+          </div>    <!-- btn add end here  -->
+	 </div>
+
+      <?php
+	 $pstTimezone = new DateTimeZone('PST');
+      $Doctor=new Application_Model_Doctor();
+
+       $Appointment=new Application_Model_Appointment();
+
+       $Patient = new Application_Model_Patient();
+
+     if($this->color=='diff1'){
+
+       if(count($this->upcomingObject)>0) {
+
+       ?> 
+
+     <div id="upcoming">   <!-- appointment div start here     -->
+
+        <div class="container-fluid">
+
+        	<div class="row">
+
+            	<div class="col-sm-12">
+
+                	<div class="whitebg">
+
+                    	<h3 class="grey-heading">Upcoming Appointments</h3>
+
+					<?php
+
+					if(count($this->upcomingObject)>0) {
+						$i=1;
+						foreach($this->upcomingObject as $row) {
+							$css_style= ''; 
+							$docObject=$Doctor->find($row->doctorId);
+
+							$where="id={$row->getId()}";
+
+							$status=$Appointment->getAppointmentStatus($where);
+
+
+
+							$patient = $Patient->fetchRow("user_id=".$row->getUserId());
+
+							$PatientH = new Application_Model_PatientHistory();
+
+							$patint_history_pdf = $PatientH->fetchRow("patient_id={$row->getUserId()}");
+							//print_r($docObject);
+
+					?>
+
+                        <div class="appoinment-table clearfix">
+
+<!--
+                        	<div class="appo-pic">
+				<?php  //if($patient->profileimage !=""){
+					//$profileImage='';
+
+						//$profileImage = "/images/patient_image/" . $patient->profileimage;
+
+						//if(!file_exists(getcwd() . $profileImage) || $patient->profileimage=='') $profileImage = "/images/doctor_image/png.png"; 
+				?>
+                            	<img src="<?php //echo $profileImage; ?>" alt="Doctor">
+				<?php //} ?>
+
+                            </div>
+-->
+
+                            <div class="appo-content">
+
+                            	<div class="topc clearfix">
+
+                                	<div class="docname">Patient Name : <span>
+										<?php if(!empty($patient)){ ?>
+												<a href="/user/index/doctor-patient-details?patid=<?php echo $patient->getId(); ?>" style="color:#2FAFF3 !important;"><?php echo $row->fname." ".$row->lname; ?></a>
+											<?php }else{ 
+												echo $row->fname." ".$row->lname;
+											 } ?>
+										<?php //echo $row->fname." ".$row->lname;?>
+										</span></div>
+
+									
+
+                                    <div class="docdate" style="width:40.5% !important;float:right;">Date : <span>On <?php echo date('F j, Y',strtotime($row->appointmentDate));?> At <?php echo date('h:i A',strtotime($row->appointmentTime)); ?>  </span></div>
+
+                                </div>
+
+                                <div class="topc clearfix">
+
+                                	<div class="doclocation">
+
+                                    	<img src="/images/custom/img/loc-icon.png" alt="location" class="imgleft"> 
+
+                                        Location : <span> <?php echo $docObject->street;?>, <?php echo $docObject->city;?>, <?php echo $docObject->zipcode;?></span>
+
+                                        
+
+                                        <div class="docphone">Patient Reply : <span>
+
+											<?php 
+
+												$call_type = $row->calltype;
+
+												switch($call_type){
+													
+													
+													case 'email':
+
+														echo $row->textmessagereply; 
+
+													break;
+
+													case 'text':
+														
+														if(!empty($row->getLatestReply())){
+															echo $row->getLatestReply();
+														}else{
+															echo $row->textmessagereply;
+														}
+														 
+
+													break;
+
+													case 'voice':
+
+														if($row->apiinboundreply !=''){
+
+															if($row->apiinboundreply==1){
+
+																echo '<font color="green">Call Completed.	</font>';
+
+															}else if($row->apiinboundreply==2){
+
+																echo '<font color="red">Call transferred to doctor\'s phone</font>';
+
+															}
+
+														}else{
+
+															echo 'Called';
+
+														}
+
+													break;
+
+													default :
+
+														echo 'NA';
+
+													break;
+
+												}
+
+											?>
+
+                                      </span> </div>
+					
+
+							  
+						<?php if($call_type=='text' && $row->apiinbounddate !='') {
+									?>
+					 <div class="docphone">Reply Date & Time : <span>
+
+											<?php 
+											
+											if(!empty($row->getLatestReply())){
+												 $datetime = $row->getLatestReplyDatetime();
+											}else{
+												 $datetime = $row->apiinbounddate.' '.$row->apiinboundtime;
+											}
+											
+												
+												 $myDateTime = new DateTime($datetime, $pstTimezone);
+												 $offset = $pstTimezone->getOffset($myDateTime);
+												 
+												 $time = strtotime($datetime);
+												 
+												 $time = $time + $offset;  //we use + instead of using - sign because it already returns with - offset
+												
+												 $converted_date = date("Y-m-d H:i:s", $time);
+
+												 echo date('F j, Y',strtotime($converted_date)).' '.date('g:i a',strtotime($converted_date));
+											//echo date('F j, Y',strtotime($row->apiinbounddate)).' '.date('g:i a',strtotime($row->apiinboundtime));
+
+											
+
+											?>
+
+                                           </span></div>
+					<?php }?>	
+					
+									  
+						<?php if($call_type=='email' && $row->apiinbounddate !='') {
+									?>
+					 <div class="docphone">Reply Date & Time : <span>
+
+											<?php 
+											 $datetime = $row->apiinbounddate.' '.$row->apiinboundtime;
+												
+												 $myDateTime = new DateTime($datetime, $pstTimezone);
+												 $offset = $pstTimezone->getOffset($myDateTime);
+												 
+												 $time = strtotime($datetime);
+												 
+												 $time = $time + $offset;  //we use + instead of using - sign because it already returns with - offset
+												
+												 $converted_date = date("Y-m-d H:i:s", $time);
+
+												 echo date('F j, Y',strtotime($converted_date)).' '.date('g:i a',strtotime($converted_date));
+											//echo date('F j, Y',strtotime($row->apiinbounddate)).' '.date('g:i a',strtotime($row->apiinboundtime));
+
+											
+
+											?>
+
+                                           </span></div>
+					<?php }?>	
+					   <div class="docphone" style="width:100%;float:left;"><div style="width:3.2%;height:10px;float:left;"></div>Delivery Status: <span>
+
+										<?php 
+
+											switch($call_type){
+
+												case 'text' :
+
+													//echo ucfirst($row->deliverystatus);
+
+													echo "Text Sent on";
+
+												break;
+												
+												case 'email' :
+
+													//echo ucfirst($row->deliverystatus);
+
+													echo "Email Sent on";
+
+												break;
+
+
+												case 'voice' :
+
+													echo 'Call '.ucfirst($row->apicallstatus).' on';
+
+												break;
+
+											}
+
+											
+
+										?>   
+										
+										<?php if($row->calltype !='email'){ ?>
+
+										<?php 
+
+											if($row->apioutbounddate !=''){
+																																			$datetime = $row->apioutbounddate.' '.$row->apioutboundtime;
+												
+												 $myDateTime = new DateTime($datetime, $pstTimezone);
+												 $offset = $pstTimezone->getOffset($myDateTime);
+												 
+												 $time = strtotime($datetime);
+												 
+												 $time = $time + $offset;  //we use + instead of using - sign because it already returns with - offset
+												
+												 $converted_date = date("Y-m-d H:i:s", $time);
+												
+												echo '<strong>'.date('F j, Y',strtotime($converted_date)).'</strong> at <strong>'.date('g:i a',strtotime($converted_date)).'</strong>';
+
+												//echo date('F j, Y',strtotime($row->apioutbounddate)).' '.date('g:i a',strtotime($row->apioutboundtime));
+
+											}else{
+													
+												echo 'NA';
+												//echo 'NA';
+
+											}
+
+										?>   
+
+									<?php } ?>
+
+									
+										
+									</span></div>
+
+
+									 
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <div class="appo-icon">
+
+                            	<div class="ico" style="width:150px !important;">
+
+                                	<ul class="clearfix">
+										<?php 
+											$is_confirmed  = trim($row->getManualConfirm());
+											if($is_confirmed == 1 || (trim(strtoupper($row->apiinboundreply)) =='C') || (trim(strtoupper($row->apiinboundreply)) ==1)){
+										?>
+																															<li><label style="font-family:open_sansregular !important;font-weight:normal !important;"><img  title="Appointment Confirmed" style="cursor: pointer; cursor: hand;" src="/images/after_confirm.png"></label></li>
+
+										<?php 
+											}else{
+										?>
+											<li><label style="font-family:open_sansregular !important;font-weight:normal !important;"><img src="/images/before_confirm.png" class="manual_confirm" id="<?php echo $row->getId();?>" title="Confirm Manually" style="cursor: pointer; cursor: hand;"></label></li>
+										<?php 
+											
+											} 
+										?>
+                                        <li>
+
+                                        	<a href="#" class="removeAppointment" onClick="decline(this, 'del_<?php echo $row->getId(); ?>'); return false;" title="decline">
+
+                                        		<img src="/images/custom/img/close-icon.png" alt="Close">
+
+                                        	</a>
+
+                                        </li>
+
+										<?php if($patint_history_pdf->status==1){ ?>
+
+										<li><a href="/user/index/sharepdf/userid/<?php echo base64_encode($patint_history_pdf->getPatientId());?>" title="Download patient medical history"><img src="/images/user/pinned-icon.png" alt="edit"></a></li>
+
+										<?php } ?>
+
+										
+
+                                    </ul>
+
+                                    <?php if($row->getApprove() != 1) { ?>
+
+                                    <div class="orange-btn">
+
+                                    	<a href="#" class="approveAppointment" onClick="approve(this, '<?php echo $row->getId(); ?>'); return false;" id="<?php echo $row->getId(); ?>" title="approve" >Approve</a>
+
+                                    </div>
+
+                                    <?php } else { ?>
+										
+											<?php 
+
+												$call_type = $row->calltype;
+
+												switch($call_type){
+													
+													case 'email':
+
+															$css_style= 'background:#8AC640 !important;border:#8AC640 !important;';
+
+													break;
+
+
+													case 'text':
+
+														if(trim($row->apiinboundreply)==1 || trim(strtoupper($row->apiinboundreply))=='C'){
+
+														//if(strtoupper($row->apiinboundreply)=='C'){
+
+															$css_style= 'background:#8AC640 !important;border:#8AC640 !important;';
+
+														//}else if($row->apiinboundreply==2 || strtoupper($row->apiinboundreply)=='N'){
+
+														}//else if($row->apiinboundreply==2 || strtoupper($row->apiinboundreply)=='N'){
+
+														//	echo '<font color="red">Cancelled</font>';
+
+														//														}else if($row->apiinboundreply !='' && $row->apiinboundreply !=1 && $row->apiinboundreply !=2 && strtoupper($row->apiinboundreply) !='C' && strtoupper($row->apiinboundreply) !='N'){
+
+														// }
+
+														else if(trim($row->getManualConfirm())==1){
+
+															$css_style= 'background:#8AC640 !important;border:#8AC640 !important;';
+
+																																							}
+														else if(trim($row->apiinboundreply) !='' && trim(strtoupper($row->apiinboundreply)) !='C' && trim($row->getManualConfirm()) !=1){
+
+														$css_style= 'background:#FFA500 !important;border:#FFA500 !important;';
+
+
+																																							}else if(trim($row->apiinboundreply)==2){ 
+														$css_style= 'background:#FFA500 !important;border:#FFA500 !important;';
+																																									//echo 'Cancelled';
+
+															
+
+														}else{
+
+															$css_style= 'background:#25A6EA !important;border:#25A6EA !important;';
+
+														}
+
+													break;
+
+													case 'voice':
+
+														if(trim($row->apiinboundreply) !=''){
+
+															if(trim($row->apiinboundreply)==1){
+
+																$css_style= 'background:#8AC640 !important;border:#8AC640 !important;';
+
+															}else if(trim($row->getManualConfirm())==1){
+
+															$css_style= 'background:#8AC640 !important;border:#8AC640 !important;';
+
+																																							}else if(trim($row->apiinboundreply)==2 && trim($row->getManualConfirm()) !=1){
+
+																$css_style= 'background:#FFA500 !important;border:#FFA500 !important;';
+
+															}else{
+																$css_style= 'background:#D9534F !important;border:#D9534F !important;';
+															}
+
+														}else if(trim($row->getManualConfirm()) ==1){
+															$css_style= 'background:#8AC640 !important;border:#8AC640 !important;';
+														}else{
+
+															$css_style= 'background:#25A6EA !important;border:#25A6EA !important;';
+
+														}
+
+													break;
+
+													default :
+														if(trim($row->getManualConfirm())==1){
+															$css_style= 'background:#8AC640 !important;border:#8AC640 !important;';
+														}else{
+															$css_style= 'background:#D9534F !important;border:#D9534F !important;';
+														}
+
+													break;
+
+												}
+
+											?>
+
+                                    <div class="blue-btn" style="<?php echo $css_style;?>">
+
+                                    	<?php 
+
+												//$call_type = $row->calltype;
+
+												switch($call_type){
+													
+													case 'email':
+														echo 'Confirmed';
+													break;
+
+													case 'text':
+
+														if(trim($row->apiinboundreply)==1 || trim(strtoupper($row->apiinboundreply))=='C'){
+
+														//if(strtoupper($row->apiinboundreply)=='C'){
+
+															echo 'Confirmed';
+
+														//}else if($row->apiinboundreply==2 || strtoupper($row->apiinboundreply)=='N'){
+
+														}//else if($row->apiinboundreply==2 || strtoupper($row->apiinboundreply)=='N'){
+
+														//	echo '<font color="red">Cancelled</font>';
+
+														//														}else if($row->apiinboundreply !='' && $row->apiinboundreply !=1 && $row->apiinboundreply !=2 && strtoupper($row->apiinboundreply) !='C' && strtoupper($row->apiinboundreply) !='N'){
+
+														// }
+
+														else if(trim($row->apiinboundreply) !='' && trim(strtoupper($row->apiinboundreply)) !='C' && trim($row->getManualConfirm()) !=1){
+
+
+
+																																								 echo "Replied";
+
+																																							}else if(trim($row->getManualConfirm())==1){
+
+
+
+																																								 echo "Confirmed";
+
+																																							}else if(trim($row->apiinboundreply)==2){ 
+
+																																									echo 'Cancelled';
+
+															
+
+														}else{
+
+															echo 'Pending';
+
+														}
+
+													break;
+
+													case 'voice':
+
+														if(trim($row->apiinboundreply) !=''){
+
+															if(trim($row->apiinboundreply)==1){
+
+																echo 'Confirmed';
+
+															}else if(trim($row->apiinboundreply)==2){
+
+																echo '<font style="font-size:15px;">Call Transferred</font>';
+
+															}else{
+																echo '<font style="font-size:15px;">Invalid input</font>';
+															}
+
+														}else if(trim($row->getManualConfirm())==1){
+															echo 'Confirmed';
+														}else{
+
+															echo 'Called';
+
+														}
+
+													break;
+
+													default :
+														if(trim($row->getManualConfirm())==1){
+															echo 'Confirmed';
+														}else{
+															echo 'Undelivered';
+														}
+													break;
+
+												}
+
+											?>
+
+                                    </div>
+
+                                    <?php } ?>
+
+                                </div>
+
+                            </div>
+							
+						
+							
+                        </div>
+                        <?php if(count($this->upcomingObject) !=$i){ ?>
+                        	<div style="width:100%;border-bottom:1px solid #57AFF3; padding-bottom:1.5px;margin-top:3px;"></div>
+
+                        <?php } $i++; } } else { ?>
+
+						 <div class="appoinment-table clearfix">
+
+						<div class="orange-btn"><a href="#">No Upcoming Appointments</a>
+
+                                    </div>
+
+									</div>
+
+						<?php } ?>
+
+                        
+
+                        
+
+                        
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+       </div>    <!-- upcoming div close here     -->
+
+   <?php
+
+    }else{
+
+    echo  '<div style="padding-left:13%;padding-top:20px;"><a href="#">No Upcoming Appointments</a></div>' ;
+
+    }
+
+  }
+
+?>
+
+    <?php
+
+    if($this->color=='diff2'){
+
+      if(count($this->pastObject)>0) {
+
+       ?> 
+
+       <div id="post">   <!-- post div start here     -->  
+
+        <div class="container-fluid">
+
+        	<div class="row">
+
+            	<div class="col-sm-12">
+
+                	<div class="whitebg">
+
+                    	<h3 class="grey-heading">Past Appointments</h3>
+
+						<?php
+
+						$DoctorReview = new Application_Model_DoctorReview();
+
+					if(count($this->pastObject)>0) {
+						$j=1;	
+						foreach($this->pastObject as $pastrow) {
+
+							$doctor_id = $pastrow->getDoctorId();    
+
+							$docObject=$Doctor->find($doctor_id);
+
+							$where="id={$pastrow->id}";
+
+							$status=$Appointment->getAppointmentStatus($where);
+
+							$patient = $Patient->fetchRow("user_id=".$pastrow->getUserId());
+
+					?>
+
+                        <div class="appoinment-table clearfix">
+
+<!--
+                        	<div class="appo-pic">
+				  <?php  //if($patient->profileimage !=""){
+	//$profileImage='';
+
+			//$profileImage = "/images/patient_image/" . $patient->profileimage;
+
+			//if(!file_exists(getcwd() . $profileImage) || $patient->profileimage=='') $profileImage = "/images/doctor_image/png.png";
+?>
+<img src="<?php //echo //$profileImage; ?>" alt="Doctor">
+<?php //} ?>
+		                   </div>
+-->
+
+                            <div class="appo-content">
+
+                            	<div class="topc clearfix">
+
+                                	<div class="docname">Patient Name : <span>
+										<?php if(!empty($patient)){ ?>
+												<a href="/user/index/doctor-patient-details?patid=<?php echo $patient->getId(); ?>" style="color:#2FAFF3 !important;"><?php echo $pastrow->fname." ".$pastrow->lname; ?></a>
+											<?php }else{ 
+												echo $pastrow->fname." ".$pastrow->lname;
+											 } ?>
+										</span></div>
+
+                                   <div class="docdate" style="width:40.5% !important;float:right;">Date : <span>On <?php echo date('F j, Y',strtotime($pastrow->appointmentDate));?> At <?php echo date('h:i A',strtotime($pastrow->appointmentTime)); ?>  </span></div>
+
+
+                                </div>
+
+                                <div class="topc clearfix">
+
+                                	<div class="doclocation">
+
+                                    	<img src="/images/custom/img/loc-icon.png" alt="location" class="imgleft"> 
+
+                                        Location : <span><?php echo $docObject->street;?>, <?php echo $docObject->city;?>, <?php echo $docObject->zipcode;?></span>
+
+<div class="docphone">Patient Reply : <span>
+
+											<?php 
+
+												$call_type = $pastrow->calltype;
+
+												switch($call_type){
+													
+													case 'email':
+
+														echo $pastrow->textmessagereply; 
+
+													break;
+
+													case 'text':
+													
+														if(!empty($pastrow->getLatestReply())){
+															echo $pastrow->getLatestReply();
+														}else{
+															echo $pastrow->textmessagereply;
+														}
+														 
+													break;
+
+													case 'voice':
+
+														if($pastrow->apiinboundreply !=''){
+
+															if($pastrow->apiinboundreply==1){
+
+																echo '<font color="green">Call Completed.	</font>';
+
+															}else if($pastrow->apiinboundreply==2){
+
+																echo '<font color="red">Call transferred to doctor\'s phone</font>';
+
+															}
+
+														}else if($pastrow->getManualConfirm()==1){
+															echo '<font color="green">Call Completed.	</font>';
+														}else{
+
+															echo 'Called';
+
+														}
+
+													break;
+
+													default :
+
+														if(trim($pastrow->getManualConfirm())==1){
+															echo 'Confirmed';
+														}else{
+															echo 'Undelivered';
+														}
+
+													break;
+
+												}
+
+											?>
+
+                                        </span></div>
+
+								<?php if($call_type=='text' && $pastrow->apiinbounddate!='') {?>
+
+                                           <div class="docphone">Reply Date & Time: <span>
+
+											<?php 
+											
+											if(!empty($pastrow->getLatestReply())){
+												 $datetime = $pastrow->getLatestReplyDatetime();
+											}else{
+												 $datetime = $pastrow->apiinbounddate.' '.$pastrow->apiinboundtime;
+											}
+												
+												
+												 $myDateTime = new DateTime($datetime, $pstTimezone);
+												 $offset = $pstTimezone->getOffset($myDateTime);
+												 
+												 $time = strtotime($datetime);
+												 
+												 $time = $time + $offset;  //we use + instead of using - sign because it already returns with - offset
+												
+												 $converted_date = date("Y-m-d H:i:s", $time);
+
+												 echo date('F j, Y',strtotime($converted_date)).' '.date('g:i a',strtotime($converted_date));
+													//echo date('F j, Y',strtotime($pastrow->apiinbounddate)).' '.date('h:i a',strtotime($pastrow->apiinboundtime));
+
+											?>
+
+                                           </span></div>
+
+								   <?php }?>	
+								   
+								   
+								<?php if($call_type=='email' && $pastrow->apiinbounddate!='') {?>
+
+                                           <div class="docphone">Reply Date & Time: <span>
+
+											<?php 
+												 $datetime = $pastrow->apiinbounddate.' '.$pastrow->apiinboundtime;
+												
+												 $myDateTime = new DateTime($datetime, $pstTimezone);
+												 $offset = $pstTimezone->getOffset($myDateTime);
+												 
+												 $time = strtotime($datetime);
+												 
+												 $time = $time + $offset;  //we use + instead of using - sign because it already returns with - offset
+												
+												 $converted_date = date("Y-m-d H:i:s", $time);
+
+												 echo date('F j, Y',strtotime($converted_date)).' '.date('g:i a',strtotime($converted_date));
+													//echo date('F j, Y',strtotime($pastrow->apiinbounddate)).' '.date('h:i a',strtotime($pastrow->apiinboundtime));
+
+											?>
+
+                                           </span></div>
+
+								   <?php }?>							
+
+                                    <div class="docphone" style="width:100%;float:left;"><div style="width:3.2%;height:10px;float:left;"></div>Delivery Status: <span>
+
+										<?php 
+
+											switch($call_type){
+												
+												case 'email' :
+
+													//echo ucfirst($row->deliverystatus);
+
+													echo "Email Sent on";
+
+												break;
+
+												case 'text' :
+
+													//echo ucfirst($row->deliverystatus);
+
+													echo "Text Sent on";
+
+												break;
+
+												case 'voice' :
+
+													echo 'Called on ';
+
+												break;
+
+											}
+
+											
+
+										?> 
+										
+										<?php if($pastrow->calltype !='email'){ 
+
+											if($pastrow->apioutbounddate !=''){
+											 $datetime = $pastrow->apioutbounddate.' '.$pastrow->apioutboundtime;
+												
+												 $myDateTime = new DateTime($datetime, $pstTimezone);
+												 $offset = $pstTimezone->getOffset($myDateTime);
+												 
+												 $time = strtotime($datetime);
+												 
+												 $time = $time + $offset;  //we use + instead of using - sign because it already returns with - offset
+												
+												 $converted_date = date("Y-m-d H:i:s", $time);
+
+												 echo '<strong>'.date('F j, Y',strtotime($converted_date)).'</strong> at <strong>'.date('g:i a',strtotime($converted_date)).'</strong>';
+											//	echo date('F j, Y',strtotime($pastrow->apioutbounddate)).' '.date('h:i a',strtotime($pastrow->apioutboundtime));
+
+											}else{
+												
+													
+														echo 'Undelivered';
+												
+											}
+									} ?>
+          
+										
+									  </span></div>
+										
+							
+            </div>
+
+                                </div>
+
+                                <?php 
+
+                                $review = $DoctorReview->fetchRow('appointment_id='.$pastrow->getId());
+
+                                if($review) { ?>
+
+                                <div class="topc clearfix">
+
+                                	<div class="docreview">
+
+                                    	<img src="/images/user/review-icon.png" alt="location" class="imgleft"> 
+
+                                        Review : <span><?php echo $review->getReview(); ?></span>
+
+                                        <?php if($review->getDocterReply()) { ?>
+
+                                        Your answer: <span><?php echo $review->getDocterReply(); ?></span>
+
+                                        <?php } ?>
+
+                                    </div>
+
+                                </div>
+
+                               <?php } ?>
+
+                            </div>
+
+                            <div class="appo-icon">
+
+                            	<div class="ico">
+
+                                	<?php if(!$review) { ?>
+
+                                    <div class="orange-btn">
+
+                                    	<a href="#" onclick="remidReview(this, <?php echo $pastrow->getId(); ?>); return false;" class="remindReview">Remind review</a>
+
+                                    </div>
+
+                                    <?php } ?>
+
+                                </div>
+
+                            </div>
+							
+							
+                        </div>
+							<?php if(count($this->pastObject) !=$j){ ?>
+                        	<div style="width:100%;border-bottom:1px solid #57AFF3; padding-bottom:1.5px;margin-top:3px;"></div>
+
+                        
+						  <?php } $j++; } } else { ?>
+							  
+						 <div class="appoinment-table clearfix">
+
+						<div class="orange-btn"><a href="#">No Past Appointments</a>
+
+                                    </div>
+
+									</div>
+
+						<?php } ?>
+
+                        
+
+                        
+
+                        
+
+                        
+
+                        
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        </div>
+
+        <?php
+
+     }else{
+
+        echo '<div style="padding-left:13%;padding-top:20px;"><a href="#">No Past Appointments</a></div>' ;
+
+     }
+
+    }
+
+    ?>
+
+    <?php
+
+    if($this->color=='diff3'){
+
+     if(count($this->cancelObjects)>0) {
+
+    ?>  
+
+       <div id="cancel">   <!-- cancel div start here     --> 
+
+        <div class="container-fluid">
+
+        	<div class="row">
+
+            	<div class="col-sm-12">
+
+                	<div class="whitebg">
+
+                    	<h3 class="grey-heading">Cancelled Appointments</h3>
+
+						<?php
+
+					if(count($this->cancelObjects)>0) {
+						$k=1;
+						foreach($this->cancelObjects as $pastrow) {
+
+							$doctor_id = $pastrow->getDoctorId();    
+
+							$docObject=$Doctor->find($doctor_id);
+
+							$where="id={$pastrow->id}";
+
+							$status=$Appointment->getAppointmentStatus($where);
+
+							$patient = $Patient->fetchRow("user_id=".$pastrow->getUserId());
+
+					?>
+
+                        <div class="appoinment-table clearfix">
+
+
+<!--
+<div class="appo-pic">
+
+                            	  <?php  //if($patient->profileimage !=""){
+	//$profileImage='';
+
+			//$profileImage = "/images/patient_image/" . $patient->profileimage;
+
+			//if(!file_exists(getcwd() . $profileImage) || $patient->profileimage=='') $profileImage = "/images/doctor_image/png.png";
+?>
+<img src="<?php //echo //$profileImage; ?>" alt="Doctor">
+<?php //} ?>
+                            </div>
+-->
+
+                            <div class="appo-content">
+
+                            	<div class="topc clearfix">
+
+                                	<div class="docname">Patient Name : <span>
+										<?php if(!empty($patient)){ ?>
+											<a href="/user/index/doctor-patient-details?patid=<?php echo $patient->getId(); ?>" style="color:#2FAFF3 !important;"><?php echo $pastrow->fname." ".$pastrow->lname; ?></a>
+										<?php }else{ 
+											echo $pastrow->fname." ".$pastrow->lname;
+										 } ?>
+										
+										</span></div>
+
+                                    <div class="docdate" style="width:40.5% !important;float:right;">Date : <span>On <?php echo date('F j, Y',strtotime($pastrow->appointmentDate));?> At <?php echo date('h:i A',strtotime($pastrow->appointmentTime)); ?>  </span></div>
+
+                                </div>
+
+                                <div class="topc clearfix">
+
+                                	<div class="doclocation">
+
+                                    	<img src="/images/custom/img/loc-icon.png" alt="location" class="imgleft"> 
+
+                                        Location : <span><?php echo $docObject->street;?>, <?php echo $docObject->city;?>, <?php echo $docObject->zipcode;?></span>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <!--
+
+                            <div class="appo-icon">
+
+                            	<div class="ico">
+
+                                	<div class="orange-btn"><a href="#">Reschedule</a>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        	-->
+
+                        </div>
+			<?php if(count($this->cancelObjects) !=$j){ ?>
+                        	<div style="width:100%;border-bottom:1px solid #57AFF3; padding-bottom:1.5px;margin-top:3px;"></div>
+
+                        
+						  <?php } $k++; } } else { ?>
+
+
+
+
+<?php } ?>					   
+
+                       
+
+                        
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        </div> <!--  div close here     -->
+
+       <?php
+
+       }else{
+
+         echo '<div style="padding-left:13%;padding-top:20px;"><a href="#">No Cancelled Appointments</a></div>' ;
+
+      }
+
+    }
+
+     ?>      
+
+    </div>
+
+  
+
+  
+
+  
+
+  <div class="container-fluid">
+
+  	<div class="row">
+
+    </div>
+
+  </div>
+
+  
+
+  
+
+  
+
+
+
+
+
+</div>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  <div class="container-fluid div-space">
+
+    <div class="row">
+
+      <div class="col-sm-6">
+
+        
+
+      </div>
+
+      <div class="col-sm-6">
+
+        
+
+      </div>
+
+    </div>
+
+  </div>
+  
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/js/select2.min.js"></script>
+
+
+  <script>
+
+  $(function () {
+
+    $('#myTab a:first').tab('show')
+
+  })
+
+</script> 
+
+<script>
+
+  $(function () {
+
+    $('#myTab01 a:first').tab('show')
+
+  })
+
+</script>
+
+<script>
+
+  $(function () {
+
+    $('#myTab02 a:first').tab('show')
+
+  })
+
+</script>  
+
+</div>
+<?php 
+	$actual_link = $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+	$exploded_url = explode('/',$actual_link);
+	if(in_array('past',$exploded_url) && !empty($exploded_url)){
+		$type="past";
+	}else if(in_array('cancell',$exploded_url) && !empty($exploded_url)){
+		$type="cancel";
+	}else{
+		$type="current";
+	}
+?>
+<script>
+
+	$('#ada_code').select2();
+
+	jQuery("#fulldate").pickmeup({
+
+		hide_on_select: true,
+
+		min: new Date,
+
+		format: "m-d-Y"
+
+	});
+	
+	$(document).ready(function(){
+		
+		//var selectedKeyword = '<?php echo $this->selectedKeyword;?>';
+		//if(selectedKeyword !='' || selectedKeyword !=undefined){
+			//$(".sort_by_key").removeClass("active");
+			//$("#"+selectedKeyword).addClass("active");
+		//}
+				
+		//$(".sort_by_key").on("click",function(){
+			//var key =  $(this).attr("id");
+			//if(key !='' || key !=undefined){
+				//var current_url = '<?php echo $type;?>';
+				//if(current_url=='past'){
+					//showPast(key);
+				//}else if(current_url=='cancel'){
+					//showCancel(key);
+				//}else{
+					//showUpcoming(key);
+				//}
+			//}else{
+				//alert("Browser is not responding currently, please try again!");
+			//}
+		//});
+		
+		
+		/***********Manual Confirmation*************/
+		
+		$(".manual_confirm").on("click",function(){
+			var id = $(this).attr("id");
+			if(id > 0){
+					//if(ajax_req){ ajax_req.abort(); }
+					$.getJSON("/user/index/confirm-appointment-manually",{id:id}, function(result){
+						if(result.key ==1){
+							window.location.reload();
+						}else{
+							alert("Unable to confirm appointment this time");
+						}	
+					});
+			}else{
+				alert("Unable to confirm appointment this time");
+			}
+		});
+	});
+
+function approve(element, id) {
+
+	//console.log(id);
+
+	$.post("/user/index/approve-appointment", {"appointid" : id},
+
+		function(data) { 
+
+			decoded = $.parseJSON(data);
+
+			if(decoded['err'] == 0) {
+
+				jQuery(element).closest("div").addClass("blue-btn").removeClass("orange-btn");
+
+				jQuery(element).html("Approved");
+
+			} else {
+
+				console.log("Problem while approving");
+
+			}
+
+		}
+
+	);
+
+	return false;
+
+}
+
+function decline(element, id) {
+
+	//console.log(id);
+
+	$.post("/user/index/decline-appointment", {"appointid" : id},
+
+		function(data) { 
+
+			decoded = $.parseJSON(data);
+
+			if(decoded['err'] == 0) {
+
+				jQuery(element).closest(".appoinment-table").remove();
+
+			} else {
+
+				console.log("Problem while deleting");
+
+			}
+
+		}
+
+	);
+
+	return false;
+
+}
+
+
+
+function remidReview(element, appid) {
+
+	$.post("/user/index/remind-patient-review", {"appid" : appid},
+
+		function(data) { 
+
+			decoded = $.parseJSON(data);
+
+			if(decoded['error'] == 0) {
+
+				jQuery(element).closest(".ico").append(decoded['message']);
+
+			} else {
+
+				console.log("Problem while sending reminder");
+
+			}
+
+		}
+
+	);
+
+	return false;
+
+}
+
+
+
+jQuery("#savePatientBtn").click(function(event){
+
+	event.preventDefault();
+
+	var name_val = jQuery("#name").val();
+
+	var lastname_val = jQuery("#lastname").val();
+
+	var phone_val = jQuery("#phone").val();
+
+	var mobile_val = jQuery("#mobile").val();
+	
+	var procedure_val = jQuery("#procedure").val();
+
+	var hour_val = jQuery("#hour").val();
+
+	var min_val = jQuery("#minutes").val();
+
+	var am_val = jQuery("#am").val();
+
+	var fulldate_val = jQuery("#fulldate").val();
+
+	var email_val = jQuery("#email").val();
+
+	var street_val = jQuery("#street").val();
+
+	var city_val = jQuery("#city").val();
+
+	var zipcode_val = jQuery("#zipcode").val();
+
+	var state_val = jQuery("#state").val();
+	
+	var ada_code = jQuery("#ada_code option:selected").val();
+	
+	var preventative_maintenance_other = jQuery("input[name=preventative_maintenance_other]:checked").val();
+	
+	$('#savePatientBtn').prop('disabled', true);
+
+	$("#loading").html('<img src="/images/progress_bar.gif">');
+
+	$("body").css('opacity','0.8');
+
+	$("body").css('background-color','#26A7EC');
+
+	$.post('/user/index/new-patient-appointment/', {
+
+        name: name_val,
+
+        lastname: lastname_val,
+
+        email: email_val,
+
+        phone: phone_val,
+        
+        mobile: mobile_val,
+
+        procedure: procedure_val,
+
+        hour: hour_val,
+
+        minutes: min_val,
+
+        am: am_val,            
+
+        fulldate: fulldate_val,
+
+        street: street_val,
+
+        city: city_val,
+
+        zipcode: zipcode_val,
+
+        state: state_val,
+        
+        ada_code: ada_code,
+		
+		preventative_maintenance_other : preventative_maintenance_other
+
+    },
+
+    function(html){
+
+        jQuery(".welcome").click();
+
+        location.reload();
+
+    });
+
+});
+
+function showUpcoming(keyword){ 
+	keyword = keyword || ''; 
+	//window.location.assign("/user/index/doctor-appointment/id/upcoming/key/"+keyword+"");
+	window.location.assign("/user/index/doctor-appointment/id/upcoming");
+}
+
+function showPast(keyword){ 
+	keyword = keyword || ''; 
+	//window.location.assign("/user/index/doctor-appointment/id/past/key/"+keyword+"");
+	window.location.assign("/user/index/doctor-appointment/id/past");
+}
+
+function showCancel(keyword){
+	keyword = keyword || ''; 	
+	//window.location.assign("/user/index/doctor-appointment/id/cancell/key/"+keyword+"");
+	window.location.assign("/user/index/doctor-appointment/id/cancell");
+}
+
+</script>
+
+
+
+<style>
+	
+		
+.blue-btn{
+
+    background: rgba(0, 0, 0, 0) url("/images/user/blue-btn-bg.png") repeat-x scroll center top;
+
+    border: 1px solid #1ea1e6;
+
+    border-radius: 6px;
+
+    color: #fff;
+
+    cursor: pointer;
+
+    display: block;
+
+    font-size: 18px;
+
+    height: 38px;
+
+    line-height: 38px;
+
+    text-align: center;
+
+    margin-top:10px;
+
+    width:130px;
+
+}
+
+.orange-btn {
+
+    background: rgba(0, 0, 0, 0) linear-gradient(to bottom, rgba(255, 170, 12, 1) 0%, rgba(255, 124, 1, 1) 100%) repeat scroll 0 0;
+
+    border: 1px solid #ff9600;
+
+    border-radius: 5px;
+
+    clear: both;
+
+    color: #fff;
+
+    font-family: "montserratregular";
+
+    font-size: 17px;
+
+    font-weight: 400;
+
+    margin-top: 10px;
+
+    padding: 6px 8px;
+
+    text-align: center;
+
+    width: 130px;
+
+    height: 38px;
+
+}
+
+</style>
+
+
+
+

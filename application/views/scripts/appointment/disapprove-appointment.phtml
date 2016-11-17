@@ -1,0 +1,17 @@
+<div class="white-bg contactblock-gap clearfix">
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-12 text-center">
+				<h1 id="appointmentApprovalTitle"><?php echo $this->msg; ?></h1>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-12 appoitnemtApprovalDetails">
+				<h2>Appointment Details</h2>
+				<p><span>Date:</span> <span id="appdateFinal"><?php echo date("F d, Y", strtotime($this->appointment->getAppointmentDate())); ?></span> at <span id="apptimeFinal"><?php echo date("g:i a", strtotime($this->appointment->getAppointmentTime())); ?></span></p>
+				<p><span>Patient:</span> <span id="patnameFinal"><?php echo $this->appointment->getFname()." ".$this->appointment->getLname(); ?></span></p>
+				<p><span>Reason for visit:</span> <span id="reasonFinal"><?php echo $this->appointment->getNeeds(); ?></span></p>
+			</div>
+		</div>
+	</div>
+</div>

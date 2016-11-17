@@ -1,0 +1,12 @@
+
+<select multiple name="doctor_affiliation2" id="doctor_affiliation2" style="width:250px"" size="10">
+<?php
+$arraffiliate= $this->affiliations;
+
+foreach($arraffiliate as $key=>$val)
+{
+    echo "<option value='{$key}'>{$val}</option>";
+}
+?>
+</select>
+

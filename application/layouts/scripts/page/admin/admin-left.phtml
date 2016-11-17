@@ -1,0 +1,93 @@
+<!-- left Content box -->
+<?php 
+$usersNs = new Zend_Session_Namespace("members"); 
+$Usern = new Application_Model_User();
+$Usern = $Usern->fetchRow("id=$usersNs->userId");
+if($Usern->getUserLevelId() == 4){
+?>
+<div id="bodyleftmain">
+  <!-- General Info -->
+  <div class="leftsidelink">
+    <h2 id="generalInfoAdmin"> General Info</h2>
+      <ul class="leftlinklist">
+        <li><a href="<?php echo $this->seoUrl('/admin/index/dashboard')?>" id="<?php if($this->controllerName=='index'){echo "activeNav";} ?>">Dashboard</a> </li>
+        <li><a href="<?php echo $this->seoUrl('/admin/user/change-password')?>"  id="<?php if($this->actionName=='change-password' && $this->controllerName=='user' ){echo "activeNav";} ?>" >Change Password</a></li>
+        <li><a href="<?php echo $this->seoUrl('/admin/login/logout')?>">Logout</a></li>
+      </ul>
+  </div>
+  <div class="leftsidelink">
+    <h2  id="usersAdmin">Manage Users</h2>
+	<ul class="leftlinklist">
+		<li><a href="<?php echo $this->seoUrl('/admin/doctor/')?>" id="<?php if($this->controllerName=='doctor'){echo "activeNav";} ?>">Doctors</a></li>
+	</ul>
+	</div>
+	 <div class="leftsidelink">
+    <h2 id="appointmentAdmin">Manage Appointment</h2>
+      <ul class="leftlinklist">
+        <li><a href="<?php echo $this->seoUrl('/admin/appointment/')?>" id="<?php if($this->controllerName=='appointment'){echo "activeNav";} ?>">Web Appointment</a></li>
+      </ul>
+    
+  </div>
+</div>
+<?php } else { ?>
+<div id="bodyleftmain">
+  <!-- General Info -->
+  <div class="leftsidelink">
+    <h2 id="generalInfoAdmin"> General Info</h2>
+      <ul class="leftlinklist">
+        <li><a href="<?php echo $this->seoUrl('/admin/index/dashboard')?>" id="<?php if($this->controllerName=='index'){echo "activeNav";} ?>">Dashboard</a> </li>
+        <li><a href="<?php echo $this->seoUrl('/admin/user/change-password')?>"  id="<?php if($this->actionName=='change-password' && $this->controllerName=='user' ){echo "activeNav";} ?>" >Change Password</a></li>
+        <li><a href="<?php echo $this->seoUrl('/admin/login/logout')?>">Logout</a></li>
+      </ul>
+  </div>
+  <!-- General Info -->
+  <!-- General Admin-->
+  <div class="leftsidelink">
+    <h2 id="generalAdmin">General Admin</h2>
+      <ul class="leftlinklist">
+        <li><a href="<?php echo $this->seoUrl('/admin/user/')?>" id="<?php if($this->controllerName=='user' && $this->actionName<>'change-password'){echo "activeNav";} ?>">Manage Admin</a></li>
+        <!--li><a href="<?php echo $this->seoUrl('/admin/userlevel/view/')?>" id="<?php if($this->controllerName=='userlevel'){echo "activeNav";} ?>">User Level</a></li-->
+        <li><a href="<?php echo $this->seoUrl('/admin/global-settings/')?>" id= "<?php if($this->controllerName=='global-settings' && $this->actionName!="amazon" ){echo "activeNav";} ?>">Global Settings</a></li>
+        <li><a href="<?php echo $this->seoUrl('/admin/email-template/')?>" id= "<?php if($this->controllerName=='email-template'){echo "activeNav";} ?>">Email Template</a></li>
+        <li><a href="<?php echo $this->seoUrl('/admin/article/')?>" id= "<?php if($this->controllerName=='article'  && $this->actionName!='category'){echo "activeNav";} ?>">Manage Article</a></li>
+        <li><a href="<?php echo $this->seoUrl('/admin/article/category')?>" id= "<?php if($this->controllerName=='article' && $this->actionName=='category'){echo "activeNav";} ?>">Manage Article Category</a></li>
+      </ul>
+  </div>
+  <!-- Manage Doctors-->
+  <div class="leftsidelink">
+    <h2  id="usersAdmin">Manage Users</h2>
+        <ul class="leftlinklist">
+            <li><a href="<?php echo $this->seoUrl('/admin/doctor/')?>" id="<?php if($this->controllerName=='doctor'){echo "activeNav";} ?>">Doctors</a></li>
+        </ul>
+		<ul class="leftlinklist">
+            <li><a href="<?php echo $this->seoUrl('/admin/assistant/')?>" id="<?php if($this->controllerName=='assistant'){echo "activeNav";} ?>">Assistants</a></li>
+        </ul>
+        <ul class="leftlinklist">
+            <li><a href="<?php echo $this->seoUrl('/admin/patient/')?>" id="<?php if($this->controllerName=='patient'){echo "activeNav";} ?>">Patients</a></li>
+        </ul>
+        
+  </div>
+
+  <div class="leftsidelink">
+    <h2 id="appointmentAdmin">Manage Appointment</h2>
+      <ul class="leftlinklist">
+        <li><a href="<?php echo $this->seoUrl('/admin/appointment/')?>" id="<?php if($this->controllerName=='appointment'){echo "activeNav";} ?>">Web Appointment</a></li>
+      </ul>
+    
+  </div>
+  
+  <div class="leftsidelink">
+    <h2 id="miscAdmin">Miscellaneous</h2>
+      <ul class="leftlinklist">
+        <li><a href="<?php echo $this->seoUrl('/admin/category/')?>" id="<?php if($this->controllerName=='category' && $this->actionName=='index'){echo "activeNav";} ?>">Category</a></li>
+        <li><a href="<?php echo $this->seoUrl('/admin/insurance-company/')?>" id="<?php if($this->controllerName=='insurance-company' && $this->actionName=='index'){echo "activeNav";} ?>">Insurance Company</a></li>
+		<li><a href="<?php echo $this->seoUrl('/admin/insurance-plan/')?>" id="<?php if($this->controllerName=='insurance-company' && $this->actionName=='index'){echo "activeNav";} ?>">Insurance Plan</a></li>
+		<li><a href="<?php echo $this->seoUrl('/admin/association/')?>" id="<?php if($this->controllerName=='association'){echo "activeNav";} ?>">Associations</a></li>
+        <li><a href="<?php echo $this->seoUrl('/admin/hospital-affiliation/')?>" id="<?php if($this->controllerName=='hospital-affiliation'){echo "activeNav";} ?>">Hospital Affiliation</a></li>
+        <li><a href="<?php echo $this->seoUrl('/admin/reason-for-visit/')?>" id="<?php if($this->controllerName=='reason-for-visit'){echo "activeNav";} ?>">Reason for Visit</a></li>
+		<li><a href="<?php echo $this->seoUrl('/admin/patient-comment/')?>" id="<?php if($this->controllerName=='patient-comment'){echo "activeNav";} ?>">Patient Comment</a></li>
+      </ul>
+  </div>
+</div>
+<!-- End left Content box -->
+<?php } ?>

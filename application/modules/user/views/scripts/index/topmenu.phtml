@@ -1,0 +1,18 @@
+<div class="breadcrum">
+    <ul class="crumb-nav">
+		<li id="crumb3"><a class="<?php if($this->active=="personal") echo "active"; else "";?>" href="<?php echo $this->seoUrl('/user/index/personal');?>" id="crumbA3"><span>Personal Info</span></a></li>
+		<li id="crumb2"><a class="<?php if($this->active=="payment") echo "active"; else "";?>" href="<?php echo $this->seoUrl('/user/index/payment');?>" id="crumbA2"><span>Payment Info</span></a></li>
+		<li id="crumb1"><a class="<?php if($this->active=="officeinfo") echo "active"; else "";?>" href="<?php echo $this->seoUrl('/user/index/officeinfo');?>" id="crumbA1"><span>Office Info</span></a></li>
+	</ul>
+</div>
+<?php
+    $doctorId = "";
+    $usersNs = new Zend_Session_Namespace("members");
+    if($usersNs)$doctorId = $usersNs->doctorId;
+?>
+<div class="edit-profile-begin">
+    <div class="profileMessage">Text Formatting: Double enter translates to a bullet in your profile</div>
+    <div>
+		<a href="<?php echo $this->seoUrl('/profile/index/id/'.$doctorId);?>" target="_blank" class="myButton right">Show Profile</a>
+	</div>
+</div><br clear="all" />

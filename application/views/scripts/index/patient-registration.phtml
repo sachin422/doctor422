@@ -1,0 +1,247 @@
+<div class="container">
+	<div class="row">
+    	<div class="col-sm-12">
+    		<form id="loginForm" name="login" method="post" action="<?php echo $this->form->action ?>">
+	        	
+	        	<div class="white-bg patient-registration clearfix">
+	            	<div class="container-fluid">
+	                	<div class="row">
+	                    	<div class="col-sm-12">
+	                        	<h2>Register with doctors</h2>
+	                            <div class="full-border">
+	                            	<div class="container-fluid">
+	                                	<div class="row">
+		                                	<div class="col-sm-4">
+		                                    	<img src="/images/oneicon.png" alt="One"> <span>Create Profile</span>
+		                                    </div>
+		                                    <div class="col-sm-4">
+		                                    	<img src="/images/twoicon.png" alt="One"> Start Managing Your Health!
+		                                    </div>
+		                                </div>
+	                            	</div>
+
+	                            	<div class="reg-pane">
+		                            	<div class="container-fluid">
+		                                	<div class="row">
+		                                    	<div class="col-sm-5 text-center">
+		                                        	<div class="reg-note">
+		                                        		<span>doctors</span> is giving you the ease and convenience of managing your health online.
+		                                        	</div>
+		                                            <div class="blue-pane">
+		                                            	<span>BOOK APPOINTMENTS 24/7</span> ONLINE OR ON YOUR SMART PHONE.
+		                                            </div>
+		                                        </div>
+		                                        <div class="col-sm-7">
+		                                        	<?php 
+		                                        	if($this->email!=''){
+										                $path="/index/login/e/".$this->email;
+										                $url = $this->SeoUrl($path);
+										                ?>
+										                <div class="grey-content clearfix">
+										                	<p class="reg-note">
+										                		Thank you for registering. You can now manage your health online using doctors. In order to login 
+										                		<a href = "javascript:void();" onclick="window.location='<?php echo $url?>'">
+										                			<?php echo $this->lang[181]; ?>
+										                		</a>
+										                	</p>
+										                </div>
+													<?php } else { ?>
+		                                       		<div id="patregstep1">
+			                                        	<div class="grey-content clearfix">
+			                                            	<div class="form-head clearfix">
+			                                                	<img src="/images/onesmall.png" alt="doctors"> WHO WILL BE MAKING THE APPOINTMENTS ?
+			                                                </div>
+			                                                <p class="formlabel">First Name:</p>
+			                                                <?php echo $this->form->first_name; ?>
+			                                                <p class="formlabel">Last Name:</p>
+			                                                <?php echo $this->form->last_name; ?>
+			                                                <div class="form-head sec clearfix">
+			                                                	<img src="/images/twosmall.png" alt="doctors" class="pull-left"> CREATE YOUR LOGIN CREDENTIALS TO MANAGE YOUR ACCOUNT 
+			                                                </div>
+			                                                <p class="formlabel">E-mail Address : </p>
+			                                                <?php echo $this->form->email; ?>
+			                                                <p class="formlabel">Password : </p>
+			                                                <?php echo $this->form->password; ?>
+			                                                <p class="formlabel">Confirm Password : </p>
+			                                                <?php echo $this->form->confirmPassword; ?>
+                                                            <p class="formlabel"><input type="checkbox" tabindex="14" class="form" value="1" id="terms" name="terms"> I have read and accept doctors’s <a href="/terms-of-use-and-disclaimers" target="_blank">Terms &amp; Conditions</a></p>
+			                                                <input type="image" src="/images/submit-btn.png" id="reg_submit_btn">
+			                                            </div>
+			                                        </div>
+			                                        <div id="patregstep2">
+		                                            	<div class="grey-content clearfix">
+		                                                	<div class="form-head clearfix">
+		                                                    	<img src="/images/onesmall.png" alt="doctors"> Enter 4-digit code : 
+		                                                    </div>
+		                                                   
+		                                                    <?php echo $this->form->code; ?>
+		                                                    <p class="bluetext">DIDN’T GET THE CODE IN THE EMAIL ? <a href="#" id="resendCode">CLICK HERE</a></p>
+		                                                    
+		                                                    <input name="" type="image" src="/images/submit-btn.png" id="submitForm" alt="">
+		                                                </div>
+		                                            </div>
+		                                            <?php } ?>
+		                                        </div>
+		                                    </div>
+		                                </div>
+		                            </div>
+
+		                        </div>
+		                    </div>
+		                </div>
+		            </div>
+		        </div>
+		        
+	        </form>
+        </div>
+    </div>
+</div>
+<!--/CONTENT SECTION -->
+<div id="error" style="display:none">
+	<span id="errorMessage"></span>
+</div>
+<a href="#error" id="errorLauncher"></a>
+
+<script language="javascript">//<![CDATA[
+jQuery( document ).ready(function() {
+	jQuery("#reg_submit_btn").click(function(event){
+		event.preventDefault();
+		var first_name = $('#first_name').val();
+		var last_name = $('#last_name').val();
+		var email = $('#email'). val();
+		var password = $('#password'). val();
+		var confirmPassword = $('#confirmPassword'). val();
+        var terms = $('#terms').is(':checked');
+		var error_flag = 0;
+		var filter=/^.+@.+\..{2,3}$/
+        var error_msg = "<div id='errorbox'><h4><?php echo $this->lang[148]; ?></h4><ul id='errorList'>";
+		if(first_name=="" )	{ error_msg += "<li><?php echo $this->lang[149]; ?></li>";	error_flag = 1; }
+		if(email=="" )	{ error_msg += "<li><?php echo $this->lang[162]; ?></li>";	error_flag = 1; }
+		else if(!filter.test(email))	{ error_msg += "<li><?php echo $this->lang[151]; ?></li>"; error_flag = 1; }
+        if(terms == false)	{ error_msg += "<li><?php echo "Terms & Conditions"; ?></li>";	error_flag = 1; }
+		
+		if(password=="")	{ error_msg += "<li><?php echo $this->lang[155]; ?></li>";	error_flag = 1; }
+		if(password.length< 6 && password!="")	{ error_msg += "<li><?php echo $this->lang[192]; ?></li>";	error_flag = 1; }
+		if(password!=confirmPassword)	{ error_msg += "<li><?php echo $this->lang[193]; ?></li>";	error_flag = 1; }
+
+		error_msg +="</ul></div>";
+		if(error_flag) { 
+			//alert(error_msg); 
+			$("#errorMessage").html(""); //clean any previous messages
+			$("#errorMessage").html(error_msg);
+			$("#errorLauncher").fancybox({
+				'width' : 250,
+				'height' : 300,
+				'autoScale' : true,
+				'transitionIn' : 'none',
+				'transitionOut' : 'none',
+				'autoDimensionst' : false,
+				'hideOnContentClick': true,
+				'content': error_msg
+			});
+			$("#errorLauncher").click();
+			//alert(error_msg); 
+			$("#errorMessage").html(""); //clean any previous messages
+			$("#errorMessage").html(error_msg);
+			$("#errorLauncher").fancybox({
+				'width' : 250,
+				'height' : 300,
+				'autoScale' : true,
+				'transitionIn' : 'none',
+				'transitionOut' : 'none',
+				'autoDimensionst' : false,
+				'hideOnContentClick': true,
+				'content': error_msg
+			});
+			$("#errorLauncher").click();
+		} else {
+			jQuery("#patregstep1").fadeOut(500);
+			sendCode(email, first_name, last_name);
+			jQuery("#patregstep2").fadeIn(500);
+			window.scrollTo(0, 0);
+		}
+	});
+
+	jQuery("#submitForm").click(function(event){
+		event.preventDefault();		
+		checkCode();
+	});
+
+	jQuery("#sendCode").click(function(event){
+		event.preventDefault();
+		var first_name = $('#first_name').val();
+		var last_name = $('#last_name').val();
+		var email = $('#email'). val();
+		return sendCode(email, first_name, last_name);
+	});
+
+	jQuery("#resendCode").click(function(event){
+		event.preventDefault();
+		var first_name = $('#first_name').val();
+		var last_name = $('#last_name').val();
+		var email = $('#email'). val();
+		return sendCode(email, first_name, last_name);
+	});
+});
+
+function sendCode(email, first_name, last_name) {
+	$.post('/index/patient-code/', {
+		pemail: email,
+		fname: first_name,
+		lname: last_name
+	}, function(html){
+		var decoded = $.json.decode(html);
+		console.log(decoded);
+		if(decoded["error"]) {
+			var error_msg = "<div id='errorbox'><h4>Cannot create verification code. Please try again.</h4>";
+			$("#errorMessage").html(""); //clean any previous messages
+			$("#errorMessage").html(error_msg);
+			$("#errorLauncher").fancybox({
+				'width' : 250,
+				'height' : 300,
+				'autoScale' : true,
+				'transitionIn' : 'none',
+				'transitionOut' : 'none',
+				'autoDimensionst' : false,
+				'hideOnContentClick': true,
+				'content': error_msg
+			});
+			$("#errorLauncher").click();
+			$("#errorLauncher").click();
+			return false;
+		}
+		return true;
+	});
+}
+
+function checkCode(code) {
+	var codeGiven = jQuery("#code").val();
+	var email = $('#email'). val();
+	$.post('/index/check-patient-code/', {
+		pemail: email,
+		code: codeGiven
+	}, function(html){
+		var decoded = $.json.decode(html);
+		//console.log(decoded);
+		if(decoded["error"]) {
+			var error_msg = "<div id='errorbox'><h4>Wrong verification code</h4>";
+			$("#errorMessage").html(""); //clean any previous messages
+			$("#errorMessage").html(error_msg);
+			$("#errorLauncher").fancybox({
+				'width' : 250,
+				'height' : 300,
+				'autoScale' : true,
+				'transitionIn' : 'none',
+				'transitionOut' : 'none',
+				'autoDimensionst' : false,
+				'hideOnContentClick': true,
+				'content': error_msg
+			});
+			$("#errorLauncher").click();
+			return false;
+		}
+		jQuery("#loginForm").submit();
+		return true;
+	});
+}
+</script>

@@ -1,0 +1,963 @@
+<div id="admin-content">
+  <h1><img src="/images/user/dashboard-icon.png" alt="Dashboard"> Dashboard</h1>
+<!-- Javascript -->
+
+<script>
+$(function () {
+	$("#items1,#items2").sortable({
+		connectWith: "#items1,#items2,#items3",
+		start: function (event, ui) {
+			ui.item.toggleClass("highlight");
+		},
+		stop: function (event, ui) {
+			ui.item.toggleClass("highlight");
+		}
+	});
+	//$("#items1,#items2").disableSelection();
+});
+</script>
+
+   <link href="/style/tour/introjs.css" rel="stylesheet"></link>
+
+<!-- HTML -->
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-sm-6 items" id="items1">
+			<div class="list">
+				<div class="block radius" id="step1">
+					<div class="block-top">
+						<div class="container-fluid">
+							<div class="row">
+								<div class="col-sm-6">
+									<h2>Appointments:<?php //echo date('Y-m-d',$this->docObject->expiration);?></h2>
+								</div> <?php if($this->docObject->firstLogin==0){?> <a  href="javascript:void(0);" onclick="startIntro();" id="foo"></a><?php } ?>
+								<div class="col-sm-6 text-right">
+
+								</div>
+							</div>
+						</div>
+						<div class="container-fluid">
+							<div class="row">
+								<div class="col-sm-12">
+									<div class="tab-content">
+										<div role="tabpanel" class="tab-pane active" id="home">
+											<div class="full-div">
+												<div class="top clearfix">
+													<div class="smallblock border-right pull-left">
+														<div class="container-fluid">
+															<div class="row">
+																<div class="col-sm-12 text-center">
+																	<a href="/user/index/doctor-dashboard/sort/sent" style="color:#ffffff;"><div class="number-alert radius red-bg"><?php echo count($this->sentappObject); ?></div></a><br>
+																	<a href="/user/index/doctor-dashboard/sort/sent">Sent</a>
+												</div>
+															</div>
+														</div>
+													</div>
+													<div class="smallblock border-right pull-left">
+														<div class="container-fluid">
+															<div class="row">
+																<div class="col-sm-12 text-center">
+																	<a href="/user/index/doctor-dashboard/sort/confirm" style="color:#ffffff;">
+																	<div class="number-alert radius green-bg"><?php echo count($this->confirmedappObject); ?></div></a><br>
+																	<a href="/user/index/doctor-dashboard/sort/confirm">Confirmed</a>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="smallblock pull-left">
+														<div class="container-fluid">
+															<div class="row">
+																<div class="col-sm-12 text-center">
+																	<a href="/user/index/doctor-dashboard/sort/pending" style="color:#ffffff;">
+																	<div class="number-alert radius sky-bg">
+																		<?php echo count($this->pendingappObject); ?>
+																	</div>
+																	</a>
+																	<br>
+																	<a href="/user/index/doctor-dashboard/sort/pending">Pending</a>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="container-fluid">
+							<div class="row">
+								<div class="col-sm-12">
+									<div class="appo-overview">
+											</div>
+									<div class="appo-overview" id="upcomming">
+										<h3>Upcoming Appointments (Next 7 days):</h3>
+										<?php if($this->upcomingappObject) {
+											
+											foreach($this->upcomingappObject as $upcoming_appointment) {$css_style= ''; 
+											$puser_id = '';
+											$patient = array();
+											$puser_id = $upcoming_appointment->getUserId();
+											$Patient = new Application_Model_Patient();
+											$patient = $Patient->fetchRow("user_id={$puser_id}");
+											?>
+										<div class="appo-table clearfix">
+											<div class="a01">
+												<?php if(!empty($patient)){ ?>
+													<a href="/user/index/doctor-patient-details?patid=<?php echo $patient->getId(); ?>" style="color:#2FAFF3 !important;"><?php echo $upcoming_appointment->getFname()." ".$upcoming_appointment->getLname(); ?></a>
+												<?php }else{ 
+													echo $upcoming_appointment->getFname()." ".$upcoming_appointment->getLname();
+												 } ?>
+											 </div>
+											<div class="a02">
+												<?php echo $newDate = date("F j, Y", strtotime($upcoming_appointment->getAppointmentDate())); ?>
+											</div>
+											<div class="a03">
+												<?php echo $time_in_12_hour_format  = date("g.i A", strtotime($upcoming_appointment->getAppointmentTime())); ?>
+											</div>
+											<div style="width:18%;float:right;">
+												
+													<?php 
+
+												$call_type = $upcoming_appointment->calltype;
+
+												switch($call_type){
+													
+													case 'email':
+
+														if(trim($upcoming_appointment->apiinboundreply)==1 || trim(strtoupper($upcoming_appointment->apiinboundreply))=='C'){
+
+														//if(strtoupper($row->apiinboundreply)=='C'){
+															$css_style= 'background:#8AC640 !important;border:#8AC640 !important;';
+															
+														//}else if($row->apiinboundreply==2 || strtoupper($row->apiinboundreply)=='N'){
+
+														}//else if($row->apiinboundreply==2 || strtoupper($row->apiinboundreply)=='N'){
+
+														//	echo '<font color="red">Cancelled</font>';
+
+														//														}else if($row->apiinboundreply !='' && $row->apiinboundreply !=1 && $row->apiinboundreply !=2 && strtoupper($row->apiinboundreply) !='C' && strtoupper($row->apiinboundreply) !='N'){
+
+														// }
+
+														else if(trim($upcoming_appointment->apiinboundreply) !='' && trim(strtoupper($upcoming_appointment->apiinboundreply)) !='C'){
+
+
+															$css_style= 'background:#FFA500 !important;border:#FFA500 !important;';
+
+
+														}else{
+															$css_style= 'background:#25A6EA !important;border:#25A6EA !important;';
+															
+
+														}
+
+													break;
+
+
+													case 'text':
+
+														if(trim($upcoming_appointment->apiinboundreply)==1 || trim(strtoupper($upcoming_appointment->apiinboundreply))=='C'){
+
+														//if(strtoupper($row->apiinboundreply)=='C'){
+															$css_style= 'background:#8AC640 !important;border:#8AC640 !important;';
+															
+														//}else if($row->apiinboundreply==2 || strtoupper($row->apiinboundreply)=='N'){
+
+														}//else if($row->apiinboundreply==2 || strtoupper($row->apiinboundreply)=='N'){
+
+														//	echo '<font color="red">Cancelled</font>';
+
+														//														}else if($row->apiinboundreply !='' && $row->apiinboundreply !=1 && $row->apiinboundreply !=2 && strtoupper($row->apiinboundreply) !='C' && strtoupper($row->apiinboundreply) !='N'){
+
+														// }
+														else if(trim($upcoming_appointment->getManualConfirm())==1){
+
+															$css_style= 'background:#8AC640 !important;border:#8AC640 !important;';
+
+																																					}
+														else if(trim($upcoming_appointment->apiinboundreply) !='' && trim(strtoupper($upcoming_appointment->apiinboundreply)) !='C' && trim($upcoming_appointment->getManualConfirm()) !=1){
+
+
+															$css_style= 'background:#FFA500 !important;border:#FFA500 !important;';
+
+
+														}else{
+															$css_style= 'background:#25A6EA !important;border:#25A6EA !important;';
+															
+
+														}
+
+													break;
+
+													case 'voice':
+
+														if(trim($upcoming_appointment->apiinboundreply) !=''){
+
+															if(trim($upcoming_appointment->apiinboundreply)==1){
+																
+																$css_style= 'background:#8AC640 !important;border:#8AC640 !important;';
+
+
+															}else if(trim($upcoming_appointment->getManualConfirm())==1){
+
+															$css_style= 'background:#8AC640 !important;border:#8AC640 !important;';
+
+																																							}else if(trim($upcoming_appointment->apiinboundreply)==2 && trim($upcoming_appointment->getManualConfirm()) !=1){
+																
+																$css_style= 'background:#FFA500 !important;border:#FFA500 !important;';
+
+
+															}else{
+																$css_style= 'background:#D9534F !important;border:#D9534F !important;';
+															}
+
+														}else if(trim($upcoming_appointment->getManualConfirm()) ==1){
+															$css_style= 'background:#8AC640 !important;border:#8AC640 !important;';
+														}else{
+															$css_style= 'background:#25A6EA !important;border:#25A6EA !important;';
+														}
+
+													break;
+
+													default :
+													
+														if(trim($upcoming_appointment->getManualConfirm())==1){
+															$css_style= 'background:#8AC640 !important;border:#8AC640 !important;';
+														}else{
+															$css_style= 'background:#D9534F !important;border:#D9534F !important;';
+														}
+
+													break;
+
+												}
+
+											?>
+
+												<div class="blue-btn" style="font-size:12px;<?php echo $css_style;?>">
+													
+
+                                    	<?php 
+
+												//$call_type = $upcoming_appointment->calltype;
+
+												switch($call_type){
+													
+													case 'email':
+
+														if(trim($upcoming_appointment->apiinboundreply)==1 || trim(strtoupper($upcoming_appointment->apiinboundreply))=='C'){
+
+														//if(strtoupper($row->apiinboundreply)=='C'){
+														echo 'Confirmed';
+
+														//}else if($row->apiinboundreply==2 || strtoupper($row->apiinboundreply)=='N'){
+
+														}//else if($row->apiinboundreply==2 || strtoupper($row->apiinboundreply)=='N'){
+
+														//	echo '<font color="red">Cancelled</font>';
+
+														//														}else if($row->apiinboundreply !='' && $row->apiinboundreply !=1 && $row->apiinboundreply !=2 && strtoupper($row->apiinboundreply) !='C' && strtoupper($row->apiinboundreply) !='N'){
+
+														// }
+
+														else if(trim($upcoming_appointment->apiinboundreply) !='' && trim(strtoupper($upcoming_appointment->apiinboundreply)) !='C' && trim($upcoming_appointment->getManualConfirm()) !=1){
+
+
+															echo "Replied";
+
+														}else if(trim($row->getManualConfirm())==1){
+
+
+
+																																								 echo "Confirmed";
+
+																																							}else{
+															
+															echo 'Pending';
+
+														}
+
+													break;
+
+													case 'text':
+
+														if(trim($upcoming_appointment->apiinboundreply)==1 || trim(strtoupper($upcoming_appointment->apiinboundreply))=='C'){
+
+														//if(strtoupper($row->apiinboundreply)=='C'){
+														echo 'Confirmed';
+
+														//}else if($row->apiinboundreply==2 || strtoupper($row->apiinboundreply)=='N'){
+
+														}//else if($row->apiinboundreply==2 || strtoupper($row->apiinboundreply)=='N'){
+
+														//	echo '<font color="red">Cancelled</font>';
+
+														//														}else if($row->apiinboundreply !='' && $row->apiinboundreply !=1 && $row->apiinboundreply !=2 && strtoupper($row->apiinboundreply) !='C' && strtoupper($row->apiinboundreply) !='N'){
+
+														// }
+
+														else if(trim($upcoming_appointment->apiinboundreply) !='' && trim(strtoupper($upcoming_appointment->apiinboundreply)) !='C' && trim($upcoming_appointment->getManualConfirm()) !=1){
+
+
+															echo "Replied";
+
+														}else if(trim($upcoming_appointment->getManualConfirm())==1){
+
+
+
+																																								 echo "Confirmed";
+
+																																							}else{
+															
+															echo 'Pending';
+
+														}
+
+													break;
+
+													case 'voice':
+
+														if(trim($upcoming_appointment->apiinboundreply) !=''){
+
+															if(trim($upcoming_appointment->apiinboundreply)==1){
+																
+																echo 'Confirmed';
+
+															}else if(trim($upcoming_appointment->getManualConfirm())==1){
+
+
+
+																																								 echo "Confirmed";
+
+																																							}else if(trim($upcoming_appointment->apiinboundreply)==2 && trim($upcoming_appointment->getManualConfirm()) !=1){
+																
+															echo '<font style="font-size:9px;">Call Transferred</font>';
+
+															}else{
+																echo '<font style="font-size:10px;">Invalid input</font>';
+															}
+
+														}else if(trim($upcoming_appointment->getManualConfirm())==1){
+															echo 'Confirmed';
+														}else{
+															
+															echo 'Called';
+
+														}
+
+													break;
+
+													default :
+													
+														if(trim($upcoming_appointment->getManualConfirm())==1){
+															echo 'Confirmed';
+														}else{
+															echo '<font style="font-size:11px;">Undelivered</font>';
+														}
+													break;
+
+												}
+
+											?>
+
+                                    </div>
+
+											</div>
+										</div>
+										<?php } 
+									} ?>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="list">
+				<div class="block radius"  id="step5">
+					<div class="block-top">
+						<h2 class="text-center">New Reviews</h2>
+						<div class="tab-content">
+							<div role="tabpanel" class="tab-pane active" id="W1">
+								<div class="container-fluid">
+									<div class="row">
+										<div class="col-sm-1"></div>
+										<div class="col-sm-10">
+											<div class="patient-number radius">
+												<img src="/images/user/patient-add-icon.png" alt="Doc Mate"> <?php echo $this->Today; ?>
+												<img src="/images/rating/<?php echo floor($this->Today);?>.png" alt="Rating">
+											</div>
+										</div>
+										<div class="col-sm-1"></div>
+									</div>
+								</div>
+							</div>
+							<div role="tabpanel" class="tab-pane" id="W2">
+								<div class="container-fluid">
+									<div class="row">
+										<div class="col-sm-1"></div>
+										<div class="col-sm-10">
+											<div class="patient-number radius">
+												<img src="/images/user/patient-add-icon.png" alt="doctors"> <?php echo $this->weekly; ?>
+												<img src="/images/rating/<?php echo floor($this->weekly);?>.png" alt="Rating">               
+											</div>
+										</div>
+										<div class="col-sm-1"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="patient-number-tab">
+						<ul class="nav nav-tabs" role="tablist" id="myTab02">
+							<li role="presentation" class="active"><a href="#W1" aria-controls="W1" role="tab" data-toggle="tab">Today</a></li>
+							<li role="presentation"><a href="#W2" aria-controls="W2" role="tab" data-toggle="tab">Weekly</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+
+			<div class="list">
+				<div class="block radius" id="step6">
+					<div class="container-fluid">
+						<div class="row">
+							<div class="col-sm-12">
+								<h2>Most Important Tasks</h2>
+							</div>
+						</div>
+					</div>
+					<div class="container-fluid">
+						<div class="row">
+							<div class="col-sm-12" id="refresh">
+								<div id="taskdiv"></div>
+								<div id="taskbox">
+									<?php foreach($this->tasks as $tasks) { ?>
+									<div class="taskbox radius">
+										<div class="container-fluid">
+											<div class="row">
+												<div class="col-sm-1">
+													<input name="" type="checkbox" value="">
+												</div>
+												<div class="col-sm-10"><?php echo $tasks->getDoctorTask(); ?></div>
+												<div class="col-sm-1">
+													<a href="javascript:void(0);" id="<?php echo $tasks->id; ?>" onclick="delete_task(this.id);">
+														<img src="/images/user/cross-btn.png" alt="Cross">
+													</a>
+												</div>
+											</div>
+										</div>
+									</div>
+									<?php } ?>
+								</div>
+								<form id="task" name="task" action="" method="post">
+									<div class="addtask">
+										<div class="container-fluid">
+											<div class="row">
+												<div class="col-sm-8">
+													<input name="task" id="taskid" type="text" placeholder="Enter Task here...">
+												</div>
+												<div class="col-sm-4">
+													<a class="blue-btn" id="submit" href="javascript:void(0);">+ Add Task</a>
+												</div>
+											</div>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		
+
+		<div class="col-sm-6 items" id="items2">
+		
+		<!--
+			<div class="list g" id="step2">
+				<div class="block radius">
+					<div class="block-top">
+						<h2 class="text-center">New Patient refferals</h2>
+						<div class="tab-content">
+							<div role="tabpanel" class="tab-pane active" id="today">
+								<div class="container-fluid">
+									<div class="row">
+										<div class="col-sm-2"></div>
+										<div class="col-sm-8">
+											<div class="patient-number radius"> <img src="/images/user/patient-add-icon.png" alt="Doc Mate"> 15 </div>
+										</div>
+										<div class="col-sm-2"></div>
+									</div>
+								</div>
+							</div>
+							<div role="tabpanel" class="tab-pane" id="weekly">
+								<div class="container-fluid">
+									<div class="row">
+										<div class="col-sm-2"></div>
+										<div class="col-sm-8">
+											<div class="patient-number radius"> <img src="/images/user/patient-add-icon.png" alt="Doc Mate"> 35 </div>
+										</div>
+										<div class="col-sm-2"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="container-fluid">
+						<div class="row">
+							<div class="col-sm-1"></div>
+							<div class="col-sm-10">
+								<div class="patient-number-tab">
+									<ul class="nav nav-tabs" role="tablist" id="myTab01">
+										<li role="presentation" class="active"><a href="#today" aria-controls="today" role="tab" data-toggle="tab">Today</a></li>
+										<li role="presentation"><a href="#weekly" aria-controls="weekly" role="tab" data-toggle="tab">Weekly</a></li>
+									</ul>
+								</div>
+							</div>
+							<div class="col-sm-1"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		-->
+			<div class="list g" id="step3">
+				<div class="block radius">
+					<div class="container-fluid">
+						<div class="row">
+							<div class="col-sm-7">
+								<div class="all-social clearfix">
+									<div class="fb facebook">
+										<p class="text-right"><img src="/images/user/facebook-icon.png" alt="Facebook"></p>
+										<p class="whitebigtext countContainer"></p>
+										<p class="whitemediumtext">LIKES</p>
+										<p class="whitesmalltext">&nbsp;</p>
+									</div>
+									<div class="twitter">
+										<p class="text-right"><img src="/images/user/twitter-icon.png" alt="Twitter"></p>
+										<p class="whitebigtext countContainer"></p>
+										<p class="whitemediumtext">FOLLOWERS</p>
+										<p class="whitesmalltext">&nbsp;</p>
+									</div>
+									<div class="googleplus gplus">
+										<p class="text-right"><img src="/images/user/googleplus-icon.png" alt="Google plus"></p>
+										<p class="whitebigtext countContainer"></p>
+										<p class="whitemediumtext">+1</p>
+										<p class="whitesmalltext">&nbsp;</p>
+									</div>
+									<!--
+									<div class="linkedin">
+										<p class="text-right"><img src="/images/user/linkedin-icon.png" alt="LinkedIn"></p>
+										<p class="whitebigtext countContainer"></p>
+										<p class="whitemediumtext">CONNECTIONS</p>
+										<p class="whitesmalltext">&nbsp;</p>
+									</div>
+									-->
+								</div>
+							</div>
+							<div class="col-sm-5 notification-container">
+								<h2>Notifications</h2>
+								<div class="notification-panel-sample">
+									<div class="container-fluid">
+										<div class="row">
+											<div class="col-sm-3" style="width:64px;">&nbsp;</div>
+											<div class="col-sm-9" style="width:180px;"><p class="notofication-heading">&nbsp;</p><p class="desc">&nbsp;</p></div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+<!--
+			<div class="list g" id="step4">
+				<div class="block radius">
+					<div class="container-fluid">
+						<div class="row">
+							<div class="col-sm-12"> <img src="/images/user/calender.png" alt="Calendar"> </div>
+						</div>
+					</div>
+					<div class="container-fluid">
+						<div class="row">
+							<div class="col-sm-12">
+								<div class="appo-overview bsp">
+									<div class="appo-table clearfix">
+										<div class="a01">Arun Mahato</div>
+										<div class="a02">January, 15, 2015</div>
+										<div class="a03">11.29 AM</div>
+									</div>
+									<div class="appo-table clearfix">
+										<div class="a01">Arun Mahato</div>
+										<div class="a02">January, 15, 2015</div>
+										<div class="a03">11.29 AM</div>
+									</div>
+									<div class="appo-table clearfix">
+										<div class="a01">Arun Mahato</div>
+										<div class="a02">January, 15, 2015</div>
+										<div class="a03">11.29 AM</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>	-->
+				
+		</div>
+	</div>
+</div>
+<script type= "text/javascript">
+		$(document).ready(function(){
+			$("#submit").on("click", function(event){
+				var task	 = $("#taskid").val();
+				// Returns successful data submission message when the entered information is stored in database.
+				var dataString = 'task='+ task;
+				if(task=='')
+				{
+					alert("Please Fill All Fields");
+				}
+				else
+				{
+					// AJAX Code To Submit Form.
+					
+					$.post("/user/index/task/", {"task" : task},
+					function(data)
+					{ 
+						if ($('#taskbox').length > 0) {
+							$("#taskdiv").prepend(data);
+							$("#taskid").val("");
+							//location.reload(true);
+						} else {
+							$("#taskdiv").append(data);
+							$("#taskid").val("");
+							//location.reload(true);
+						}	
+					});
+				}
+				event.preventDefault;
+			});
+			<?php if(trim($this->docObject->getFacebookLikesPage())): ?>
+			$('.all-social .fb.facebook .countContainer').popnSocialButton(['facebook'], {
+			  url: '<?php echo $this->docObject->getFacebookLikesPage(); ?>'
+			});
+			<?php else: ?>
+			$('.all-social .fb.facebook .countContainer').html('<a class="highlightlink" href="/user/index/social">Setup Facebook</a>');
+			<?php endif; ?>
+			<?php if(trim($this->docObject->getGooglePlusPage())): ?>
+			$('.all-social .gplus.googleplus .countContainer').popnSocialButton(['gplus'], {
+			  url: '<?php echo $this->docObject->getGooglePlusPage(); ?>'
+			});
+			<?php else: ?>
+			$('.all-social .gplus.googleplus .countContainer').html('<a class="highlightlink" href="/user/index/social">Setup Google+</a>');
+			<?php endif; ?>
+			<?php if(trim($this->docObject->getTwittername())): ?>
+			getTwitterFollowerCount();
+			getTwitterStream();
+			<?php else: ?>
+			$('.all-social .twitter .countContainer').html('<a class="highlightlink" href="/user/index/social">Setup Twitter</a>');
+			$('.notification-container').append('<a class="highlightlink" href="/user/index/social">Setup Twitter</a>');
+			$('.notification-panel-sample').remove();
+			<?php endif; ?>
+			getLinkedInConnections();
+		});
+		
+		function delete_task(id)
+		{
+			$.post("/user/index/delete-task/", {"taskid" : id},
+			function(data)
+			{ 
+				//location.reload(true);
+			});
+			taskbox 
+			$("#"+id).closest( ".taskbox" ).hide();
+			return false;
+		}
+		
+		function convertfiveDigitMilitaryToAmPmTime(fiveDigitTime) {
+			var hours24 = parseInt(fiveDigitTime.substring(0, 2),10);
+			var hours = ((hours24 + 11) % 12) + 1;
+			var amPm = hours24 > 11 ? 'pm' : 'am';
+			var minutes = fiveDigitTime.substring(3);
+			return hours + ':' + minutes + amPm;
+		};
+		
+		function getTwitterStream()
+		{
+			$.post("/user/index/twitter-stream/", {},
+				function(data)
+				{ 
+					data = $.parseJSON(data);
+					var tweets;
+					var months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+					var strMonth = '';
+					$.each(data, function(i, item){
+						if (i == 0) {
+							tweets = '';
+						}
+						/*
+						for(var i=0; i<=12; i++) {
+							if(months[i] == item['created_at'].substr(4, 3)) {
+								strMonth = i + 1;
+								if(strMonth < 10) {
+									strMonth = '0' + strMonth;
+								}
+							}
+						}*/
+						var convTime = convertfiveDigitMilitaryToAmPmTime(item['created_at'].substr(11,5));
+						var convMonth = item['created_at'].substr(4, 3);
+						var currYear = new Date().getFullYear();
+						var convYear = item['created_at'].substr(26,4);
+						if(currYear == convYear){
+							convYear = '';
+						}else{
+							convYear = ', '+convYear;
+						}
+						var date_str = convMonth + ' ' + item['created_at'].substr(8, 2)  + convYear + ' - ' + convTime;
+						tweets += '<div class="notification-panel"><div class="row"><div class="container-fluid">';
+						tweets += '<div class="col-sm-3"><img alt="Author" src="'+item['user']['profile_image_url_https']+'"> </div>';
+						tweets += '<div class="col-sm-9"><p class="notofication-heading">'+date_str+'</p>';
+						tweets += '<p class="desc">'+item['text']+'</p>';
+						tweets += '</div>';
+						tweets += '</div></div></div>';
+					});
+					tweets += '';
+					$('.notification-container').append(tweets);
+					$('.notification-panel-sample').remove();
+				}
+			);
+			return true;
+		}
+		
+		function getTwitterFollowerCount(){
+			$.post("/user/index/twitter-follower/", {},
+				function(data)
+				{ 
+					follower = $.parseJSON(data);					
+					console.log(follower);
+					$('.all-social .twitter .countContainer').append(countFormatter(follower));
+				}
+			);
+			return true;
+		}
+		
+		function getLinkedInConnections(){
+			
+			return true;
+		}
+		
+		
+		function countFormatter(num) {
+			 if (num >= 1000000000) {
+				return (num / 1000000000).toFixed(1).replace(/\.0$/, '') + 'G';
+			 }
+			 if (num >= 1000000) {
+				return (num / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
+			 }
+			 if (num >= 1000) {
+				return (num / 1000).toFixed(1).replace(/\.0$/, '') + 'K';
+			 }
+			 return num;
+		};
+		</script>
+<script>
+function approve(element, id) {
+	//console.log(id);
+	$.post("/user/index/approve-appointment", {"appointid" : id},
+		function(data) { 
+			decoded = $.parseJSON(data);
+			if(decoded['err'] == 0) {
+				jQuery(element).addClass("active");
+			} else {
+				console.log("problem approving");
+			}
+		}
+	);
+	return false;
+}
+function decline(element, id) {
+	//console.log(id);
+	$.post("/user/index/decline-appointment", {"appointid" : id},
+		function(data) { 
+			decoded = $.parseJSON(data);
+			if(decoded['err'] == 0) {
+				jQuery(element).closest(".appo-table").remove();
+			} else {
+				console.log("problem deleting");
+			}
+		}
+	);
+	return false;
+}
+</script>
+
+	<script src="/js/tour/intro.js"></script>
+	<script>
+		function firstLogin()
+		{
+			 $.ajax
+		({ 
+			url: '/user/index/first-login',
+			data: "fisrt_login=1",
+			type: 'post',
+			success: function()
+			{
+				/*$('.modal-box').text(result).fadeIn(700, function() 
+				{
+					setTimeout(function() 
+					{
+						$('.modal-box').fadeOut();
+					}, 2000);
+				});*/
+			}
+		});
+		}
+	</script>
+	<script type="text/javascript">
+      function startIntro(){  
+	 
+         var intro = introJs();
+          intro.setOptions({
+            steps: [
+              {
+                element: '#step1',
+                intro: '<h2>Appointments</h2>    <p>See your real-time appointment snapshot here</p><p><img alt="" src="/images/linee.png"></p>'
+              },
+              /*{
+                element: '#step2',
+                intro: '<h2>New Patient refferals</h2>    <p>See patient referrals as they come in by daily or weekly view</p><p><img alt="" src="/images/linee.png"></p>'
+               
+              },*/
+              {
+                element: '#step3',
+                intro: '<h2>Social Media Information</h2>    <p>See all your social media information in one place</p><p><img alt="" src="/images/linee.png"></p>'
+                
+              }/*,
+              {
+                element: '#step4',
+                intro: '<h2>Calender</h2>    <p>Pick a day and see your real-time appointment information here</p><p><img alt="" src="/images/linee.png"></p>'
+               
+              }*/,
+              {
+                element: '#step5',
+                intro: '<h2>New Reviews</h2>    <p>See a snapshot of your reviews in daily and weekly views</p><p><img alt="" src="/images/linee.png"></p>'
+              }
+			  ,
+              {
+                element: '#step6',
+                intro: '<h2>Task Management</h2>    <p>Add or delete any task that you need to do for your practice here</p><p><img alt="" src="/images/linee.png"></p>'
+              }
+			  ,
+              {
+                element: '#step7',
+                intro: '<h2>Notifications</h2>    <p>Notifications of anything that goes on with your patient communication platform</p><p><img alt="" src="/images/linee.png"></p>'
+              }
+			  ,
+              /*{
+                element: '#step8',
+                intro: '<h2>Search Content</h2>    <p>Search for anything in your communication platform here ex. patients name</p><p><img alt="" src="/images/linee.png"></p>'
+              }
+			  ,*/
+              {
+                element: '#step9',
+                intro: '<h2>Dashboard</h2>    <p>Snapshot of all your activities happening in your practice</p><p><img alt="" src="/images/linee.png"></p>',				
+				position:'bottom-middle-aligned'
+              } 
+              ,
+              {
+                element: '#step11',
+                intro: '<h2>My Appointments</h2>    <p>Shows all of your upcoming, cancelled and rescheduled appointments  </p><p><img alt="" src="/images/linee.png"></p>',
+				position:'bottom'
+              }
+			  ,
+              {
+                element: '#step10',
+                intro: '<h2>My Patients</h2>    <p>List of all of your patients</p><p><img alt="" src="/images/linee.png"></p>',
+				position:'bottom-middle-aligned'
+              }
+			 
+			   ,
+              /*{
+                element: '#step12',
+                intro: '<h2>Referrals</h2>    <p>See all your referrals for your practice</p><p><img alt="" src="/images/linee.png"></p>',
+				position:'bottom-middle-aligned'
+              }
+			   ,*/
+              {
+                element: '#step13',
+                intro: '<h2>Patient Reviews</h2>    <p>Manage and reply to all of your reviews </p><p><img alt="" src="/images/linee.png"></p>',
+				position:'bottom-middle-aligned'
+              }
+              ,
+			  {
+                element: '#step18',
+                intro: '<h2>My Calendar</h2>    <p>See all of your appointments for the day, week or month in one location</p><p><img alt="" src="/images/linee.png"></p>',
+				position:'bottom-middle-aligned'
+              }
+              ,
+			  {
+                element: '#step17',
+                intro: '<h2>Practice Statistics</h2>    <p>See all the statistics of your practice in one place for your convenience</p><p><img alt="" src="/images/linee.png"></p>',
+				position:'bottom-middle-aligned'
+              }
+			  ,
+              {
+                element: '#step14',
+                intro: '<h2>Doctor Referrals</h2>    <p>Refer your patients to other doctors in our network with one click</p><p><img alt="" src="/images/linee.png"></p>',
+				position:'bottom-middle-aligned'
+              }
+              ,
+			  {
+                element: '#step16',
+                intro: '<h2>Social Widgets</h2>    <p>Use these widgets for your website for live appointments and patient reviews online </p><p><img alt="" src="/images/linee.png"></p>',
+				position:'bottom-middle-aligned'
+              }
+			  ,
+              {
+                element: '.doc_left_menu_step15',
+                intro: '<h2>Settings</h2>    <p>Edit your profile, add your hours, add your vacation! </p><p><img alt="" src="/images/linee.png"></p>',
+				position:'bottom-middle-aligned'
+              }
+			  ,
+			  /*{
+                element: '#step19',
+                intro: '<h2>Secure Messages</h2>    <p>Send and receive secure messages with your patients 24 hours a day</p><p><img alt="" src="/images/linee.png"></p>',
+				position:'bottom-middle-aligned'
+              }
+			  ,*/
+			  /*{
+                element: '#step20',
+                intro: '<h2>Payment Details (this will change to: Your Plan): </h2>    <p>Upgrade your features here</p><p><img alt="" src="/images/linee.png"></p>',
+				position:'bottom'
+              }
+			  ,*/
+			  /*{
+                element: '#step21',
+                intro: '<h2>Email Newsletter </h2>    <p>Send birthday greetings, holiday cards and more instantly</p><p><img alt="" src="/images/linee.png"></p>',
+				position:'bottom-middle-aligned'
+              }
+			  ,*/
+			  {
+                element: '#step22',
+                intro: '<h2>Customer Service</h2>    <p>Submit a ticket or contact us from the help page</p><p><img alt="" src="/images/linee.png"></p>',
+				position:'bottom-middle-aligned'
+              }
+            ]
+          });
+          intro.start();
+		  // alert("testing"+element);
+      }
+	
+	  
+	/*$( document ).ready(function() {
+	var value = $(".introjs-tooltiptext h2").html();
+	alert(value);
+	});*/
+	
+	 
+	  $( "#foo" ).trigger( "click" );
+	  
+    </script>

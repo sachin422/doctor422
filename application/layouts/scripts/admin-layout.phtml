@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<?php echo $this->headTitle(); ?><?php echo $this->headMeta(); ?>
+<?php
+        $this->headLink()->appendStylesheet("/style/admin-style.css");
+        $this->headLink()->appendStylesheet("/js/datepicker/jquery-ui.css");
+        $this->headLink()->appendStylesheet("/js/datepicker/jquery-ui.theme.css");
+
+        echo $this->headLink();
+
+		$this->headScript()->appendFile('/js/jquery-1.7.1.min.js'); 
+		$this->headScript()->appendFile('/js/patient.js'); 
+		$this->headScript()->appendFile('/js/datepicker/jquery-ui.js');		
+    	$this->headScript()->appendFile("/js/jquery.json-2.2.js");
+        echo $this->headScript();
+        ?>
+<?php
+        if ($this->custom_head) {
+            echo $this->custom_head;
+        } ?>
+<link rel="SHORTCUT ICON" HREF="<?php echo Zend_Registry::get('siteurl') ?>/images/favicon.ico" type="image/x-icon"/>
+<link rel="icon" href="<?php echo Zend_Registry::get('siteurl') ?>/images/favicon.ico" type="image/x-icon" />
+</head>
+<body <?php
+        if ($this->custom_body) {
+            echo $this->custom_body;
+        }
+?>>
+<div id="containter">
+  <div class="admin-top">
+    <div class="admin-top-right"></div>
+  </div>
+  <div class="wrapper">
+    <div class="content-area">
+      <!-- Header Start -->
+      <?php $path = "/layouts/scripts/page/admin" ?>
+      <?php echo $this->pageElement('admin-header', $path) ?>
+      <!-- Header End -->
+      <div id="mainbody">
+        <div class="left-container">
+          <div class="left-top">
+            <div class="left-top-right"></div>
+          </div>
+          <div class="left-wrapper"><?php echo $this->pageElement('admin-left', $path) ?></div>
+          <div class="left-bottom">
+            <div class="left-bottom-right"></div>
+          </div>
+        </div>
+        <div class="right-container">
+          <div class="right-top">
+            <div class="right-top-right"></div>
+          </div>
+          
+          <div class="right-wrapper"><?php echo $this->layout()->content ?></div>
+          
+          <div class="right-bottom">
+            <div class="right-bottom-right"></div>
+          </div>
+        </div>
+      </div>
+	  </div>
+      <!-- footer start -->
+      <?php echo $this->pageElement('admin-footer', $path) ?>
+      <!-- footer end -->
+    </div>
+  </div>
+  <div class="admin-bottom">
+    <div class="admin-bottom-right"></div>
+  </div>
+</div>
+</body>
+</html>

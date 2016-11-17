@@ -1,0 +1,195 @@
+<script language="javascript">
+    $(document).ready(function()
+    { 
+        $("#checkall").click(function()
+        {
+            var checked = false;
+            if(this.checked)checked = true;
+            
+            $("input:checkbox.cid").each(function()
+            {
+                this.checked = checked;
+            });
+        });
+        
+        $(".actions").click(function()
+        {
+            var ids = Array();
+            var i = 0;
+            $("input:checkbox.cid").each(function()
+            {
+                if(this.checked==true){
+                    ids[i] = this.value;
+                    i++;
+                }
+            });
+            if(ids.length < 1){alert('Please make a selection from the list for '+$(this).attr('title')+'.');return false;}
+            $("#ids").val(ids);
+            if($(this).attr('rel')=='delete'){
+                if(!confirm("Are you sure you want to delete the record(s)?")){
+                    return false;
+                }
+            }
+            //$("#multiaction").attr('action', '/admin/doctor/'+$(this).attr('rel')).submit();
+            $("#multiaction").attr('action', '/admin/patient/'+$(this).attr('rel'));
+            $("#multiaction").submit();
+            
+           
+        });
+    });
+
+
+ function resetpass()
+ {
+
+     if( confirm('Are you sure to reset password?'))
+         return true;
+     else
+         return false;
+ }
+</script>
+
+<?php $page = $this->paginator->getCurrentPageNumber();?>
+
+<div id="rightsidemain">
+    <div id="rightcontentpart">
+        <div id="rightsideheading">
+            <img src="/images/admin-images/bl-tl.gif" align="left" /><img src="/images/admin-images/bl-tr.gif" align="right" />
+
+
+
+	Patient - <span class='msg'>Total <?php echo $this->total ?> Record(s) found! </span>
+                  <span style="margin: 0pt 15px 0pt 0pt; float: right;"><a class="add" href="/admin/patient/add-edit/">Add</a></span>
+        </div>
+<form id="multiaction" action="" method="post">
+        <div style="text-align:center;background-color: #fff;">
+            
+                <input type="hidden" name="ids" id="ids" />
+                <input type="hidden" name="page" value="<?php echo $page?>" />
+                <img border="0" class="actions" style="cursor: pointer" title="Publish" rel="publish" src="/images/admin-images/true.gif">&nbsp;&nbsp;
+                <img border="0" class="actions" style="cursor: pointer" title="Unpublish" rel="unpublish" src="/images/admin-images/false.gif">&nbsp;&nbsp;
+                <img border="0" class="actions" style="cursor: pointer" title="Delete" rel="delete" src="/images/admin-images/delete.gif">&nbsp;
+           
+        </div> 
+        <div id="rightsidecontentpart">
+         
+            <?php
+            $Patient =  new Application_Model_Patient();
+            if ($this->total > 0) {
+            ?>
+                <br><span class='red'>
+                <?php echo $this->msg; ?>
+            </span>
+                
+            <br>
+            <?= $this->paginationControl($this->paginator, 'Sliding', 'pagination.phtml'); ?>
+                <br>
+
+                <table width='100%' border='0' class='dataTable' cellspacing='0' cellpadding='0'>
+                    <tr>
+                        <th>#</th>
+                        <th><input type="checkbox" name="checkall" id="checkall" value="" /></th>
+                        <th>Name </th>
+						<th>Surname </th>
+                        <th>Email </th>
+			<th>Phone </th>
+                        <th>Zipcode </th>
+                        <th>Age </th>
+                        <th>Gender </th>
+                        
+                        
+                        <th style="width: 10%;">Action</th>
+                    </tr>
+
+                <?php
+                $sno = 0;
+                
+                $items_per_page = $this->paginator->getItemCountPerPage();
+                if ($page > 1) {
+                    $sno = $items_per_page * $page - $items_per_page;
+                }
+                $rowClass = 'trbg1';
+
+				$User = new Application_Model_User();
+
+                foreach ($this->paginator as $row) {
+
+					$userInfo = $User->find($row['user_id']);
+                    $sno++;
+
+                    if ($rowClass == "trbg1")
+                        $rowClass = 'trbg';
+                    else
+                        $rowClass='trbg1';
+
+                    $gender = $Patient->getFullGender("id={$row['id']}");
+                ?>
+                    <tr class='<?php echo $rowClass ?>'>
+                        <td><?php echo $sno ?></td>
+                        <td><input type="checkbox" name="cid[]" class="cid" value="<?= $row['id'] ?>" id="cid<?php echo $row['id']; ?>"/></td>
+                        <td><?php echo $row['name'];?></td>
+                        <td><?php echo $userInfo->getLastName(); ?></td>
+                        <td><?php echo $userInfo->getEmail(); ?></td>
+						<td><?php echo $row['phone'];?></td>
+                        <td><?php echo $row['zipcode'];?></td>
+                        <td><?php echo $row['age'];?></td>
+                        <td><?php echo $gender;?></td>
+                                            
+                        <td>
+                        <?php
+                        $published = "false.gif";
+                        $published_action = "publish";
+                        $published_title = "Publish";
+                        if ($userInfo->getStatus() == "active") {
+                            $published = "true.gif";
+                            $published_title = "Unpublished";
+                            $published_action = "unpublish";
+                        }
+                       
+                        if(!empty($this->search_text))
+                                $arg="/doctor_name/".$this->search_text;
+                        else
+                            $arg="";
+
+                        if(!empty($this->category_id))
+                                $arg.="/catid/".$this->category_id;
+                               
+                        ?>
+                        <a class="actions" rel="<?php echo $published_action?>" onclick ='document.getElementById("cid<?php echo $row['id']; ?>").checked=true;' ><img src='/images/admin-images/<?php echo $published ?>' border='0' title='<?php echo $published_title ?>'/></a>&nbsp;&nbsp;
+                        <a  href='/admin/patient/add-edit/id/<?= $row['id'].$arg ?>/page/<?= $page ?>'><img src='/images/admin-images/edit.gif' border='0' title='Edit'/></a>&nbsp;&nbsp;
+                        <a  href='/admin/patient/delete/ids/<?= $row['id'].$arg ?>/page/<?= $page ?>' onclick="if(!confirm('Are you sure you want to delete?'))return false;"><img src='/images/admin-images/delete.gif' border='0' title='Delete'/></a>&nbsp;&nbsp;
+                        <a href='/admin/user/reset-password/id/<?php echo $row->user_id ?>/foruser/2/page/<?= $page ?>' onclick="return resetpass()">Reset Password</a>&nbsp;&nbsp;
+                    </td>
+
+                </tr>
+                <?php
+                    }
+                ?>
+                </table><br />
+            <?= $this->paginationControl($this->paginator, 'Sliding', 'pagination.phtml'); ?><br /><br />
+            <?php
+                }
+                else
+                {
+            ?>
+            <table width='100%' border='0' class='dataTable' cellspacing='0' cellpadding='0'>
+                    <tr>
+                        <th>#</th>
+                        <th><input type="checkbox" name="checkall" id="checkall" value="" /></th>
+                        <th>Entry Title </th>
+                        <th>Set Default Time </th>
+			<th>Created </th>
+                        <th style="width: 10%;">Action</th>
+                    </tr>
+                    <tr>
+                        <td colspan="6" align="center">No Records Found</td>
+                     </tr>
+                    </table>
+            <?php
+                }
+            ?>
+        </div></form>
+
+    </div>
+    <div class="btm-curve"><img src="/images/admin-images/btm-r-l.gif" align="left" /><img src="/images/admin-images/btm-r-r.gif" align="right" /></div>
+</div>

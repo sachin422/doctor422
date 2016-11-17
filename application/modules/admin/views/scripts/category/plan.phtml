@@ -1,0 +1,142 @@
+<script language="javascript">
+    $(document).ready(function()
+    { 
+        $("#checkall").click(function()
+        {
+            var checked = false;
+            if(this.checked)checked = true;
+            
+            $("input:checkbox.cid").each(function()
+            {
+                this.checked = checked;
+            });
+        });
+        
+        $(".actions").click(function()
+        {
+            var ids = Array();
+            var i = 0;
+            $("input:checkbox.cid").each(function()
+            {
+                if(this.checked==true){
+                    ids[i] = this.value;
+                    i++;
+                }
+            });
+            if(ids.length < 1){alert('Please make a selection from the list for '+$(this).attr('title')+'.');return false;}
+            $("#ids").val(ids);
+            if($(this).attr('rel')=='delete'){
+                if(!confirm("Are you sure you want to delete the record(s)?")){
+                    return false;
+                }
+            }
+            $("#multiaction").attr('action', '/admin/insurance-company/plan-'+$(this).attr('rel')).submit();
+
+        });
+    });
+</script>
+
+<?php $page = $this->paginator->getCurrentPageNumber();?>
+
+<div id="rightsidemain">
+    <div id="rightcontentpart">
+        <div id="rightsideheading">
+            <img src="/images/admin-images/bl-tl.gif" align="left" /><img src="/images/admin-images/bl-tr.gif" align="right" />
+
+
+
+	Insurance Plan - <span class='msg'>Total <?php echo $this->total ?> Record(s) found! </span>
+                  <span style="margin: 0pt 15px 0pt 0pt; float: right;"><a class="add" href="/admin/insurance-company/add-edit-plan/cid/<?php echo $this->linkArray['cid']?>/page/<?php echo $page?>">Add</a></span>
+        </div>
+
+        <div style="text-align:center;background-color: #fff;">
+            <form id="multiaction" action="" method="post">
+                <input type="hidden" name="ids" id="ids" />
+                <input type="hidden" name="cid" value="<?php echo $this->linkArray['cid']?>" />
+                <input type="hidden" name="page" value="<?php echo $page?>" />
+                <img border="0" class="actions" style="cursor: pointer" title="Publish" rel="publish" src="/images/admin-images/true.gif">&nbsp;&nbsp;
+                <img border="0" class="actions" style="cursor: pointer" title="Unpublish" rel="unpublish" src="/images/admin-images/false.gif">&nbsp;&nbsp;
+                <img border="0" class="actions" style="cursor: pointer" title="Delete" rel="delete" src="/images/admin-images/delete.gif">&nbsp;
+            </form>
+        </div>
+        <div id="rightsidecontentpart">
+            
+            <?php
+            if ($this->total > 0) {
+            ?>
+                <br><span class='red'>
+                <? echo $this->msg; ?>
+            </span>
+                <br>
+                <select name="cid" onChange="window.location='/admin/insurance-company/plan/cid/'+this.value;">
+                    <?php foreach($this->companies as $company):?>
+                    <option value="<?php echo $company->getId()?>" <?php if($company->getId()==$this->linkArray['cid']) echo "selected";?>> <?php echo $company->getCompany()?></option>
+                    <?php endforeach;?>
+                </select>
+            <br><br>
+            <?= $this->paginationControl($this->paginator, 'Sliding', 'pagination.phtml', array('linkArray'=>$this->linkArray )); ?>
+                <br>
+
+                <table width='100%' border='0' class='dataTable' cellspacing='0' cellpadding='0'>
+                    <tr>
+                        <th>#</th>
+                        <th><input type="checkbox" name="checkall" id="checkall" value="" /></th>
+                        <th>Insurance Plan</th>
+                        <th>Plan Type</th>
+                        <th style="width: 10%;">Action</th>
+                    </tr>
+
+                <?php
+                $sno = 0;
+                
+                $items_per_page = $this->paginator->getItemCountPerPage();
+                if ($page > 1) {
+                    $sno = $items_per_page * $page - $items_per_page;
+                }
+                $rowClass = 'trbg1';
+
+                foreach ($this->paginator as $row) {
+                    $sno++;
+
+                    if ($rowClass == "trbg1")
+                        $rowClass = 'trbg';
+                    else
+                        $rowClass='trbg1';
+
+                ?>
+                    <tr class='<?= $rowClass ?>'>
+                        <td><?= $sno ?></td>
+                        <td><input type="checkbox" name="cid[]" class="cid" id="cid<?= $row['id'] ?>" value="<?= $row['id'] ?>" /></td>
+                        <td><?= $row['plan'] ?></td>
+                        <td><?php if($row['plan_type']=='d')echo 'Dental';else echo 'General'; ?></td>
+                        <td>
+                        <?php
+                        $published = "false.gif";
+                        $published_action = "publish";
+                        $published_title = "Publish";
+                        $published_action = "publish";
+                        if ($row['status'] == 1) {
+                            $published = "true.gif";
+                            $published_title = "Unpublished";
+                            $published_action = "unpublish";
+                            $published_action = "unpublish";
+                        }
+                        ?>
+                        <a onclick="document.getElementById('cid<?= $row['id'] ?>').checked=true;" class="actions" rel="<?php echo $published_action;?>"><img src='/images/admin-images/<?php echo $published ?>' border='0' title='<?php echo $published_title ?>'/></a>&nbsp;&nbsp;
+                        <a href='/admin/insurance-company/add-edit-plan/id/<?= $row['id'] ?>/cid/<?php echo $this->linkArray['cid']?>/page/<?= $page ?>'><img src='/images/admin-images/edit.gif' border='0' title='Edit'/></a>&nbsp;&nbsp;
+                        <a onclick="document.getElementById('cid<?= $row['id'] ?>').checked=true;" class="actions" rel="delete"><img src='/images/admin-images/delete.gif' border='0' title='Delete'/></a>&nbsp;&nbsp;
+                    </td>
+
+                </tr>
+                <?
+                    }
+                ?>
+                </table><br />
+            <?php echo  $this->paginationControl($this->paginator, 'Sliding', 'pagination.phtml', array('linkArray'=>$this->linkArray )); ?><br /><br />
+            <?
+                }
+            ?></div>
+
+    </div>
+    <div class="btm-curve"><img src="/images/admin-images/btm-r-l.gif" align="left" /><img src="/images/admin-images/btm-r-r.gif" align="right" /></div>
+</div>

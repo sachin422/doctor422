@@ -1,0 +1,128 @@
+<?php
+	$prname ="";
+	$usersNs = new Zend_Session_Namespace("members");
+	$objPat = new Application_Model_Patient();
+	$objPatient = $objPat->find($usersNs->patientId);
+	
+	
+	$objUser = new Application_Model_User();
+	$objUserd =$objUser ->find($objPatient->userId);
+	
+    $Patient = new Application_Model_Patient();
+    $docPatient = $Patient->fetchRow("user_id='{$usersNs->userId}'");
+    $Appointment = new Application_Model_Appointment();
+	$upcomingWhere = "deleted!=1 AND user_id={$usersNs->userId} AND DATEDIFF(NOW(),appointment_date)<=0 AND  approve!=2";
+    $pastWhere = "deleted!=1 AND (user_id={$usersNs->userId} AND DATEDIFF(NOW(),appointment_date)>0) OR (user_id={$usersNs->userId} AND approve=2)";
+	
+	$cancellWhere = "approve=2 AND user_id={$usersNs->userId}";
+
+    $upcomingObject = $Appointment->fetchAll($upcomingWhere, "appointment_date DESC");
+    $pastObject = $Appointment->fetchAll($pastWhere, "appointment_date DESC");
+	$cancelObject = $Appointment->fetchAll($cancellWhere, "appointment_date DESC");
+	
+	$Patient_history = new Application_Model_PatientHistory();
+	$patient_history = $Patient_history->fetchRow("patient_id='{$usersNs->userId}'");
+	//echo $usersNs->userId;
+	//echo '<pre>';print_r($patient_history);die;
+
+?>
+
+<div class="admin-contentin">
+  <div class="username">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-5"> <img src="<?php echo $docPatient->getImage(); ?>" alt="Author"> </div>
+        <div class="col-sm-7">
+          <p class="aut"><?php   echo ucfirst($objUserd->firstName);?> <br><?php echo ucfirst($objUserd->lastName);?></p>
+          <ul>
+            <li><a href="/user/index/patient-edit" title="edit profile"><img src="/images/custom/user01.png" alt=""></a></li>
+            <!--<li><a href="#"><img src="/images/custom/user02.png" alt=""></a></li>-->
+            <li><a href="/user/index/patient-review" title="reviews"><img src="/images/custom/user03.png" alt=""></a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="navhead">Communication Center </div>
+      </div>
+    </div>
+  </div>
+  <div class="sidemenu">
+  	  <ul id="menu">
+		<li <?php if($this->actionName=="patient-dashboard") { ?>class="selected" <?php } ?> id="step1">
+			<a href="/user"><img src="/images/patient/icon01.png" alt=""> Dashboard</a>
+		</li>
+		<li <?php if($this->actionName=="patient-appointment") { ?>class="selected" <?php } ?> id="step2">
+			<a href="/user/index/patient-appointment"><img src="/images/patient/icon02.png" alt=""> My Appointments <span><?php echo count($upcomingObject);?></span></a>
+		</li>
+		<li <?php if($this->actionName=="patient-review") { ?>class="selected" <?php } ?> id="step4">
+			<a href="/user/index/patient-review"><img src="/images/patient/icon04.png" alt=""> Doctor Reviews </a>
+		</li>
+		<li <?php if($this->actionName=="patient-favourite-doctor") { ?>class="selected" <?php } ?> id="step8">
+			<a href="/user/index/patient-favourite-doctor"><img src="/images/patient/icon08.png" alt=""> Favorite Doctors </a>
+		</li>
+		<?php 
+		switch ($this->actionName) {
+			case 'patient-information-stepone':
+			case 'patient-information-steptwo':
+			case 'patient-information-stepthree':
+			case 'patient-information-stepfour':
+			case 'patient-information-stepfive':
+			case 'patient-information-stepsix':
+			case 'patient-information-stepseven':
+			case 'patient-information-stepeight':
+			case 'patient-information-stepnine':
+			case 'patient-information-stepten':
+			case 'patient-information-stepeleven':
+			case 'patient-information-stepthirteen':
+			case 'patient-information-stepfourteen':
+			case 'patient-information-stepfifteen':
+			case 'patient-information-stepsixteen':
+			case 'patient-information-stepseventeen':
+			case 'patient-information-final':
+				$patSteps = true;
+				break;
+			default:
+				$patSteps = false;
+				break;
+		}
+		
+		if($patient_history->status==0){ 
+		$patient_history_url='/user/index/patient-information-stepone';
+		}elseif($patient_history->status==1)
+		{
+		$patient_history_url='/user/index/patient-information-full';
+		}
+		
+		?>
+		<li <?php if($patSteps) { ?>class="selected" <?php } ?> id="step9">
+			<a href="<?php echo $patient_history_url;?>"><img src="/images/patient/icon09.png" alt=""> Medical History </a>
+		</li>
+		<li <?php if($this->actionName=="patient-edit") { ?>class="selected" <?php } ?> id="step5">
+			<a href="/user/index/patient-edit"><img src="/images/patient/icon05.png" alt=""> My Profile </a>
+		</li>
+		<li <?php if($this->actionName=="patient-questions") { ?>class="selected" <?php } ?> id="step10">
+			<a href="/user/index/patient-questions"><img src="/images/patient/icon10.png" alt=""> Customer Service </a>
+		</li>
+
+		<!--
+		<li <?php if($this->actionName=="") { ?>class="selected" <?php } ?> id="step3">
+			<a href="#"><img src="/images/patient/icon03.png" alt=""> Referrals <span>00</span></a>
+		</li>
+		-->
+		<!--
+		<li <?php if($this->actionName=="") { ?>class="selected" <?php } ?> id="step6">
+			<a href="#"><img src="/images/patient/icon06.png" alt=""> Secure Messages</a>
+		</li>
+		<li <?php if($this->actionName=="") { ?>class="selected" <?php } ?> id="step7">
+			<a href="#"><img src="/images/patient/icon07.png" alt=""> Medical Expenses <span>00</span></a>
+		</li>
+		-->
+	</ul>
+  </div>
+</div>
+
+

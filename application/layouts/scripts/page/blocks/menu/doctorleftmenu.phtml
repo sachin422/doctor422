@@ -1,0 +1,168 @@
+<?php 
+$doctorId = "";
+$usersNs = new Zend_Session_Namespace("members");
+if($usersNs) $userId = $usersNs->userId;
+$Doctor = new Application_Model_Doctor();
+$doctor = $Doctor->fetchRow("user_id=".$userId);
+$doctorPlan = $doctor->getMembershipPlan();
+?>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="navhead">Communication Center </div>
+		</div>
+	</div>
+</div>
+<div class="sidemenu">
+	<ul id="menu">
+		<li <?php if($this->actionName=="doctor-dashboard") { ?>class="selected" <?php } ?> id="step9">
+			<a href="/user"><img src="/images/user/icon01.png" alt=""> Dashboard</a>
+		</li>
+		<?php if($doctorPlan > 1) { ?>
+		<li <?php if($this->actionName=="doctor-appointment") { ?>class="selected" <?php } ?> id="step11">
+			<a href="/user/index/doctor-appointment"><img src="/images/patient/icon02.png" alt=""> My Appointments <span><?php echo $this->appointmentsCount;?></span></a>
+		</li>
+		<?php } ?>
+		<li <?php if($this->actionName=="patient-list" || $this->actionName=="doctor-patient-details" ) { ?>class="selected" <?php } ?> id="step10">
+			<a href="/user/index/patient-list"><img src="/images/user/patient-icon.png" alt=""> My Patients <span><?php echo $this->patientCount; ?></span></a>
+		</li>	
+
+                 <li <?php if($this->actionName=="referrals-patient") { ?>class="selected" <?php } ?> id="step10">
+                        <a href="/user/index/referrals-patient"><img src="/images/user/referrals-icon.png" alt=""> Patient Referrals<span><?php echo $this->referralspatientCount; ?></span></a>
+                </li>
+	
+		<?php if($doctorPlan > 1) { ?>
+		<li <?php if($this->actionName=="doctor-review") { ?>class="selected" <?php } ?> id="step13">
+			<a href="/user/index/doctor-review"><img src="/images/user/review-icon.png" alt=""> Patient Reviews </a>
+		</li>
+		<li <?php if($this->actionName=="appointment") { ?>class="selected" <?php } ?> id="step18">
+			<a href="/user/index/appointment/"><img src="/images/user/calender-icon.png" alt=""> My Calendar </a>
+		</li>
+		<?php } ?>
+		<li <?php if($this->actionName=="doctor-statictics") { ?>class="selected" <?php } ?> id="step17">
+			<a href="/user/index/doctor-statictics"><img src="/images/user/stat-icon.png" alt=""> Practice Statistics </a>
+		</li>
+		<?php if($doctorPlan > 1) { ?>
+		<li <?php if($this->actionName=="doctor-referal-step01" || $this->actionName=="doctor-referal-step02" || $this->actionName=="doctor-referal-step03" || $this->actionName=="doctor-referal-step04") { ?>class="selected" <?php } ?> id="step14">
+			<a href="/user/index/doctor-referal-step01"><img src="/images/user/doctor-to-doctor-icon.png" alt=""> Doctor Referrals </a>
+		</li>
+		<?php } ?>
+		<li <?php if($this->actionName=="social") { ?>class="selected" <?php } ?> id="step16">
+			<a href="/user/index/social/"><img src="/images/user/social-icon.png" alt=""> Social Widgets </a>
+		</li>
+		<!--
+		<li <?php if($this->actionName=="") { ?>class="selected" <?php } ?> id="step12">
+			<a href="#"><img src="/images/user/referrals-icon.png" alt=""> Referrals <span>00</span></a>
+		</li>
+		-->
+		<li id="MyElement" class="doc_left_menu_step15 non_hover_menu">
+			<a href="#"><img src="/images/user/settings-icon.png" alt="">Settings</a>
+			<ul>
+				<li <?php if($this->actionName=="my-profile") { ?>class="selected" <?php } ?>>
+					<a href="/user/index/my-profile">My Profile</a>
+				</li>
+				<li <?php if($this->actionName=="account-details") { ?>class="selected" <?php } ?>>
+					<a href="/user/index/account-details">Account Details</a>
+				</li>
+				<li <?php if($this->actionName=="master-slot" && $this->controllerName=="timeslot") { ?>class="selected" <?php } ?>>
+					<a href="/user/timeslot/master-slot/drid/<?php echo $doctor->getId(); ?>">Booking Rules</a>
+				</li>
+				<li <?php if($this->actionName=="edit" && $this->controllerName=="timeslot") { ?>class="selected" <?php } ?>>
+					<a href="/user/timeslot/edit">Time off</a>
+				</li>
+				<li <?php if($this->actionName=="insurance") { ?>class="selected" <?php } ?>>
+					<a href="/user/index/insurance">Insurances Accepted</a>
+				</li>
+<!--
+				<li <?php //if($this->actionName=="upgrade-plan") { ?>class="selected" <?php //} ?> >
+					<a href="/user/index/upgrade-plan">My Plan </a>
+				</li>
+-->
+			</ul>
+		</li>
+		<li <?php if($this->actionName=="doctor-questions") { ?>class="selected" <?php } ?> id="step22">
+			<a href="/user/index/doctor-questions"><img src="/images/user/help.png" alt=""> Customer Service </a>
+		</li>
+		
+		<!--
+		<li <?php if($this->actionName=="") { ?>class="selected" <?php } ?> >
+			<a href="#"><img src="/images/user/blog-icon.png" alt=""> Blog <span>00</span></a>
+		</li>
+		<li <?php if($this->actionName=="") { ?>class="selected" <?php } ?> id="step19">
+			<a href="#"><img src="/images/user/mail-iconn.png" alt=""> Messages <span>00</span></a>
+		</li>
+		<li <?php if($this->actionName=="") { ?>class="selected" <?php } ?> id="step20">
+			<a href="#"><img src="/images/user/payment-icon.png" alt=""> Payment Details </a>
+		</li>
+		-->
+		<!--
+		<li <?php if($this->actionName=="") { ?>class="selected" <?php } ?> id="step21">
+			<a href="#"><img src="/images/user/emailnews-icon.png" alt=""> E-mail Newsletter  </a>
+		</li>
+		-->
+		<li <?php if($this->actionName=="secure-messaging") { ?>class="selected" <?php } ?> id="step19">
+
+			<a href="/user/messages/secure-messaging"><img src="/images/user/mail-iconn.png" alt=""> Messages <span id="message_counter"><?php echo count($this->messages_list);?></span></a>
+
+		</li>
+    </ul>
+</div>
+<script>
+	function showSettingsMenuOpen(){
+		$("#MyElement").show();
+	}
+	
+	//function showSettingsMenuClosed(){
+		//$("#MyElement > ul").hide();
+	//}
+	//<?php 
+	//switch($this->actionName){
+		//case "my-profile":		// FALL THROUGH
+		//case "account-details":	// FALL THROUGH
+		//case "insurance":		// FALL THROUGH
+		//case "upgrade-plan":		// FALL THROUGH
+			//?>
+			//showSettingsMenuOpen();
+			//<?php 
+			//break;
+		//case "index":
+			//if($this->controllerName=="timeslot"){
+			//?>
+				//showSettingsMenuOpen();
+			//<?php 
+			//}else{
+			//?>
+				//showSettingsMenuClosed();
+			//<?php 
+			//}
+			//break;
+		//case "master-slot":
+			//if($this->controllerName=="timeslot"){
+			//?>
+				//showSettingsMenuOpen();
+			//<?php 
+			//}else{
+			//?>
+				//showSettingsMenuClosed();
+			//<?php 
+			//}
+			//break;
+		//case "edit":
+			//if($this->controllerName=="timeslot"){
+			//?>
+				//showSettingsMenuOpen();
+			//<?php 
+			//}else{
+			//?>
+				//showSettingsMenuClosed();
+			//<?php 
+			//}
+			//break;
+		//default:
+			//?>
+			//showSettingsMenuClosed();
+			//<?php 
+			//break;
+	//}
+	//?> 
+</script>

@@ -1,0 +1,74 @@
+<?php echo $this->doctype(); ?>
+<html lang="en">
+  <head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
+	<link rel="icon" href="/images/favicon.ico" type="image/x-icon">
+<?php    
+        echo $this->headTitle();
+        echo $this->headMeta();
+		$this->headLink()->appendStylesheet('/style/default.css');
+		$this->headLink()->appendStylesheet('/style/bootstrap.css');
+		$this->headLink()->appendStylesheet('/style/style.css');
+		?>
+		<!--[if IE]><script src="js/html5.js"></script><![endif]-->
+		<?php
+        $this->headLink()->appendStylesheet('/style/nivo-slider.css');
+		$this->headLink()->appendStylesheet('/style/lazy-load.css');
+		$this->headLink()->appendStylesheet('/style/meanmenu.css');
+		$this->headLink()->appendStylesheet('/style/bootstrap-responsive.css');
+		$this->headLink()->appendStylesheet('/style/app-scr.css');
+		$this->headLink()->appendStylesheet('/js/fancybox/jquery.fancybox-1.3.4.css');
+				
+        echo $this->headLink(); 
+		$this->headScript()->appendFile('/js/jquery-1.7.1.min.js'); 
+        $this->headScript()->appendFile('/js/hover.js');
+		$this->headScript()->appendFile('/js/jquery.flexisel.js'); 
+		$this->headScript()->appendFile('/js/smoothscroll.js');
+		$this->headScript()->appendFile("/js/fancybox/jquery.fancybox-1.3.4.js"); 
+   		$this->headScript()->appendFile("/js/jquery.json-2.2.js");
+		$this->headScript()->appendFile("/js/main.js");
+		echo $this->headScript();
+?>
+<!--[if gte IE 9]
+<style type="text/css">
+.gradient {
+filter: none;
+}
+</style>
+<![endif]-->
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+<!--Start of Zopim Live Chat Script-->
+<script type="text/javascript">
+window.$zopim||(function(d,s){var z=$zopim=function(c){z._.push(c)},$=z.s=
+d.createElement(s),e=d.getElementsByTagName(s)[0];z.set=function(o){z.set.
+_.push(o)};z._=[];z.set._=[];$.async=!0;$.setAttribute("charset","utf-8");
+$.src="//v2.zopim.com/?2w6QTWYC4OicEQ5KkssvmVrj1RPOKm5t";z.t=+new Date;$.
+type="text/javascript";e.parentNode.insertBefore($,e)})(document,"script");
+</script>
+<!--End of Zopim Live Chat Script-->
+</head>
+
+<body>
+	<?php include_once(APPLICATION_PATH ."/layouts/scripts/page/analyticstracking.php"); ?>
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.3&appId=209727805869982";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+<!-- Header HTML -->
+<?php //echo $this->render("/page/headerpage.phtml"); ?>	
+<!-- CONTENT SECTION -->
+<!--CONTENT SECTION -->
+<?php echo $this->layout()->content; ?>
+<!--/CONTENT SECTION -->
+<!-- footer HTML -->
+<?php //echo $this->render("/page/footer.phtml"); ?> 
+

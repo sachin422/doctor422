@@ -1,0 +1,24 @@
+<div class="inner_wrapperReg">
+	<div id="searchHeaderReg" class="clearfix">
+		<h1 class="left"><?php echo $this->lang[48]; ?> <span><?php echo $this->lang[206]; ?></span></h1>
+	</div>
+	<div class="clearfix"  id="sitemapWrapper">
+		<ul class="doc-sitemap-link left">
+			
+		</ul>
+	</div>
+</div>
+
+<div class="page-content">
+  <h2><?php echo $this->lang[207]; ?></h2>
+  <ul class="doc-sitemap-link">
+      <?php foreach ($this->paginator as $row) :?>
+      <?php
+        $real_url = "search/?category={$row->name}&insurance={$row->id}";
+      ?>
+        <li><a href="<?php echo $this->seoUrl($real_url);?>"><?php echo $row->name.' '.$row->company;?></a></li>
+      <?php endforeach;?>
+  </ul>
+  <br>
+</div>
+<?php echo $this->paginationControl($this->paginator, 'Sliding', 'pagination_sitemap.phtml'); ?>

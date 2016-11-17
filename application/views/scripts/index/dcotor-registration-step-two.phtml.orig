@@ -1,0 +1,250 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>:: Doc Mate-Doctor Sign Up ::</title>
+
+<?php    
+        echo $this->headTitle();
+        echo $this->headMeta();
+		
+		$this->headLink()->appendStylesheet('/style/bootstrap.css');
+		$this->headLink()->appendStylesheet('/style/bootstrap-theme.css');
+		$this->headLink()->appendStylesheet('/style/style-doctor-signin-reg.css');
+		
+		?>
+		<!--[if IE]><script src="js/html5.js"></script><![endif]-->
+		<?php
+				
+        echo $this->headLink(); 
+
+		$this->headScript()->appendFile('/js/modernizr.custom.79639.js'); 
+
+		echo $this->headScript();
+?>
+</head>
+
+<body>
+	<div class="sign-reg-box lesspad01 month-pricing clearfix">
+    	<p class="registration-text text-center">Register with</p>
+    	<div class="admin-logo"><a href="index.html"><img src="/images/doctors-admin-logo.png" alt="doctors"></a></div>
+        
+        <div class="label-heading space" style="margin-left:0px; margin-right:0px;">
+        	<div class="wrapper-demo">
+					<div id="dd" class="wrapper-dropdown-5" tabindex="1"><p class="blueform">Select Plan <span>Page 2 of 4</span></p>
+						<ul class="dropdown">
+							<li class="form-opt"><a href="#">Create Profile <span>Page 1 of 4</span></a></li>
+							<li class="form-opt"><a href="#">Almost There <span>Page 3 of 4</span></a></li>
+							<li class="form-opt"><a href="#">Welcome to doctors <span>Page 4 of 4</span></a></li>
+						</ul>
+					</div>
+				​</div>
+        </div>
+        
+        <div class="fetprice-all clearfix">
+        	<div class="fetpricebox01">
+            	<div class="top01">KEY FEATURES</div>
+                <div class="top02">Featured Profile</div>                
+                <div class="top03">Online Appointment Booking</div>
+                <div class="top03">Important Task Management</div>
+                <div class="top02">Social Media Setup</div>
+                <div class="top03">Patient Reviews</div>
+                <div class="top03">Doctor to Doctor Referrals</div>
+                <div class="top02">Patient Referrals</div>
+                <div class="top03">Social & Website Widgets</div>
+                <div class="top02">Practice Statistics</div>
+                <div class="top03">Patient Medical History</div>
+                <div class="top02">Secure Messaging</div>
+                <div class="top03">Past Due Reminders</div>
+                <div class="top02">Email Campaigns</div>
+            </div>
+            <form id="free" name="free" action="" method="post" enctype="multipart/formdata"> 
+			 	<input type="hidden" name="plan" value="1">
+				<input type="hidden" name="price" value="0">
+	            <div class="fetpricebox02">
+	            	<div class="top04">FREE</div> 
+	                <div class="top02 text-center"><img src="/images/tick.png" alt="doctors"></div>
+	                <div class="top02 text-center"><img src="/images/tick.png" alt="doctors"></div>
+	                <div class="top03 text-center"><img src="/images/tick.png" alt="doctors"></div>
+	                <div class="top02 text-center"><img src="/images/tick.png" alt="doctors"></div>
+	                <div class="top03 text-center"><img src="/images/cross.png" alt="doctors"></div>
+	                <div class="top02 text-center"><img src="/images/cross.png" alt="doctors"></div>
+	                <div class="top02 text-center"><img src="/images/cross.png" alt="doctors"></div>
+	                <div class="top03 text-center"><img src="/images/cross.png" alt="doctors"></div>
+	                <div class="top02 text-center"><img src="/images/cross.png" alt="doctors"></div>
+	                <div class="top03 text-center"><img src="/images/cross.png" alt="doctors"></div>
+	                <div class="top02 text-center"><img src="/images/cross.png" alt="doctors"></div>
+	                <div class="top03 text-center"><img src="/images/cross.png" alt="doctors"></div>
+	                <div class="top02 text-center"><img src="/images/cross.png" alt="doctors"></div>
+	                <div class="top07"><!--<a href="#"><img src="/images/signup-btn.png" alt="doctors"></a>--><input type="image" src="/images/signup-btn.png"></div>
+	            </div>
+			</form>
+			<form id="premium" name="premium" action="" method="post" enctype="multipart/formdata"> 
+            	<div class="fetpricebox02">
+	            	<div class="top06">
+	                	<h2>Premium </h2>
+	                    <h2>$100 </h2>
+	                    <p><!--Annually (2 months free) or -->$100/month</p>
+	                </div> 
+					<input type="hidden" name="plan" value="3">
+					<input type="hidden" name="price" value="1250">
+	                <div class="top02 text-center"><img src="/images/blue-tickk.png" alt="doctors"></div>
+	                <div class="top03 text-center"><img src="/images/blue-tickk.png" alt="doctors"></div>
+	                <div class="top02 text-center"><img src="/images/blue-tickk.png" alt="doctors"></div>
+	                <div class="top03 text-center"><img src="/images/blue-tickk.png" alt="doctors"></div>
+	                <div class="top02 text-center"><img src="/images/blue-tickk.png" alt="doctors"></div>
+	                <div class="top03 text-center"><img src="/images/blue-tickk.png" alt="doctors"></div>
+	                <div class="top02 text-center"><img src="/images/blue-tickk.png" alt="doctors"></div>
+	                <div class="top03 text-center"><img src="/images/blue-tickk.png" alt="doctors"></div>
+	                <div class="top02 text-center"><img src="/images/blue-tickk.png" alt="doctors"></div>
+	                <div class="top03 text-center"><img src="/images/blue-tickk.png" alt="doctors"></div>
+	                <div class="top02 text-center"><img src="/images/blue-tickk.png" alt="doctors"></div>
+	                <div class="top03 text-center"><img src="/images/blue-tickk.png" alt="doctors"></div>
+	                <div class="top02 text-center"><img src="/images/blue-tickk.png" alt="doctors"></div>
+	                <div class="top07"><!--<a href="#"><img src="/images/signup-blue.png" alt="doctors"></a>-->
+	                	<input type="image" src="/images/signup-blue.png">
+	                </div>
+            	</div>
+			</form>
+			<!--<form id="intermediate" name="intermediate" action="" method="post" enctype="multipart/formdata"> 
+            <div class="fetpricebox02">
+            	<div class="top05">
+                	<h2>Intermediate</h2>
+                    <h2>$750</h2>
+                    <p>Annually (2 months free) or $75/month</p>
+                </div> 
+				<input type="hidden" name="plan" value="2">
+				<input type="hidden" name="price" value="750">
+                <div class="top02 text-center"><img src="/images/orange-tick.png" alt="doctors"></div>
+                <div class="top03 text-center"><img src="/images/orange-tick.png" alt="doctors"></div>
+                <div class="top02 text-center"><img src="/images/orange-tick.png" alt="doctors"></div>
+                <div class="top03 text-center"><img src="/images/orange-tick.png" alt="doctors"></div>
+                <div class="top02 text-center"><img src="/images/orange-tick.png" alt="doctors"></div>
+                <div class="top03 text-center"><img src="/images/orange-tick.png" alt="doctors"></div>
+                <div class="top02 text-center"><img src="/images/orange-tick.png" alt="doctors"></div>
+                <div class="top03 text-center"><img src="/images/orange-tick.png" alt="doctors"></div>
+                <div class="top02 text-center"><img src="/images/orange-tick.png" alt="doctors"></div>
+                <div class="top03 text-center"><img src="/images/cross.png" alt="doctors"></div>
+                <div class="top02 text-center"><img src="/images/cross.png" alt="doctors"></div>
+                <div class="top03 text-center"><img src="/images/cross.png" alt="doctors"></div>
+                <div class="top02 text-center"><img src="/images/cross.png" alt="doctors"></div>
+                <div class="top03 text-center"><img src="/images/cross.png" alt="doctors"></div>
+                <div class="top07"><input type="image" src="/images/signup-orange.png"> </div>
+            </div>
+			</form>-->
+<<<<<<< HEAD
+=======
+			 <form id="premium" name="premium" action="" method="post" enctype="multipart/formdata"> 
+            <div class="fetpricebox02">
+            	<div class="top06">
+                	<h2>Premium </h2>
+                    <h2>$100 </h2>
+                    <p><!--Annually (2 months free) or -->$100/month</p>
+                </div> 
+				<input type="hidden" name="plan" value="3">
+				<input type="hidden" name="price" value="100">
+                <div class="top02 text-center"><img src="/images/blue-tickk.png" alt="doctors"></div>
+                <div class="top03 text-center"><img src="/images/blue-tickk.png" alt="doctors"></div>
+                <div class="top02 text-center"><img src="/images/blue-tickk.png" alt="doctors"></div>
+                <div class="top03 text-center"><img src="/images/blue-tickk.png" alt="doctors"></div>
+                <div class="top02 text-center"><img src="/images/blue-tickk.png" alt="doctors"></div>
+                <div class="top03 text-center"><img src="/images/blue-tickk.png" alt="doctors"></div>
+                <div class="top02 text-center"><img src="/images/blue-tickk.png" alt="doctors"></div>
+                <div class="top03 text-center"><img src="/images/blue-tickk.png" alt="doctors"></div>
+                <div class="top02 text-center"><img src="/images/blue-tickk.png" alt="doctors"></div>
+                <div class="top03 text-center"><img src="/images/blue-tickk.png" alt="doctors"></div>
+                <div class="top02 text-center"><img src="/images/blue-tickk.png" alt="doctors"></div>
+                <div class="top03 text-center"><img src="/images/blue-tickk.png" alt="doctors"></div>
+                <div class="top02 text-center"><img src="/images/blue-tickk.png" alt="doctors"></div>
+                <div class="top03 text-center"><img src="/images/blue-tickk.png" alt="doctors"></div>
+                <div class="top07"><!--<a href="#"><img src="/images/signup-blue.png" alt="doctors"></a>--><input type="image" src="/images/signup-blue.png">				
+				</div>
+            </div>
+			</form>
+			<form id="yearly" name="yearly" action="" method="post" enctype="multipart/formdata"> 
+			<input type="hidden" name="plan" value="yearly">
+				<input type="hidden" name="price" value="1000">
+			<div class="subscription-con">
+			<div class="col-md-10 col-xs-12 col-sm-12">
+				<div class="col-md-4 col-xs-12 col-sm-12 pull-right">
+				<input type="submit" class="subs-btn" value="Yearly Subscription" name="yearly" >
+				</div>
+			</div>	
+			</div>
+			</form>
+			
+>>>>>>> feature/Ramesh
+        </div>
+        
+        <div id="policyNotes">
+        	<p>
+        		<h3>Return Policy:</h3>
+        		<ul style="padding-left: 15px; margin-left: 15px; font-weight: normal;">
+        			<li>No Commitment or Contract</li>
+        			<li>Free Plans – No credit card or payment required</li>
+        			<li>30 day money back guarantee with full refund for monthly and annual plans.</li>
+        		</ul>
+        	</p>
+        	<p>
+        		<h3>Cancellation Policy:</h3>
+        		<ul style="padding-left: 15px; margin-left: 15px; font-weight: normal;">
+        			<li>1 week notice before the next billing cycle is required to cancel the service for monthly and annual plans.</li>
+        		</ul>
+        	</p>
+        </div>
+
+        <div id="policyNotes">
+        	<p>
+        		<h3>Return Policy:</h3>
+        		<ul>
+        			<li>No Commitment or Contract required</li>
+        			<li>Free Plans – No credit card or payment required</li>
+        			<li>30 day money back guarantee with full refund for monthly and annual plans.</li>
+        		</ul>
+        	</p>
+        	<p>
+        		<h3>Cancellation Policy:</h3>
+        		<ul>
+        			<li>1 week notice before the next billing cycle is required to cancel the service for monthly and annual plans.</li>
+        		</ul>
+        	</p>
+        </div>
+        
+        
+    </div>
+    
+    <p class="copyright-text">Copyright © 2015 doctors LLC. All rights reserved.</p>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+		<script type="text/javascript">
+
+			function DropDown(el) {
+				this.dd = el;
+				this.initEvents();
+			}
+			DropDown.prototype = {
+				initEvents : function() {
+					var obj = this;
+
+					obj.dd.on('click', function(event){
+						$(this).toggleClass('active');
+						event.stopPropagation();
+					});	
+				}
+			}
+
+			$(function() {
+
+				var dd = new DropDown( $('#dd') );
+
+				$(document).click(function() {
+					// all dropdowns
+					$('.wrapper-dropdown-5').removeClass('active');
+				});
+
+			});
+
+		</script>
+</body>
+</html>

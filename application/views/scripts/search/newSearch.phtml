@@ -1,0 +1,86 @@
+<script type="text/javascript">
+function checkArea() {
+	var area = document.getElementById("area").value;
+	if(area == "<?php echo $this->lang[69]; ?>") {
+		<?php
+		$setting = new Admin_Model_GlobalSettings();
+		$default_city = $setting->settingValue('default_city');
+		?>
+		document.getElementById("area").value = "<?php echo $default_city; ?>";
+	} 
+	
+	var docName = document.getElementById("doctornameHidden").value;
+	if(docName == "<?php echo $this->lang[76]; ?>") {
+		document.getElementById("doctornameHidden").value = "";
+		jQuery("#doctornameHidden").attr('name', '');
+	}
+	if(jQuery('#category option:selected').val() == ""){
+		jQuery("#category").attr('name', '');
+	}
+	if(jQuery('#insurance option:selected').val() == ""){
+		jQuery("#insurance").attr('name', '');
+	}
+}
+</script>
+
+<div id="form_area"  <?php if($this->controllerName=='search'){ echo 'style="margin-left:0px"'; } ?> >
+	<form accept-charset="utf-8" action="/search"  name="patient_search" id="patient_search" onSubmit="checkArea()" class="jqtransform">
+		<div  class="left formPart1">
+			<h2 id="docSearch"><span><?php echo $this->lang[71]; ?></span></h2>
+			<div id="the_category">
+				<select id="category" name="<?php echo $this->lang[933]; ?>" >
+					<option value=""><?php echo $this->lang[72]; ?></option>
+					<?php foreach ($this->categories as $category): ?>
+					<option value="<?php echo $category->getName() ?>" <?php if ($category->getName() == $this->selectedCategory)echo 'selected="selected"'; ?>><?php echo $category->getName() ?></option>
+					<?php endforeach; ?>
+				</select>	
+			</div>
+		</div>
+		<div class="left formPart2">
+			<h2 id="areaSearch"><span><?php echo $this->lang[73]; ?></span></h2>		
+			<input type="text" name="<?php echo $this->lang[934]; ?>" id="area" value="<?php
+				if ($this->area != '')echo $this->area;else echo $this->lang[69];
+				?>" onfocus="if(this.value=='<?php echo $this->lang[69]; ?>'){this.value=''}" onblur="if(this.value==''){this.value='<?php echo $this->lang[69]; ?>'}" />
+		</div>
+		<div id="the_insurance"  class="left formPart1">
+			<select name="<?php echo $this->lang[935]; ?>" id="insurance">
+				<option value=""><?php echo $this->lang[74]; ?></option>
+				<option value="<?php echo $this->lang[936]; ?>" <?php if ($this->lang[936] == $this->selectedinsurance) echo 'selected="selected"'; ?>><?php echo $this->lang[75]; ?></option>
+				<?php foreach ($this->insurances as $insurance): ?>
+				<option value="<?php echo $insurance->getCompany(); ?>" <?php if ($insurance->getCompany() == $this->selectedinsurance)echo 'selected="selected"'; ?>><?php echo $insurance->getCompany(); ?></option>
+				<?php endforeach; ?>
+			</select>
+		</div>
+		<input type="text" name="doctorname" id="doctornameHidden"  class="left formPart2" value="<?php if($this->doctorname!='')echo $this->doctorname;else echo $this->lang[76];?>" onfocus="if(this.value=='<?php echo $this->lang[76]; ?>'){this.value=''}" onblur="if(this.value==''){this.value='<?php echo $this->lang[76]; ?>'}" class="doc-city">
+		<input type="submit" value="" id="submit"  class="left" />		
+	</form>
+</div>
+<script type="text/javascript">
+$(document).ready(function() {
+	$('form.jqtransform').jqTransform();
+
+	$("#area").autocomplete('/search/autosuggest/', {
+		<?php if ($_REQUEST[$this->lang[934]] == '' ) { ?>
+		width: 440,
+		<?php } else { ?>
+		width: 300,
+		<?php } ?>
+		autoFocus: false, 
+		delay : 0,
+		minChars: 2,
+		selectFirst: false
+	});
+	
+	$("#showName").click(function(){	
+		jQuery('#hidden_fields').slideToggle('fast', function(){
+				if(jQuery('#hidden_fields').css('display') == 'block') {
+					jQuery('#showName').css('background','url("/images/show_arrow.png") no-repeat 175px -18px');
+				} else {
+					jQuery('#showName').css('background','url("/images/show_arrow.png") no-repeat 175px 0'); 
+				}
+			}
+		);
+		return false;
+	});	
+});
+</script>

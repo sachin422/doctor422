@@ -1,0 +1,397 @@
+<script language="javascript">
+    $(document).ready(function()
+    { 
+        $("#checkall").click(function()
+        {
+            var checked = false;
+            if(this.checked)checked = true;
+            
+            $("input:checkbox.cid").each(function()
+            {
+                this.checked = checked;
+            });
+        });
+        
+        $(".actions").click(function()
+        {
+            var ids = Array();
+            var i = 0;
+            $("input:checkbox.cid").each(function()
+            {
+                if(this.checked==true){
+                    ids[i] = this.value;
+                    i++;
+                }
+            });
+            if(ids.length < 1){alert('Please make a selection from the list for '+$(this).attr('title')+'.');return false;}
+            $("#ids").val(ids);
+            if($(this).attr('rel')=='delete'){
+                if(!confirm("Are you sure you want to delete the record(s)?")){
+                    return false;
+                }
+            }
+            
+              
+            
+            //$("#multiaction").attr('action', '/admin/doctor/'+$(this).attr('rel')).submit();
+            $("#multiaction").attr('action', '/admin/doctor/'+$(this).attr('rel'));
+            $("#multiaction").submit();
+            
+            
+           
+        });
+    });
+    function setFormAction(sort_criteria)
+    {
+        var doctor_name = $('#doctor_name').val();
+        var catid = $("#catid").val();
+        var state = $("#state").val();
+        var zip = $("#zip").val();
+        var mlevel = $("#mlevel").val();
+        var urlparam="";
+
+        if(sort_criteria)
+        {
+            urlparam+="/sorder/<?php echo $this->sorder ?>";
+            urlparam+="/scriteria/"+sort_criteria;
+        }
+        
+        if(doctor_name!="")
+        {
+            urlparam+="/doctor_name/"+doctor_name;
+        }
+        if(mlevel!="")
+        {
+            urlparam+="/mlevel/"+mlevel;
+        }
+        if(catid!="")
+        {
+            urlparam+="/catid/"+catid;
+        }
+        if(state!="")
+        {
+            urlparam+="/state/"+state;
+        }
+        if(zip!="")
+        {
+            urlparam+="/zip/"+zip;
+        }
+        if(urlparam=="")
+        {
+            //alert("Please enter any search criteria");
+            //return false;
+        }
+        //urlparam = encodeURI(urlparam);
+        
+        var action = "/admin/doctor/index"+urlparam;
+        
+        $('#multiaction').attr('action',action);
+        $('#multiaction').submit();
+        return true;
+        
+    }
+    function resetpass()
+    {
+    
+        if( confirm('Are you sure to reset password?'))
+            return true;
+        else
+            return false;
+    }
+    function changelevel()
+    {
+
+        var ids = Array();
+            var i = 0;
+            $("input:checkbox.cid").each(function()
+            {
+                if(this.checked==true){
+                    ids[i] = this.value;
+                    i++;
+                }
+            });
+            if(ids.length < 1){alert('Please make a selection from the list for change membership level.');return false;}
+            $("#ids").val(ids);
+
+          /*if(!confirm("Are you sure you want to change  membership level of the record(s)?")){
+           return false;
+                }
+                else
+                    {*/
+                var ids,membership_level;
+               ids = $('#ids').val();
+               membership_level =$('#member_level').val();
+               if(membership_level!="")
+                   {
+
+                   if(!confirm("Are you sure you want to change  membership level of the selected doctor(s)?")){
+           return false;
+                }
+                else
+                    {
+              $("#multiaction").attr('action', '/admin/doctor/changelevel');
+            $("#multiaction").submit();
+                    }
+                   }
+                   else
+                       {
+                           alert("Please select any membership level");
+                       }
+
+                   // }
+      
+    }
+</script>
+
+<?php $page = $this->paginator->getCurrentPageNumber(); ?>
+
+<div id="rightsidemain">
+    <div id="rightcontentpart">
+        <div id="rightsideheading">
+            <img src="/images/admin-images/bl-tl.gif" align="left" /><img src="/images/admin-images/bl-tr.gif" align="right" />
+
+<?php 
+$usersNs = new Zend_Session_Namespace("members"); 
+$Usern = new Application_Model_User();
+$Usern = $Usern->fetchRow("id=$usersNs->userId");
+?>
+
+	Doctor - <span class='msg'>Total <?php echo $this->total ?> Record(s) found! </span>
+	<?php if($Usern->getUserLevelId() != 4){ ?>
+            <span style="margin: 0pt 15px 0pt 0pt; float: right;"><a class="add" href="/admin/doctor/add-edit/">Add</a></span>
+	<?php } ?>
+            &nbsp;&nbsp;
+           
+        </div>
+
+        <form id="multiaction" action="" method="post">
+				<?php 
+if($Usern->getUserLevelId() != 4){
+?>
+            <div style="text-align:center;background-color: #fff;">
+
+                <input type="hidden" name="ids" id="ids" />
+                <input type="hidden" name="page" value="<?php echo $page ?>" />
+                <img border="0" class="actions" style="cursor: pointer" title="Publish" rel="publish" src="/images/admin-images/true.gif">&nbsp;&nbsp;
+                <img border="0" class="actions" style="cursor: pointer" title="Unpublish" rel="unpublish" src="/images/admin-images/false.gif">&nbsp;&nbsp;
+                <img border="0" class="actions" style="cursor: pointer" title="Delete" rel="delete" src="/images/admin-images/delete.gif">&nbsp;
+                Change Membership Level to <select name="member_level" id="member_level" >
+                                            <option value="">--Select Membership Level--</option>
+                                            <option value="Listed">Listed</option>
+                                            <option value="Free">Free</option>
+                                            <option value="Premium">Premium</option>
+                                            </select> <input type ="button" name="button" value ="submit" onclick ="changelevel()">
+            </div>
+		<?php } ?>
+            <div id="rightsidecontentpart">
+                <div class="search_box">
+                    Name:<input name="doctor_name" id="doctor_name" type="text" value="<?php echo stripslashes($this->search_text); ?>" onkeydown="if(event.keyCode==13)setFormAction()">
+                    Speciality:
+                    <select name="catid" id="catid">
+                        <?php
+                        foreach ($this->all_cats as $key => $val) {
+                            if ($this->category_id == $key)
+                                $selected = " selected";
+                            else
+                                $selected="";
+                            echo "<option value='" . $key . "'" . $selected . ">" . $val . "</option>";
+                        }
+                        ?>
+                    </select>
+
+<?php $states = array('CA', 'MA', 'IL', 'NY') ?>
+
+                    State: <?php /* <select id="state" name="state">
+                          <?php foreach($states as $st):?>
+                          <option value ="<?php echo $st?>" <?php if($st==$this->state_text)echo "selected='selected'";?>><?php echo $st?></option>
+                          <?php endforeach;?>
+                          </select> */ ?>
+
+                        <input type="text" name="state" id="state" value="<?php //echo $this->state_text;  ?>" onkeydown="if(event.keyCode==13)setFormAction()">
+                        Zip: <input type="text" name="zip" id="zip" value="<?php echo $this->zip_text; ?>" onkeydown="if(event.keyCode==13)setFormAction()">
+                        Membership Level: <select id="mlevel" name="mlevel">
+                            <option value ="" >Select Membership Level</option>
+                            <option value="Listed" <?php echo $selected = ($this->mlevel == "Listed") ? " selected" : ""; ?>>Listed</option>
+                            <option value="Free" <?php echo $selected = ($this->mlevel == "Free") ? " selected" : ""; ?>>Free</option>
+                            <option value="Premium" <?php echo $selected = ($this->mlevel == "Premium") ? " selected" : ""; ?>>Premium</option>
+                        </select>
+                        <input type="button" name="button" value="Submit" onclick="return setFormAction()">
+
+
+<?php
+                        if (!empty($this->search_text) || !empty($this->category_id) || !empty($this->state_text) || !empty($this->zip_text) || !empty($this->sorder))
+                            echo "<a href='/admin/doctor/'>view all</a>";
+?>
+                    </div>
+<?php
+                        if ($this->total > 0) {
+?>
+                            <br><span class='red'>
+<?php echo $this->msg; ?>
+                            </span>
+
+                            <br>
+<?php echo $this->paginationControl($this->paginator, 'Sliding', 'pagination.phtml'); ?>
+                        <br>
+
+                        <table width='100%' border='0' class='dataTable' cellspacing='0' cellpadding='0'>
+                            <tr>
+                                <th>#</th>
+                                <th><input type="checkbox" name="checkall" id="checkall" value="" /></th>
+                                <th>Member ID</th>
+                                <th><a href ="javascript:void(0)" onclick="setFormAction('d.fname')">Entry Title </a></th>
+                                <th>Speciality</th>
+                                <th><a href ="javascript:void(0)" onclick="setFormAction('d.state')">State</a> </th>
+                                <th><a href ="javascript:void(0)" onclick="setFormAction('d.zipcode')">Zipcode</a> </th>
+                                <th>Set Default Time </th>
+                                <!--th>Created </th-->
+                                <th>Membership Level</th>
+                                <th style="width: 10%;">Action</th>
+                            </tr>
+
+<?php
+                            $sno = 0;
+
+                            $items_per_page = $this->paginator->getItemCountPerPage();
+                            if ($page > 1) {
+                                $sno = $items_per_page * $page - $items_per_page;
+                            }
+                            $rowClass = 'trbg1';
+
+                            $User = new Application_Model_User();
+                            $Category = new Application_Model_Category();
+                            $DoctorCategory = new Application_Model_DoctorCategory();
+                            foreach ($this->paginator as $row) {
+                                $categoyStr = "";
+                                $categoyArray = array();
+                                $docCatObj = $DoctorCategory->fetchAll("doctor_id='{$row->id}'");
+                                if($docCatObj){
+                                    foreach($docCatObj as $c){
+                                        $catObject = $Category->fetchRow("id='{$c->getCategoryId()}'");
+                                        if($catObject){
+                                            $categoyArray[] = $catObject->getName();
+                                        }
+                                    }
+                                }
+                                if(!empty($categoyArray))$categoryStr = implode(', ', $categoyArray);
+
+                                $arg = "";
+                                if (!empty($this->search_text))
+                                    $arg = "/doctor_name/" . $this->search_text;
+
+
+                                if (!empty($this->category_id))
+                                    $arg.="/catid/" . $this->category_id;
+
+                                if (!empty($this->state_text))
+                                    $arg.="/state/" . $this->state_text;
+
+                                if (!empty($this->zip_text))
+                                    $arg.="/zip/" . $this->zip_text;
+
+                                if (!empty($this->sorder))
+                                    $arg.="/sorder/" . $this->sorder;
+
+                                if (!empty($this->scriteria))
+                                    $arg.="/scriteria/" . $this->scriteria;
+
+                                if (!empty($this->mlevel))
+                                    $arg.="/mlevel/" . $this->mlevel;
+
+
+
+                                $userInfo = $User->find($row->user_id);
+                                $sno++;
+
+                                if ($rowClass == "trbg1")
+                                    $rowClass = 'trbg';
+                                else
+                                    $rowClass='trbg1';
+
+?>
+                                <tr class='<?= $rowClass ?>'>
+                                    <td><?php
+                                echo $sno;
+                                if ($tot_appointment > 0)
+                                    echo "<img src='/images/admin-images/mail_sent.png' alt='Appoint mail has been sent to doctor' title='Appoint mail has been sent to doctor'>";
+?>
+
+
+
+                            </td>
+                            <td><input type="checkbox" name="cid[]" class="cid" value="<?= $row->id ?>" id="cid<?php echo $row->id; ?>"/></td>
+                            <td><?php echo $row->id; ?></td>
+                            <td><a  href='/admin/doctor/add-edit/id/<?= $row->id . $arg ?>/page/<?= $page ?>'><?php echo $row->fname; ?></a></td>
+                            <td><?php echo $categoryStr ?></td>
+                            <td><?php if (!empty($row->state)
+                                    )echo $row->state; else
+                                    ""; ?></td>
+                            <td><?php if (!empty($row->zipcode)
+                                    )echo $row->zipcode; else
+                                    ""; ?></td>
+                            <td><a href="/admin/timeslot/index/drid/<?php echo $row->id ?>">Set Time Slot</a></td>
+                            <td><?php
+                                echo $row->membership_level;
+                                /*if ($userInfo)
+                                    date("Y-m-d h:i:s", $userInfo->registerDate);
+                                else
+                                    echo "";*/
+?></td>
+                            <td>
+                            <?php
+                                $published = "false.gif";
+                                $published_action = "publish";
+                                $published_title = "Publish";
+                                if ($row->status == 1) {
+                                    $published = "true.gif";
+                                    $published_title = "Unpublished";
+                                    $published_action = "unpublish";
+                                }
+                            ?>
+                               
+								<a class="actions" rel="<?php echo $published_action ?>" onclick ='document.getElementById("cid<?php echo $row->id; ?>").checked=true;' ><img src='/images/admin-images/<?php echo $published ?>' border='0' title='<?php echo $published_title ?>'/></a>&nbsp;&nbsp;
+								<a  href='/admin/doctor/add-edit/id/<?= $row->id . $arg ?>/page/<?= $page ?>'><img src='/images/admin-images/edit.gif' border='0' title='Edit'/></a>&nbsp;&nbsp;
+                                <a  href='/admin/doctor/delete/ids/<?= $row->id . $arg ?>/page/<?= $page ?>' onclick="if(!confirm('Are you sure you want to delete?'))return false;"><img src='/images/admin-images/delete.gif' border='0' title='Delete'/></a>&nbsp;&nbsp;
+                              <!--  <a href='/admin/doctor/sendemail/ids/<?= $row->id ?>/page/<?= $page ?>' >Send EMail</a>&nbsp;&nbsp; -->
+                            <?php
+                                if (!is_null($row->user_id) && $row->user_id > 0) {
+                            ?>
+                                    <a href='/admin/user/reset-password/id/<?php echo $row->user_id ?>/foruser/1/page/<?= $page . $arg ?>' onclick="return resetpass()">Reset Passwords</a>&nbsp;&nbsp;
+                            <?php
+                                }
+                            ?>
+							<?php if($this->aam) { ?> 
+								<a href="/admin/doctor/appointment/docid/<?= $row->id ?>">Manage appointments</a>
+							<?php } ?>
+                            </td>
+
+                        </tr>
+                    <?php
+                            }
+                    ?>
+                        </table><br />
+                <?= $this->paginationControl($this->paginator, 'Sliding', 'pagination.phtml'); ?><br /><br />
+                <?php
+                        } else {
+                ?>
+                            <table width='100%' border='0' class='dataTable' cellspacing='0' cellpadding='0'>
+                                <tr>
+                                    <th>#</th>
+                                    <th><input type="checkbox" name="checkall" id="checkall" value="" /></th>
+                                    <th>Entry Title </th>
+                                    <th>Set Default Time </th>
+                                    <th>Membership Level </th>
+                                    <th style="width: 10%;">Action</th>
+                                </tr>
+                                <tr>
+                                    <td colspan="6" align="center">No Records Found</td>
+                                </tr>
+                            </table>
+<?php
+                        }
+?>
+            </div></form>
+
+    </div>
+    <div class="btm-curve"><img src="/images/admin-images/btm-r-l.gif" align="left" /><img src="/images/admin-images/btm-r-r.gif" align="right" /></div>
+</div>

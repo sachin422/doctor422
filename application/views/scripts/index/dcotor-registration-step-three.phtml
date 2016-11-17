@@ -1,0 +1,120 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>:: Doc Mate-Doctor Sign Up ::</title>
+
+<?php    
+        echo $this->headTitle();
+        echo $this->headMeta();
+		
+		$this->headLink()->appendStylesheet('/style/bootstrap.css');
+		$this->headLink()->appendStylesheet('/style/bootstrap-theme.css');
+		$this->headLink()->appendStylesheet('/style/style-doctor-signin-reg.css');
+		
+		?>
+		<!--[if IE]><script src="js/html5.js"></script><![endif]-->
+		<?php
+				
+        echo $this->headLink(); 
+
+		$this->headScript()->appendFile('/js/modernizr.custom.79639.js'); 
+
+		echo $this->headScript();
+?>
+</head>
+
+<body>
+	<div class="sign-reg-box lesspad clearfix">
+    	<p class="registration-text text-center">Register with</p>
+    	<div class="admin-logo"><a href="/"><img src="/images/doctors-admin-logo.png" alt="doctors"></a></div>
+        
+        <div class="label-heading ">
+        	<div class="wrapper-demo">
+					<div id="dd" class="wrapper-dropdown-5" tabindex="1"><p class="blueform">Almost There<span>Page 3 of 4</span></p>
+						<ul class="dropdown">
+							<li class="form-opt"><a href="#">Create Profile <span>Page 1 of 4</span></a></li>
+							<li class="form-opt"><a href="#">Select Plan <span>Page 2 of 4</span></a></li>
+							<li class="form-opt"><a href="#">Welcome to doctors <span>Page 4 of 4</span></a></li>
+						</ul>
+					</div>
+				​</div>
+        </div>
+		<?php if($this->plan['plan']==1){
+				$plan='Free';
+				
+			}elseif($this->plan['plan']==2){
+			
+			$plan='Intermediate';			
+			}elseif($this->plan['plan']==3){
+			
+			$plan='Premium';			
+			}
+			
+		
+		
+		
+		?>
+        
+         <form class="regstep" action="/index/dcotor-registration-step-four" method="post">
+          <p class="formname">Doctor or Dentist :&nbsp;&nbsp;  <?php if($this->plan['price']){ ?>$<?php echo $this->plan['price']; } ?>  &nbsp;&nbsp;&nbsp;&nbsp;  Plan: <?php echo $plan;?></p>
+          <p class="formname">Credit Card : <input name="" type="text" class="credit">  cvv: <input name="" type="text" class="cvv"></p>
+          <p class="formname">Name on Credit Card: </p>
+          <input name="" type="text">
+          <p class="formname">Expires on :</p>
+          <input name="" type="text" class="credit"> <a href="#"><img src="images/date-icon.png" alt=""></a>
+          <p class="formname">Accepted Card :</p>
+          <ul class="accepted clearfix">
+              <li><a href="#"><img src="images/visa-icon.png" alt=""></a></li>
+              <li><a href="#"><img src="images/mastercard-icon.png" alt=""></a></li>
+              <li><a href="#"><img src="images/american-express-icon.png" alt=""></a></li>
+              <li><a href="#"><img src="images/discover-icon.png" alt=""></a></li>
+          </ul>
+          
+          <p class="formname">Your Credit Card will not be changed until after your account 
+has been activated by one of our service Representatives.</p>
+          <p class="formname">Your information is safe. We will not share your data with anyone. </p>
+          
+          <input name="" type="submit" value="Next">
+           
+         </form>
+        
+        
+        
+    </div>
+    
+    <p class="copyright-text">Copyright © A1 Healthcare Technologies LLC 2015. All rights reserved.</p>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+		<script type="text/javascript">
+
+			function DropDown(el) {
+				this.dd = el;
+				this.initEvents();
+			}
+			DropDown.prototype = {
+				initEvents : function() {
+					var obj = this;
+
+					obj.dd.on('click', function(event){
+						$(this).toggleClass('active');
+						event.stopPropagation();
+					});	
+				}
+			}
+
+			$(function() {
+
+				var dd = new DropDown( $('#dd') );
+
+				$(document).click(function() {
+					// all dropdowns
+					$('.wrapper-dropdown-5').removeClass('active');
+				});
+
+			});
+
+		</script>
+</body>
+</html>

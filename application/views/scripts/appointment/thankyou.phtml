@@ -1,0 +1,73 @@
+<?php
+$settings = new Admin_Model_GlobalSettings();
+$locale = $settings->settingValue('locale');
+setlocale(LC_ALL, $locale);
+?>
+<div id="inner_wrapper">
+	<div id="header">
+		&nbsp;
+	</div>
+
+	<div id="steps_main_space_wrapper">
+		<div id="steps_main_space">
+			<div id="left_side">
+				<div id="doctor_id">
+				<?php
+					$profileImage = "/images/doctor_image/" . $this->doctor->getCompanylogo();
+					if (!file_exists(getcwd() . $profileImage) || $this->doctor->getCompanylogo()=='')$profileImage = "/images/doctor_image/png.png";					
+					?>
+					<img width="185" src="<?php echo $profileImage?>" title="<?php echo $this->doctor->getFname()?>" alt="<?php echo $this->doctor->getFname()?>" id="profile_pic" />				
+					<h4><?php echo $this->lang[88]; ?></h4>
+					<p id="appointDate"><?php echo $this->object->getAppointmentDate().". ".$this->object->getAppointmentTime(); ?></p>
+
+					<h4><?php echo $this->lang[89]; ?></h4>
+					<p id="docName"><?php echo $this->doctor->getFname()?><span id="docSpecialty"> <?php echo $this->category?></span></p>
+
+					<h4><?php echo $this->lang[90]; ?></h4>
+					<p><strong><?php echo $this->doctor->getCompany()?></strong><br /><?php echo $this->doctor->getStreet()?>, <?php echo $this->doctor->getCity()?>, <?php echo $this->doctor->getState()?> <?php echo $this->doctor->getZipcode()?></p>
+				</div>			
+			</div>
+			<div id="finalstep" class="right_side step">
+				<table>
+					<tr>
+						<td class="title"><?php echo $this->lang[112]; ?>: </td>
+						<td class="data" id="nameData"><?php echo $this->object->getFName(); ?></td>
+					</tr>
+					<tr>
+						<td class="title"><?php echo $this->lang[549]; ?>: </td>
+						<td class="data" id="lastnameData"><?php echo $this->object->getLName(); ?></td>
+					</tr>
+					<tr>
+						<td class="title"><?php echo $this->lang[104]; ?>: </td>
+						<td class="data" id="emailData"><?php echo $this->object->getEmail(); ?></td>
+					</tr>
+					<tr>
+						<td class="title"><?php echo $this->lang[113]; ?>: </td>
+						<td class="data" id="phoneData"><?php echo $this->object->getPhone(); ?></td>
+					</tr>
+					<tr>
+						<td class="title"><?php echo $this->lang[53]; ?>: </td>
+						<td class="data" id="zipData"><?php echo $this->object->getZipcode(); ?></td>
+					</tr>
+					<tr>
+						<td class="title"><?php echo $this->lang[114]; ?>: </td>
+						<td class="data" id="birthData"><?php echo $this->object->getAge(); ?></td>
+					</tr>
+					<tr>
+						<td class="title"><?php echo $this->lang[116]; ?>: </td>
+						<td class="data" id="genderData">
+							<?php 
+							if($this->object->getGender()=="m") {
+								echo $this->lang[117];
+							} else {
+								echo $this->lang[118];
+							} ?></td>
+					</tr>
+				</table>
+				<a href="/login" title="<?php echo $this->lang[125]; ?>" id="regOutLink" style="display:none;"><?php echo $this->lang[126]; ?></a>
+				<a href="/user" title="<?php echo $this->lang[125]; ?>"  id="logOutLink" style="display:none;"><?php echo $this->lang[127]; ?></a>
+				
+			</div>
+		</div>
+	</div>
+</div>

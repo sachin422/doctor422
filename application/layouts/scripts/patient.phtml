@@ -1,0 +1,189 @@
+<?php echo $this->doctype() ?>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="el-gr">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta property="og:image" content="<?php echo Zend_Registry::get('siteurl') ?>images/fb_like.png"/>
+		<?php
+        echo $this->headTitle();
+        echo $this->headMeta();
+	
+        ?>
+	<link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
+		<?php echo $this->render("/page/googlecode.phtml"); ?>
+		
+		<!--<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>:: Doc Mate ::</title>-->
+	<?php  
+	echo $this->headLink()->appendStylesheet('/style/custom/bootstrap.css');
+	echo $this->headLink()->appendStylesheet('/style/custom/bootstrap-theme.css');
+	echo $this->headLink()->appendStylesheet('/style/custom/style.css');
+	echo $this->headScript()->appendFile("/js/custom/query.min.js");
+	echo $this->headScript()->appendFile("/js/custom/jquery-ui.js");
+	echo $this->headScript()->appendFile("/js/custom/jquery.ui.touch-punch.min.js");
+	
+	
+ ?>
+
+ 
+<!--Start of Zopim Live Chat Script-->
+<script type="text/javascript">
+window.$zopim||(function(d,s){var z=$zopim=function(c){z._.push(c)},$=z.s=
+d.createElement(s),e=d.getElementsByTagName(s)[0];z.set=function(o){z.set.
+_.push(o)};z._=[];z.set._=[];$.async=!0;$.setAttribute("charset","utf-8");
+$.src="//v2.zopim.com/?2w6QTWYC4OicEQ5KkssvmVrj1RPOKm5t";z.t=+new Date;$.
+type="text/javascript";e.parentNode.insertBefore($,e)})(document,"script");
+</script>
+<!--End of Zopim Live Chat Script-->
+	</head>
+	<body>
+		<?php include_once(APPLICATION_PATH ."/layouts/scripts/page/analyticstracking.php"); ?>
+<div id="admin-sidemenu"></div>
+<?php echo $this->render('/page/blocks/menu/patientleftmenu.phtml');?>
+<?php echo $this->render('/page/blocks/menu/patientbar.phtml');?>
+
+<!--ADMIN BAR -->
+<!--<div id="admin-bar" class="clearfix">
+  <div class="logo pull-left border-right"> <a href="/user/"><img src="/images/custom/doctors-logo.png" alt="Doc Mate Admin"></a> </div>
+   
+  <div class="admin-bar-notification-panel clearfix pull-left border-right">
+    <div class="notification pull-left"> <a class="dropdown-toggle" data-toggle="dropdown" href="#"><img src="/images/custom/bell-icon.png" alt="Notofication">
+      <div class="alert orange-bg">03</div>
+      </a> 
+      <ul class="dropdown-menu">
+            <li class="header">You have 3 messages</li>
+            <div class="container-fluid">
+            	<div class="row">
+                	<div class="col-sm-3">
+                    	<img src="/images/custom/avatar1.png" class="img-circle">
+                        
+                    </div>
+                    <div class="col-sm-6">
+                    <h4 class="headtt"><a href="#">Support Team </a></h4>
+                    <p class="drop-text">Why not buy a new awesome theme?</p>
+                    </div>
+                    <div class="col-sm-3">
+                    <div class="slt">5 Mins</div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+            	<div class="row">
+                	<div class="col-sm-3">
+                    	<img src="/images/custom/avatar1.png" class="img-circle">
+                        
+                    </div>
+                    <div class="col-sm-6">
+                    <h4 class="headtt"><a href="#">Support Team </a></h4>
+                    <p class="drop-text">Why not buy a new awesome theme?</p>
+                    </div>
+                    <div class="col-sm-3">
+                    <div class="slt">5 Mins</div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+            	<div class="row">
+                	<div class="col-sm-3">
+                    	<img src="/images/custom/avatar1.png" class="img-circle">
+                        
+                    </div>
+                    <div class="col-sm-6">
+                   <h4 class="headtt"><a href="#">Support Team </a></h4>
+                    <p class="drop-text">Why not buy a new awesome theme?</p>
+                    </div>
+                    <div class="col-sm-3">
+                    <div class="slt">5 Mins</div>
+                    </div>
+                </div>
+            </div>
+            <li class="footer"><a href="#">See All Messages</a></li>
+          </ul>
+      </div>
+    <div class="notification pull-left"> <a class="dropdown-toggle" data-toggle="dropdown" href="#"><img src="/images/custom/mail-icon.png" alt="Notofication">
+      <div class="alert green-bg">00</div>
+      </a> 
+      
+      <ul class="dropdown-menu">
+            <li class="header">You have 3 messages</li>
+            <div class="container-fluid">
+            	<div class="row">
+                	<div class="col-sm-3">
+                    	<img src="/images/custom/avatar1.png" class="img-circle">
+                        
+                    </div>
+                    <div class="col-sm-6">
+                    <h4 class="headtt"><a href="#">Support Team </a></h4>
+                    <p class="drop-text">Why not buy a new awesome theme?</p>
+                    </div>
+                    <div class="col-sm-3">
+                    <div class="slt">5 Mins</div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+            	<div class="row">
+                	<div class="col-sm-3">
+                    	<img src="/images/custom/avatar1.png" class="img-circle">
+                        
+                    </div>
+                    <div class="col-sm-6">
+                    <h4 class="headtt"><a href="#">Support Team </a></h4>
+                    <p class="drop-text">Why not buy a new awesome theme?</p>
+                    </div>
+                    <div class="col-sm-3">
+                    <div class="slt">5 Mins</div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+            	<div class="row">
+                	<div class="col-sm-3">
+                    	<img src="/images/custom/avatar1.png" class="img-circle">
+                        
+                    </div>
+                    <div class="col-sm-6">
+                   <h4 class="headtt"><a href="#">Support Team </a></h4>
+                    <p class="drop-text">Why not buy a new awesome theme?</p>
+                    </div>
+                    <div class="col-sm-3">
+                    <div class="slt">5 Mins</div>
+                    </div>
+                </div>
+            </div>
+            <li class="footer"><a href="#">See All Messages</a></li>
+          </ul></div>
+  </div>
+  <div class="admin-search pull-left clearfix">
+    <form>
+      <input name="" type="text" placeholder="Search here...">
+      <input name="" type="image" src="/images/custom/searc-btn.png" alt="">
+    </form>
+  </div>
+  <div class="admin-logout pull-right border-left"><a href="/index/logout">Log Out &gt;&gt;</a> </div>
+</div>-->
+<?php echo $this->layout()->content ?> 
+<!--/ADMIN BAR --> 
+
+
+
+<?php echo $this->headScript()->appendFile("/js/custom/menu-collapsed.js");
+echo $this->headScript()->appendFile("/js/custom/bootstrap.min.js");
+echo $this->headScript()->appendFile("/js/custom/docs.min.js");
+
+?>
+
+
+</body>
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+</html>

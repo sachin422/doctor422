@@ -1,0 +1,34 @@
+<div class="inner_wrapperReg">
+	<div id="searchHeaderReg" class="clearfix">
+		<h1 class="left"><?php echo $this->lang[48]; ?> <span><?php echo $this->lang[206]; ?></span></h1>
+	</div>
+	<?php 
+	$total=0;
+	foreach ($this->paginator as $row){
+		$total++;
+	}
+	$colsize = $total/3;
+	$colsize = ceil($colsize);
+	$i=0;
+	?>
+	<div class="clearfix"  id="sitemapWrapper">
+		<ul class="doc-sitemap-link left">
+			<?php 
+			foreach ($this->paginator as $row) :
+				if(($i%$colsize==0) && $i!=0){
+				?>	
+					</ul>
+					<ul class="doc-sitemap-link left">
+				<?php
+				}
+				$setting = new Admin_Model_GlobalSettings(); $default_city = $setting->settingValue('default_city'); 
+				$real_url = "/search?{$this->lang[934]}=".$default_city."&amp;{$this->lang[935]}={$row->company}";
+			?>
+			<li><a href="<?php echo $real_url;?>"><?php echo $row->name.' '.$row->company;?></a></li>
+			<?php
+			$i++;
+			endforeach;?>
+		</ul>
+	</div>
+</div>
+<?php echo $this->paginationControl($this->paginator, 'Sliding', 'pagination_sitemap.phtml'); ?>

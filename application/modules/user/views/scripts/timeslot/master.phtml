@@ -1,0 +1,705 @@
+<form name="frmSlot" action="<?php echo $this->form->action;?>" id="frmslotform" method="post" enctype="multipart/form-data">
+<div id="admin-content-profile">
+	<div class="booking-rule">
+		<h2 class="bookingrule-heading">Booking Rules</h2>
+	    <p class="bluetext">Working Hours</p>
+	    
+	    
+	    <div class="container-fluid">
+	    	<div class="row">
+	        	<div class="col-sm-12">
+
+	            	<div class="whiterow clearfix">
+	                	<div class="leftblue-grad" style="width:17%;">Monday
+	                    </div>
+	                    <div class="rightwhite">
+	                    	<div class="container-fluid">
+	                        	<div class="row">
+	                        		<div class="col-sm-2">
+	                        			<div class="day-radio">
+	                    					<label>
+	                    						<?php echo $this->form->ischecked1;?>
+	                    						<span> Working</span>
+	                    					</label>
+	                        			</div>
+	                                </div>
+	                                <div class="col-sm-3">
+	                                	<div class="alarm-note">Working Hours</div>
+	                                </div>
+	                                <div class="col-sm-7">
+	                                	<div class="time-slot clearfix">
+	                                    	 <?php echo $this->form->stime1;?> <span class="f-left"><?php echo $this->lang[277]; ?></span>
+	                                    	 <?php echo $this->form->etime1;?>
+	                                    	 <?php echo $this->form->time1;?>
+	                                    	 <a href="javascript:;" rel="1" rev="hide" class="del_slots"><?php echo $this->lang[278]; ?></a>
+	                                    	 <span id="del1" style="display:none">
+	                                    	 	<div id="checkboxDiv1" class="slot-div"></div>
+	                                    	 </span>
+	                                    	 <span class="message"></span>
+	                                    </div>
+	                                </div>
+	                            </div>
+	                        </div>
+	                    </div>
+	                </div>
+
+	                <div class="whiterow clearfix">
+	                	<div class="leftblue-grad" style="width:17%;">Tuesday
+	                    </div>
+	                    <div class="rightwhite">
+	                    	<div class="container-fluid">
+	                        	<div class="row">
+	                        		<div class="col-sm-2">
+	                        			<div class="day-radio">
+	                    					<label>
+	                    						<?php echo $this->form->ischecked2;?>
+	                    						<span> Working</span>
+	                    					</label>
+	                        			</div>
+	                                </div>
+	                                <div class="col-sm-3">
+	                                	<div class="alarm-note">Working Hours</div>
+	                                </div>
+	                                <div class="col-sm-7">
+	                                	<div class="time-slot clearfix">
+	                                    	 <?php echo $this->form->stime2;?> <span class="f-left"><?php echo $this->lang[277]; ?></span>
+	                                    	 <?php echo $this->form->etime2;?>
+	                                    	 <?php echo $this->form->time2;?>
+	                                    	 <a href="javascript:;" rel="2" rev="hide" class="del_slots"><?php echo $this->lang[278]; ?></a>
+	                                    	 <span id="del2" style="display:none">
+	                                    	 	<div id="checkboxDiv2" class="slot-div"></div>
+	                                    	 </span>
+	                                    	 <span class="message"></span>
+	                                    </div>
+	                                </div>
+	                            </div>
+	                        </div>
+	                    </div>
+	                </div>
+
+	                <div class="whiterow clearfix">
+	                	<div class="leftblue-grad" style="width:17%;">Wednesday
+	                    </div>
+	                    <div class="rightwhite">
+	                    	<div class="container-fluid">
+	                        	<div class="row">
+	                        		<div class="col-sm-2">
+	                        			<div class="day-radio">
+	                    					<label>
+	                    						<?php echo $this->form->ischecked3;?>
+	                    						<span> Working</span>
+	                    					</label>
+	                        			</div>
+	                                </div>
+	                                <div class="col-sm-3">
+	                                	<div class="alarm-note">Working Hours</div>
+	                                </div>
+	                                <div class="col-sm-7">
+	                                	<div class="time-slot clearfix">
+	                                    	 <?php echo $this->form->stime3;?> <span class="f-left"><?php echo $this->lang[277]; ?></span>
+	                                    	 <?php echo $this->form->etime3;?>
+	                                    	 <?php echo $this->form->time3;?>
+	                                    	 <a href="javascript:;" rel="3" rev="hide" class="del_slots"><?php echo $this->lang[278]; ?></a>
+	                                    	 <span id="del3" style="display:none">
+	                                    	 	<div id="checkboxDiv3" class="slot-div"></div>
+	                                    	 </span>
+	                                    	 <span class="message"></span>
+	                                    </div>
+	                                </div>
+	                            </div>
+	                        </div>
+	                    </div>
+	                </div>
+
+	                <div class="whiterow clearfix">
+	                	<div class="leftblue-grad" style="width:17%;">Thursday
+	                    </div>
+	                    <div class="rightwhite">
+	                    	<div class="container-fluid">
+	                        	<div class="row">
+	                        		<div class="col-sm-2">
+	                        			<div class="day-radio">
+	                    					<label>
+	                    						<?php echo $this->form->ischecked4;?>
+	                    						<span> Working</span>
+	                    					</label>
+	                        			</div>
+	                                </div>
+	                                <div class="col-sm-3">
+	                                	<div class="alarm-note">Working Hours</div>
+	                                </div>
+	                                <div class="col-sm-7">
+	                                	<div class="time-slot clearfix">
+	                                    	 <?php echo $this->form->stime4;?> <span class="f-left"><?php echo $this->lang[277]; ?></span>
+	                                    	 <?php echo $this->form->etime4;?>
+	                                    	 <?php echo $this->form->time4;?>
+	                                    	 <a href="javascript:;" rel="4" rev="hide" class="del_slots"><?php echo $this->lang[278]; ?></a>
+	                                    	 <span id="del4" style="display:none">
+	                                    	 	<div id="checkboxDiv4" class="slot-div"></div>
+	                                    	 </span>
+	                                    	 <span class="message"></span>
+	                                    </div>
+	                                </div>
+	                            </div>
+	                        </div>
+	                    </div>
+	                </div>
+
+	                <div class="whiterow clearfix">
+	                	<div class="leftblue-grad" style="width:17%;">Friday
+	                    </div>
+	                    <div class="rightwhite">
+	                    	<div class="container-fluid">
+	                        	<div class="row">
+	                        		<div class="col-sm-2">
+	                        			<div class="day-radio">
+	                    					<label>
+	                    						<?php echo $this->form->ischecked5;?>
+	                    						<span> Working</span>
+	                    					</label>
+	                        			</div>
+	                                </div>
+	                                <div class="col-sm-3">
+	                                	<div class="alarm-note">Working Hours</div>
+	                                </div>
+	                                <div class="col-sm-7">
+	                                	<div class="time-slot clearfix">
+	                                    	 <?php echo $this->form->stime5;?> <span class="f-left"><?php echo $this->lang[277]; ?></span>
+	                                    	 <?php echo $this->form->etime5;?>
+	                                    	 <?php echo $this->form->time5;?>
+	                                    	 <a href="javascript:;" rel="5" rev="hide" class="del_slots"><?php echo $this->lang[278]; ?></a>
+	                                    	 <span id="del5" style="display:none">
+	                                    	 	<div id="checkboxDiv5" class="slot-div"></div>
+	                                    	 </span>
+	                                    	 <span class="message"></span>
+	                                    </div>
+	                                </div>
+	                            </div>
+	                        </div>
+	                    </div>
+	                </div>
+
+	                <div class="whiterow clearfix">
+	                	<div class="leftblue-grad" style="width:17%;">Saturday
+	                    </div>
+	                    <div class="rightwhite">
+	                    	<div class="container-fluid">
+	                        	<div class="row">
+	                        		<div class="col-sm-2">
+	                        			<div class="day-radio">
+	                    					<label>
+	                    						<?php echo $this->form->ischecked6;?>
+	                    						<span> Working</span>
+	                    					</label>
+	                        			</div>
+	                                </div>
+	                                <div class="col-sm-3">
+	                                	<div class="alarm-note">Working Hours</div>
+	                                </div>
+	                                <div class="col-sm-7">
+	                                	<div class="time-slot clearfix">
+	                                    	 <?php echo $this->form->stime6;?> <span class="f-left"><?php echo $this->lang[277]; ?></span>
+	                                    	 <?php echo $this->form->etime6;?>
+	                                    	 <?php echo $this->form->time6;?>
+	                                    	 <a href="javascript:;" rel="6" rev="hide" class="del_slots"><?php echo $this->lang[278]; ?></a>
+	                                    	 <span id="del6" style="display:none">
+	                                    	 	<div id="checkboxDiv6" class="slot-div"></div>
+	                                    	 </span>
+	                                    	 <span class="message"></span>
+	                                    </div>
+	                                </div>
+	                            </div>
+	                        </div>
+	                    </div>
+	                </div>
+
+	                <div class="whiterow clearfix">
+	                	<div class="leftblue-grad" style="width:17%;">Sunday
+	                    </div>
+	                    <div class="rightwhite">
+	                    	<div class="container-fluid">
+	                        	<div class="row">
+	                        		<div class="col-sm-2">
+	                        			<div class="day-radio">
+	                    					<label>
+	                    						<?php echo $this->form->ischecked7;?>
+	                    						<span> Working</span>
+	                    					</label>
+	                        			</div>
+	                                </div>
+	                                <div class="col-sm-3">
+	                                	<div class="alarm-note">Working Hours</div>
+	                                </div>
+	                                <div class="col-sm-7">
+	                                	<div class="time-slot clearfix">
+	                                    	 <?php echo $this->form->stime7;?> <span class="f-left"><?php echo $this->lang[277]; ?></span>
+	                                    	 <?php echo $this->form->etime7;?>
+	                                    	 <?php echo $this->form->time7;?>
+	                                    	 <a href="javascript:;" rel="7" rev="hide" class="del_slots"><?php echo $this->lang[278]; ?></a>
+	                                    	 <span id="del7" style="display:none">
+	                                    	 	<div id="checkboxDiv7" class="slot-div"></div>
+	                                    	 </span>
+	                                    	 <span class="message"></span>
+	                                    </div>
+	                                </div>
+	                            </div>
+	                        </div>
+	                    </div>
+	                </div>
+					<br />
+					<!--Reminder settings start-->
+					<div class="whiterow">
+						<div class="container-fluid">
+							<div class="row">
+								<div class="auctor-new clearfix">
+									<div class="col-sm-12">
+										<a href="javascript:void(0)" class="uplode"><img src="/images/user/settings-icon.png" alt="">Turn On/Off appointment/review reminder settings (e.g. Checked for On).</a>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-4">
+									<p>Appointment Scheduling</p>
+								</div>
+								<div class="col-md-4">
+									<p>Appointment Reminder</p>
+								</div>
+								<div class="col-md-4">
+									<p>Appointment Review</p>
+								</div>
+							</div>
+							<div class="row" style="padding-left:7%;">
+								<div class="col-md-4">
+									Text :<?php echo 
+												$this->form2->enable_appointment_schedule_text;?> 
+								</div>
+								<div class="col-md-4">
+									Text :<?php echo 
+												$this->form2->enable_appointment_reminder_text;?> 
+								</div>
+								<div class="col-md-4">
+									Text :<?php echo $this->form2->enable_review_reminder_text;?>
+								</div>
+							</div>
+							<div class="row" style="padding-left:7%;">
+								<div class="col-md-4">
+									Call :<?php echo 
+												$this->form2->enable_appointment_schedule_call;?>
+								</div>
+								<div class="col-md-4">
+									Call :<?php echo 
+												$this->form2->enable_appointment_reminder_call;?>
+								</div>
+								<div class="col-md-4">
+									Email :<?php echo 
+												$this->form2->enable_appointment_scheduling_email;?> 
+								</div>
+							</div>
+							<div class="row" style="padding-left:7%;">
+								<div class="col-md-4">
+									Email :<?php echo 
+												$this->form2->enable_appointment_reminder_email;?> 
+								</div>
+								<div class="col-md-4">
+									Email :<?php echo 
+												$this->form2->enable_appointment_review_email;?> 
+								</div>
+								<div class="col-md-4">
+								</div>
+							</div>
+							<div class="overview-section02">
+								<input name="" class="savechange" type="submit" value="Save Changes">
+							</div>
+						</div>
+					</div>
+					<!--End of reminder setting-->
+					
+					<br />
+					
+					<div class="whiterow">
+						<div class="container-fluid">
+							<div class="row">
+								<div class="auctor-new clearfix">
+									<div class="col-sm-12">
+										<a href="javascript:void(0)" class="uplode"><img src="/images/user/music_disk_black.png" alt="">Upload your recorded audio message for appointment calling. (Content - Your appointment is with Dr. your name on)</a>
+										<p>
+										<?php
+											$media_file = '';
+											$mediaUrl = '';
+											$media_file =  $this->docObject->getDoctorVoice();
+											$fullfilemedia = "/images/doctorvoice/".$media_file."";
+											if($media_file !='' ){
+												$mediaUrl = 'Media: <a style="color:#24A5EA;" target="_blank" href="/images/doctorvoice/'.$media_file.'" download>Download</a>';
+												echo $mediaUrl;
+											} 
+										?>
+										</p>
+										<?php echo $this->form2->doctor_voice;?><div class="numbersection"><input name="" type="submit" id="save_audio_clip" value="Save Audio File"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+
+
+	                <div class="greylinebg-head">
+	                	<h2>Adgust the way in which your patients receive the communication</h2>
+	                </div>
+	                
+	                <div class="select-box clearfix">
+		                <h3>Appointment Reminder</h3>
+		                <p class="smalltext">How would you like to notify customers of upcoming appoinment?</p>
+		                <?php //echo $this->form->notificationby; ?>
+	                	
+		                <div id="reminderBox">
+		                <?php 
+		                $i=0;
+		                $days_more_than_seven = array('14'=>'14','21'=>'21','30'=>'30');
+		                foreach($this->reminders as $reminder) { ?>
+			                <div class="reminderContainer">	
+								<div class="row">
+									<div class="col-md-2">
+										<select class="small" name="daybefore[<?php echo $i; ?>]">
+											<?php for($days=0; $days<=7; $days++) { ?>
+											<option <?php if($reminder->getDaybefore() == $days) { echo 'selected="selected"'; } ?> value="<?php echo $days; ?>">
+												<?php echo $days; ?> Days
+											</option>
+											<?php } foreach($days_more_than_seven as $k=>$v){ ?>
+												<option <?php if($reminder->getDaybefore() == $k) { echo 'selected="selected"'; } ?> value="<?php echo $v; ?>">
+												<?php echo $v; ?> Days
+												</option>
+											<?php } ?>
+										</select>
+						
+									</div>
+									<div class="col-md-2">
+										<select class="small" name="hoursbefore[<?php echo $i; ?>]">
+											<?php for($hours=0; $hours<=24; $hours++) { ?>
+											<option value="<?php echo $hours; ?>" <?php if($reminder->getHoursbefore() == $hours ) { echo 'selected="selected"'; } ?>><?php echo $hours; ?> Hours</option>
+											<?php } ?>
+										</select>
+									</div>
+									<div class="col-md-2">
+										<select class="small" name="minutesbefore[<?php echo $i; ?>]">
+											<option value="1" <?php if($reminder->getMinutesbefore() == 1) { echo 'selected="selected"'; } ?>>00 Minutes</option>
+											<option value="15" <?php if($reminder->getMinutesbefore() == 15) { echo 'selected="selected"'; } ?>>15 Minutes</option>
+											<option value="30" <?php if($reminder->getMinutesbefore() == 30) { echo 'selected="selected"'; } ?>>30 Minutes</option>
+											<option value="45" <?php if($reminder->getMinutesbefore() == 45) { echo 'selected="selected"'; } ?>>45 Minutes</option>
+										</select>	
+							  
+									</div>
+									<div class="col-md-6">
+										<span class="note">Prior to each appointment.</span>
+										<a href="#" class="removeReminder">Remove</a>
+									</div>
+								</div>		                	
+						   
+				            </div>			            
+			            <?php $i++;
+			        	} ?>
+			            </div>
+	                </div>
+	                <p>
+	                	<a href="#" class="savechange" id="addReminder">Add reminder</a>
+	                </p>
+	                
+	                <p>
+	                	<input type="submit" class="savechange" name="submit" value="Save Changes" />
+            		</p>
+	            
+	            </div>
+	        </div>
+	    </div>
+	</div>
+</div>
+</form>
+
+  
+  
+  
+  
+  <div class="container-fluid div-space">
+    <div class="row">
+      <div class="col-sm-6">
+        
+      </div>
+      <div class="col-sm-6">
+        
+      </div>
+    </div>
+  </div>
+  <script>
+  $(function () {
+    $('#myTab a:first').tab('show')
+  })
+</script> 
+<script>
+  $(function () {
+    $('#myTab01 a:first').tab('show')
+  })
+</script>
+<script>
+  $(function () {
+    $('#myTab02 a:first').tab('show')
+  })
+</script>  
+</div>
+
+
+
+
+<script language="javascript">
+jQuery(document).ready(function(){
+	
+	jQuery('#doctor_voice').live('change',function(){
+		//var ext = this.value.match(/\.(.+)$/)[1];
+		var ext = this.value.split('.').pop();
+		var file_size = this.files[0].size/1024/1024;
+		//alert(ext);
+		switch (ext) {
+			case 'mp3':
+			case 'wav':
+			case 'mpeg':
+			case 'wave':
+			case 'x-wav':
+			case 'aiff':
+			case 'x-aifc':
+			case 'x-x-aiff':
+			case 'x-gsm':	
+			case 'gsm':
+			case 'ulaw':
+			break;
+			default :
+				this.value = '';
+				alert('This is not an allowed file type.');
+			break;
+		}
+		
+		if(file_size > 25){
+			this.value = '';
+			alert('The file size can not exceed 25MB.');
+		}
+	});
+	
+	
+	jQuery("#save_audio_clip").click(function(event){	
+		event.preventDefault();	
+		var formAction = '/user/index/upload_media';
+		//set form action
+		jQuery('#frmslotform').attr('action','');
+		jQuery('#frmslotform').attr('action', formAction);
+		//submit form
+		setTimeout(function() {
+			HTMLFormElement.prototype.submit.call(jQuery('#frmslotform')[0]);
+		}, 1500);
+		
+	});
+	
+	jQuery(".savechange").click(function(event){	
+		event.preventDefault();	
+		//set form action
+		$('#frmslotform').attr('action','');
+		//submit form
+		setTimeout(function() {
+			HTMLFormElement.prototype.submit.call(jQuery('#frmslotform')[0]);
+		}, 1500);
+	});
+	
+	
+	
+	jQuery("#addReminder").click(function(event){	
+		event.preventDefault();	
+		var time = jQuery.now();
+		var options = "<?php for($i=0; $i<=7; $i++) { ?><option value='<?php echo $i; ?>'><?php echo $i; ?> Days</option><?php } ?><option value='14'>14 Days</option><option value='21'>21 Days</option><option value='30'>30 Days</option>";
+		var houroptions = "<?php for($hours=0; $hours<=24; $hours++) { ?><option value='<?php echo $hours; ?>'><?php echo $hours; ?> Hours</option><?php } ?>";
+		var reminderContainer = '<div class="reminderContainer">\
+			<select class="small" name="daybefore['+time+']">'+options+'</select>\
+			<select class="small" name="hoursbefore['+time+']">'+houroptions+'</select>\
+			<select class="small" name="minutesbefore['+time+']">\
+				<option value="1" >00 Minutes</option>\
+				<option value="15" >15 Minutes</option>\
+				<option value="30" >30 Minutes</option>\
+				<option value="45" >45 Minutes</option>\
+			</select>	\
+            <span class="note">Prior to each appointment.</span>\
+            <a href="#" class="removeReminder">Remove</a>\
+        </div>';
+		jQuery("#reminderBox").append(reminderContainer);
+	});
+
+	jQuery('#reminderBox').on("click",".removeReminder", function(e){ //user click on remove text
+        e.preventDefault(); 
+        $(this).parent('div').remove();
+    })
+	
+
+	if( !jQuery("#ischecked7").is(":checked") ) {		
+		jQuery("#ischecked7").parents('.whiterow').find('.leftblue-grad').addClass("whitegrey-grad").removeClass("leftblue-grad");
+	}
+	if( !jQuery("#ischecked6").is(":checked") ) {		
+		jQuery("#ischecked6").parents('.whiterow').find('.leftblue-grad').addClass("whitegrey-grad").removeClass("leftblue-grad");
+	}
+	if( !jQuery("#ischecked5").is(":checked") ) {		
+		jQuery("#ischecked5").parents('.whiterow').find('.leftblue-grad').addClass("whitegrey-grad").removeClass("leftblue-grad");
+	}
+	if( !jQuery("#ischecked4").is(":checked") ) {		
+		jQuery("#ischecked4").parents('.whiterow').find('.leftblue-grad').addClass("whitegrey-grad").removeClass("leftblue-grad");
+	}
+	if( !jQuery("#ischecked3").is(":checked") ) {		
+		jQuery("#ischecked3").parents('.whiterow').find('.leftblue-grad').addClass("whitegrey-grad").removeClass("leftblue-grad");
+	}
+	if( !jQuery("#ischecked2").is(":checked") ) {		
+		jQuery("#ischecked2").parents('.whiterow').find('.leftblue-grad').addClass("whitegrey-grad").removeClass("leftblue-grad");
+	}
+	if( !jQuery("#ischecked1").is(":checked") ) {		
+		jQuery("#ischecked1").parents('.whiterow').find('.leftblue-grad').addClass("whitegrey-grad").removeClass("leftblue-grad");
+	}
+
+	jQuery("#ischecked7").change(function(){
+		if(jQuery("#ischecked7").is(":checked")) {
+			jQuery("#ischecked7").parents('.whiterow').find('.whitegrey-grad').addClass("leftblue-grad").removeClass("whitegrey-grad");
+		} else {
+			jQuery("#ischecked7").parents('.whiterow').find('.leftblue-grad').addClass("whitegrey-grad").removeClass("leftblue-grad");
+		}
+	});
+	jQuery("#ischecked6").change(function(){
+		if(jQuery("#ischecked6").is(":checked")) {
+			jQuery("#ischecked6").parents('.whiterow').find('.whitegrey-grad').addClass("leftblue-grad").removeClass("whitegrey-grad");
+		} else {
+			jQuery("#ischecked6").parents('.whiterow').find('.leftblue-grad').addClass("whitegrey-grad").removeClass("leftblue-grad");
+		}
+	});
+	jQuery("#ischecked5").change(function(){
+		if(jQuery("#ischecked5").is(":checked")) {
+			jQuery("#ischecked5").parents('.whiterow').find('.whitegrey-grad').addClass("leftblue-grad").removeClass("whitegrey-grad");
+		} else {
+			jQuery("#ischecked5").parents('.whiterow').find('.leftblue-grad').addClass("whitegrey-grad").removeClass("leftblue-grad");
+		}
+	});
+	jQuery("#ischecked4").change(function(){
+		if(jQuery("#ischecked4").is(":checked")) {
+			jQuery("#ischecked4").parents('.whiterow').find('.whitegrey-grad').addClass("leftblue-grad").removeClass("whitegrey-grad");
+		} else {
+			jQuery("#ischecked4").parents('.whiterow').find('.leftblue-grad').addClass("whitegrey-grad").removeClass("leftblue-grad");
+		}
+	});
+	jQuery("#ischecked3").change(function(){
+		if(jQuery("#ischecked3").is(":checked")) {
+			jQuery("#ischecked3").parents('.whiterow').find('.whitegrey-grad').addClass("leftblue-grad").removeClass("whitegrey-grad");
+		} else {
+			jQuery("#ischecked3").parents('.whiterow').find('.leftblue-grad').addClass("whitegrey-grad").removeClass("leftblue-grad");
+		}
+	});
+	jQuery("#ischecked2").change(function(){
+		if(jQuery("#ischecked2").is(":checked")) {
+			jQuery("#ischecked2").parents('.whiterow').find('.whitegrey-grad').addClass("leftblue-grad").removeClass("whitegrey-grad");
+		} else {
+			jQuery("#ischecked2").parents('.whiterow').find('.leftblue-grad').addClass("whitegrey-grad").removeClass("leftblue-grad");
+		}
+	});
+	jQuery("#ischecked1").change(function(){
+		if(jQuery("#ischecked1").is(":checked")) {
+			jQuery("#ischecked1").parents('.whiterow').find('.whitegrey-grad').addClass("leftblue-grad").removeClass("whitegrey-grad");
+		} else {
+			jQuery("#ischecked1").parents('.whiterow').find('.leftblue-grad').addClass("whitegrey-grad").removeClass("leftblue-grad");
+		}
+	});
+
+	
+    jQuery('.del_slots').click(function(){
+        var num = jQuery(this).attr('rel');
+        if(jQuery(this).attr('rev')=='hide'){
+            jQuery('#del'+num).fadeIn(500);
+            jQuery(this).attr('rev','show');
+            jQuery(this).html('<?php echo $this->lang[280]; ?>');
+        }else{
+            var id = jQuery('#id'+num).val();
+           // var slots = jQuery('#display_slots'+num).val();
+            var stime = jQuery('#stime'+num).val();
+            var etime = jQuery('#etime'+num).val();
+            var intval = jQuery('#time'+num).val();
+            
+            
+            var slots = '';
+            jQuery("input[name='displayCheck"+num+"[]']").each(function() {
+                if(this.checked==true)slots = slots+jQuery(this).val()+',';
+              });
+            /*jQuery.post('/user/timeslot/save-display-slots',
+            {id: id, slots:slots,intval:intval,stime:stime,etime:etime },
+
+            function(data){
+
+                //alert(data);return false;
+            }, false);
+            */
+            jQuery('#del'+num).fadeOut(500);
+            jQuery(this).attr('rev','hide');
+            jQuery(this).html('<?php echo $this->lang[278]; ?>');
+            jQuery(this).closest(".time-slot").find(".message").html("Click save changes below to save your breaks");
+        }
+    });
+
+
+    // change time interval
+    jQuery('.change_slots').change(function(){
+        var num = jQuery(this).attr('rel');
+        setDeleteTimeslots(num, 2);
+        //jQuery('#del'+num).fadeIn(500);
+        var ctls = jQuery("a[rel='"+num+"']");
+        ctls.attr('rev','show');
+        //ctls.html('<?php echo $this->lang[280]; ?>');
+    });
+});
+
+function loadTimeslots(num) {
+	var stime = jQuery('#stime'+num).val();
+    var etime = jQuery('#etime'+num).val();
+    var intval = jQuery('#time'+num).val();
+    var url = '/user/timeslot/get-doctor-slots';
+
+    var days = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"];
+    var selectedDay = days[num-1];
+    jQuery.post(url,
+    {stime:stime,etime:etime,intval:intval,num:num, day:selectedDay},
+
+    function(data){
+        
+        //alert(data);return false;
+        var decoded = $.json.decode(data);
+//        jQuery('#display_slots'+decoded['num']).val(decoded['slots']);//1
+        jQuery('#checkboxDiv'+decoded['num']).html(decoded['slots']);//1
+       
+
+    }, false);
+}
+//foreach day, prepare the timeslots
+for(var i=1;i<=7;i++){
+    loadTimeslots(i);
+}
+
+
+function setDeleteTimeslots(num, type){
+    var stime = jQuery('#stime'+num).val();
+    var etime = jQuery('#etime'+num).val();
+    var intval = jQuery('#time'+num).val();
+    if(type==1){
+        var url = '/user/timeslot/get-deleted-slots';
+    }else if(type==2){
+        var url = '/user/timeslot/make-slots';
+    }
+    jQuery.post(url,
+    {stime:stime,etime:etime,intval:intval,num:num },
+
+    function(data){
+        
+        //alert(data);return false;
+        var decoded = $.json.decode(data);
+//        jQuery('#display_slots'+decoded['num']).val(decoded['slots']);//1
+        jQuery('#checkboxDiv'+decoded['num']).html(decoded['slots']);//1
+       
+
+    }, false);
+
+}
+</script>

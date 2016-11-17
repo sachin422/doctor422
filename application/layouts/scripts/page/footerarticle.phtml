@@ -1,0 +1,76 @@
+<?php
+$controller_name = $this->controllerName;
+$catid = $this->catid;
+$search_type = $this->search1;
+$insurance_id = $this->insuranceid;
+
+
+if ($controller_name == "search_!_@#") {
+    #############-------check search type (specilaity , City, Zip, specilaity+zip, specilaity+City)--------#############
+    
+    if ($catid != "") {
+
+        #############-------#fetching cat name from database using catid--------#############
+        $Category = new Application_Model_Category();
+        $catObject = $Category->find($catid);
+        $replace_with = $catObject->getName();
+        $replace = "##Specialty##";
+
+        if ($search_type != "") {
+            if (is_numeric($search_type)) {
+                $article_type = "Specialty Zip";
+                $replace1 = "##Zip##";
+            } else {
+                $article_type = "Specialty City";
+                $replace1 = "##City##";
+            }
+            $replace_with1 = $search_type;
+        }
+        else if(!empty($insurance_id) && $catid=="7")
+        {
+         $article_type = "InsuranceDentist";
+          $replace = "##Insurance##";
+          $InsuranceComp = new Application_Model_InsuranceCompany();
+         $ObjInsuranceComp = $InsuranceComp->find($insurance_id);
+         if(!empty($ObjInsuranceComp))
+             $replace_with = $ObjInsuranceComp->getCompany ();
+         // $replace_with = "intercare-benefits-systems";
+        }
+        else {
+            $article_type = "Specialty";
+        }
+    } elseif ($search_type != "" && $catid == "") {
+
+        if (is_numeric($search_type)) {
+            $article_type = "zip";
+            $replace = "##Zip##";
+        } else {
+            $article_type = "City";
+            $replace = "##City##";
+        }
+        $replace_with = $search_type;
+    }
+} else {
+    //$article_type = "General";
+   
+}
+
+
+if (isset($article_type)) {
+    $Article = new Application_Model_Article();
+    $row = $Article->fetchRow("title='{$article_type}'");
+    if ($row->getContent() != '') {
+        if (!empty($row) && isset($article_type) && $article_type != "General") {
+            $content = $row->getContent();
+            if (isset($replace1) && $replace1 != "" && isset($replace_with1) && $replace_with1 != "") {
+                $content = str_replace($replace1, $replace_with1, $content);
+            }
+            echo " <div class='bottom-article-area'>" . nl2br(str_replace($replace, $replace_with, $content)) . "</div>";
+        } else {
+            echo " <div class='bottom-article-area'>" . nl2br($row->content) . "</div>";
+        }
+    }
+}
+?>
+
+

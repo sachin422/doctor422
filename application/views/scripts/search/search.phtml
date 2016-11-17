@@ -1,0 +1,195 @@
+
+<form action="/search" method="get" id="mainSearch">
+	<?php
+	$default_long = "-118.2436849";
+	$default_lat = "34.0522342";
+	?>
+
+	<input type="hidden" name="lat" id="lat" value="<?php echo $default_lat; ?>">
+	<input type="hidden" name="lon" id="lon" value="<?php echo $default_long; ?>">
+	<input type="hidden" name="areaok" id="areaok" value="0">
+	<div class="main-search-box">
+    	<div class="top-field">
+        	<div class="ddselect">
+			<?php $Category = new Application_Model_Category();
+			$categoryList = $Category->fetchAll("status=1");						
+			?>
+        	<select name="category" class="dentist"> 
+            	<option value="">Specialty </option>
+				<?php foreach($categoryList as $categoryname){?>
+				<option value="<?php echo $categoryname->name;?>"><?php echo $categoryname->name;?></option>
+				<?php } ?>						
+			</select>
+            </div>
+            
+            <div class="los-angle">
+            	<input type="text" name="<?php echo $this->lang[934]; ?>" class="textfield" placeholder="Zip or City" id="area">
+            </div>
+            
+            <div class="searchbtn">
+            	<input type="submit" class="btns" value="search">
+            </div>
+        </div>
+        <a href="javascript:void(0)" class="more-option"  id="option">More Options</a>
+       	<div class="top-field bottom-field" id="insurance" style="display:none;">
+        	<div class="ddselect">
+				<?php $insuranceCompany = new Application_Model_InsuranceCompany();
+				$InsCompany = $insuranceCompany->fetchAll();	
+				//	echo '<pre>';print_r($InsCompany);
+				?>
+            	<select name="insurance" class="dentist insurance" id="insurancecomp"> 
+                	<option value="">Insurance Company </option>	
+					<?php foreach($InsCompany as $company){?>
+					<option value="<?php echo $company->company;?>"><?php echo $company->company;?></option>
+					<?php } ?>						
+				</select>
+            </div>
+            
+            <div class="ddselect insurance-plan">
+            	<select name="insurance_plan" class="dentist plans" id="insurance_plan"> 
+            		<option value="">Insurance Plan</option>
+				</select>
+            </div>
+        </div>
+    </div>
+</form>
+<script>
+
+$("#specialty").autocomplete('/search/categoryautosuggest/', {
+	width: 300,
+	autoFocus: false, 
+	delay : 0,
+	minChars: 2,
+	selectFirst: false
+});
+</script>
+
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places&sensor=false&language=en"></script>
+<script type="text/javascript">
+function initSearchField() {
+	var input = document.getElementById('area');
+	var options = {
+	  types: ['geocode'],
+	  componentRestrictions: {country: 'usa'}
+	};
+	autocomplete = new google.maps.places.Autocomplete(input, options);
+	google.maps.event.addListener(autocomplete, 'place_changed', function() {
+		var place = autocomplete.getPlace();
+		console.log(place);
+		var addresses = place.address_components;
+		$(addresses).each(function(){
+			var object1 = $(this);
+		
+			var geo = new google.maps.Geocoder;
+			geo.geocode({'address':object1[0].long_name},function(results, status){
+				if (status == google.maps.GeocoderStatus.OK) {
+				  	var place = autocomplete.getPlace();
+					lat = place.geometry.location.lat();
+					lng = place.geometry.location.lng();
+					$('#lat').val(lat);
+					$('#lon').val(lng);
+				  }
+		   });
+			
+		});
+	});
+	var input = document.getElementById('area'); 
+	// dojo.connect(input, 'onkeydown', function(e) { 
+	google.maps.event.addDomListener(input, 'keydown', function(e) { 
+		if (e.keyCode == 13) 
+		{ 
+				if (e.preventDefault) {
+					jQuery("#mainSearch").submit();
+						e.preventDefault(); 
+				} 
+				else 
+				{ 
+						// Since the google event handler framework does not handle 
+						//early IE versions, we have to do it by our self. :-( 
+						e.cancelBubble = true; 
+						e.returnValue = false; 
+						jQuery("#mainSearch").submit();
+				} 
+		} 
+	});
+}
+function add0(number){
+	var result = String(number);
+	var numDec = result.split(".")[1].length;
+	if(numDec<7) {
+		var limit = 7-numDec;
+		for(var i=0; i<limit; i++) {
+			result+="0";
+		}
+	}
+	return result;
+}
+
+function roundNumber(num, dec) {
+	var result = Math.round(num*Math.pow(10,dec))/Math.pow(10,dec);
+	return result;
+}
+google.maps.event.addDomListener(window, 'load', initSearchField);
+
+$(document).ready(function(){
+    $("#option").click(function(){
+        $("#insurance").slideToggle('slow');
+    });
+	$('#insurancecomp').change(function() {
+
+    var data = "";
+    $.ajax({
+        type:"GET",
+        url : "/search/iplanajax",
+        data : "insurance="+$(this).val(),
+        async: false,
+        success : function(response) {
+		//alert(response);
+            $("#insurance_plan").html(response);
+            //return response;
+        }
+    });
+	});
+
+});
+
+$("#mainSearch").on('submit', function(e){
+	console.log("check");
+	console.log($('#lat').val()+" "+$('#lon').val());
+	if($('#lat').val() =="<?php echo $default_lat; ?>" && $('#lon').val()=="<?php echo $default_long; ?>") { //nothing selected from autocomplete
+		var area = $("#area").val();
+		if(area != "") { //not left blank
+
+			var geocoder = new google.maps.Geocoder(); 
+			geocoder.geocode({
+					address : area, 
+					region: 'no' 
+				},
+			    function(results, status) {
+			    	if (status.toLowerCase() == 'ok') {
+						// Get center
+						var coords = new google.maps.LatLng(
+							results[0]['geometry']['location'].lat(),
+							results[0]['geometry']['location'].lng()
+						);
+						$('#lat').val(coords.lat());
+	 					$('#lon').val(coords.lng());
+	 					jQuery("#areaok").val(1);
+	 					jQuery("#mainSearch").submit();
+			    	}
+				}
+			);
+
+		} else {
+			jQuery("#areaok").val(1);
+		}
+	} else {
+		jQuery("#areaok").val(1);
+	}
+	if(jQuery("#areaok").val() == 0) {
+		e.preventDefault();
+	}
+});
+
+
+ </script>

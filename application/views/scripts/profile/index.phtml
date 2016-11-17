@@ -1,0 +1,480 @@
+
+<script> 
+   $('#viewid').click(function() {
+  
+		$('#viewone').hide();
+		$('#view').show();
+        //$('#' + $(this).val()).show();
+ });
+</script>
+<?php $Doctor=  new Application_Model_Doctor(); ?>
+<?php $membershipLevel = $this->profiledata->getMembershipPlan();
+$columnsClass = 12;
+if(!$this->isAjax) {
+	$columnsClass = 10;
+}
+?>
+<div class="col-sm-<?php echo $columnsClass; ?> rightnp">
+	<div class="docContainer">
+		<div class="profile-top clearfix">		
+			<div class="topmap" id="topmap" style="display:none;">
+				<div id="profileMapContainer">&nbsp;</div>
+				<div class="close1">
+					<a href="#"  onClick="validateForm(); return false;" ><img src="/images/profile-img/close.png" alt="close1"></a>
+				</div>
+			</div>
+
+			<img src="<?php echo $this->profileImage;?>" alt="<?php echo $this->profiledata->getFullName();?>" class="leftimg profileImage">
+			<h1>Hello, I’m <?php echo $this->profiledata->getFullName(); ?></h1>
+			
+			<?php 
+			if($this->profiledata->getArea()!="") {
+				$address1line = $this->profiledata->getStreet().", ".$this->profiledata->getArea().", ".$this->profiledata->getCity().", ".$this->profiledata->getState()." ".$this->profiledata->getZipcode();
+			} else if($this->profiledata->getStreet()!="") { 
+				$address1line = $this->profiledata->getStreet().", ".$this->profiledata->getCity().", ".$this->profiledata->getState()." ".$this->profiledata->getZipcode(); 
+			} else {
+				$address1line = "";
+			} ?>
+
+			<h2><?php echo $address1line; ?></h2>
+			<p><?php echo $this->profiledata->getAbout(); ?></p>
+			<p class="text-right">
+				<a href="#" onClick="validateForm('topmap'); return false;">
+					<img src="/images/profile-img/viewmap-btn.png" alt="view map">
+				</a>
+			</p>
+		</div>
+
+
+		<div class="profile-info clearfix">
+			<div class="container-fluid">
+				<div class="row">
+
+					<div class="col-sm-5">
+						<div class="get-info">
+							<h2>General Information</h2>
+							<div class="info-box">
+								<?php if($this->profiledata->getEducation()) { ?>
+								<h3>Education</h3>
+								<ul>
+									<?php
+									$dataArray = explode("," , $this->profiledata->getEducation());
+									if($dataArray) {
+										foreach($dataArray as $value){
+											echo "<li>$value</li>";
+										}
+									} ?>
+								</ul>
+								<?php } ?>
+								
+								<?php if($this->profiledata->getHospital()){ ?>
+								<h3>Hospital Affiliations</h3>
+								<ul><li><?php echo $this->profiledata->getHospital(); ?></li></ul>
+								<?php } ?>
+
+								<?php if($this->profiledata->getLanguage()) { ?>
+								<h3>Languages Spoken</h3>
+								<ul>
+									<?php
+									$languages = explode("," , $this->profiledata->getLanguage());
+									if($languages) {
+										foreach($languages as $language) {
+											echo "<li>$language</li>";
+										}
+									}
+									?>
+								</ul>
+								<?php } ?>
+								<?php if($this->profiledata->getCertification()) { ?>
+								<h3>Board Certifications</h3>
+								<ul>
+									<?php
+									$dataArray = explode("," , $this->profiledata->getCertification());
+									if($dataArray) {
+										foreach($dataArray as $value){
+											echo "<li>$value</li>";
+										}
+									} ?>
+								</ul>
+								<?php } ?>
+
+								<?php if($this->profiledata->getTextAward()) { ?>
+								<h3>Awards</h3>
+								<ul>
+									<?php
+									$dataArray = explode("," , $this->profiledata->getTextAward());
+									if($dataArray) {
+										foreach($dataArray as $value){
+											echo "<li>$value</li>";
+										}
+									} ?>
+								</ul>
+								<?php } ?>
+							</div>
+						</div>
+
+						<div class="insure-info">
+						<?php 
+						$modeldoctor_insurance = new Application_Model_DoctorInsurance();
+						$ArrDoctorInsurance=$modeldoctor_insurance->fetchAll("doctor_id={$this->profiledata->getId()}");
+						$InsuranceCompany = new Application_Model_InsuranceCompany();
+						if($ArrDoctorInsurance) { ?>
+							<h2><?php echo $this->lang[217]; ?></h2>
+							<div class="insure-box">
+								<div class="fixcon">
+									<ul>
+									<?php 
+									$geocode = $this->profiledata->getGeocode();
+									$geocode = explode(",", $geocode);
+									$lat = $geocode[0];
+									$lon = $geocode[1];
+									foreach($ArrDoctorInsurance as $docinsurance) {
+									$insurance = $InsuranceCompany->find($docinsurance->getInsuranceId()); 
+									$value = str_replace(" ", "+", $insurance->getCompany()) ;
+									?>
+										<li>
+											<a href="<?php echo $this->seoUrl("/search?lat=".$lat."&amp;lon=".$lon."&amp;{$this->lang[935]}={$value}"); ?>">
+												<!-- <img src='/images/insurance/<?php echo $insurance->getLogo(); ?>' alt='<?php echo $insurance->getCompany(); ?>'>  -->
+												<?php echo $insurance->getCompany(); ?>
+											</a>
+										</li>
+									<?php } ?>
+									</ul>
+								</div>
+								<h6 class="plan1">Don't see your plan?please <a href="/contact-us">contact us.</a></h6>
+							</div>
+						<?php } ?>
+						</div>
+					</div> <!-- col5 -->
+
+					<div class="col-sm-7">
+						<div class="location-info">
+							<h2>Locations </h2>
+							<div class="location-box">
+								<div class="container-fluid">
+									<div class="row">
+										<div class="col-sm-6">
+											<div class="left">
+												<h3><?php echo $this->profiledata->getFullName(); ?></h3>
+												<p class="desig"><?php echo $address1line; ?></p>
+												<p class="spe">Specialties: 
+												<?php
+					    						$DocCategory = new Application_Model_DoctorCategory();
+												$categoryArr = $DocCategory->getDoctorCategories("doctor_id='{$this->profiledata->getId()}'");
+												asort($categoryArr);
+												$specialties = "";
+												if(!empty($categoryArr)){
+													foreach($categoryArr as $catname): 
+														$specialties .= $catname." ";
+													endforeach;
+													echo $specialties;
+												}
+												?></p>
+												<?php if($membershipLevel != 1) { ?>
+												<p><a href="/appointment/index/drid/<?php echo $this->profiledata->getId(); ?>" id="bookAppointButton">Book Appointment</a></p>
+												<?php } ?>
+												<?php  $identity = Zend_Auth::getInstance()->getIdentity();
+												if(!empty($identity))
+												{
+														$usersNs = new Zend_Session_Namespace("members");
+														$objPat = new Application_Model_Patient();
+														$objPatient = $objPat->find($usersNs->patientId);
+														$User = new Application_Model_User();
+														$userdata = $User->fetchRow("id=".$usersNs->userId);
+														}
+												///echo '<pre>';print_r($userdata->userLevelId);
+												//echo count($objPatient);
+												?>
+												<div class="successf">
+													<?php 
+													if(!$this->isDocLoggedin) { //show buttons 
+														
+														if($this->favStatus == "Favorite") {
+															$isFavourited=true;
+														} else {
+															$isFavourited=false;
+														}
+														
+														if($this->isPatLoggedin) { //logged patient
+														?>
+													<div id="unFavDocButton" onclick="return unfavouriteDoctor(<?php echo $this->profiledata->getId();?>)" class="favButtonToggler" style="<?php echo $isFavourited ? 'display:block;' : 'display:none;';?>">
+														Remove from Favorites
+													</div>
+													<div id="favDocButton" onclick="return favouriteDoctor(<?php echo $this->profiledata->getId();?>);" class="favButtonToggler" style="<?php echo $isFavourited ? 'display:none;' : 'display:block;';?>">
+														Add to Favorites
+													</div>
+													<div id="favResultMsg"><br/>&nbsp;</div>
+														
+														<?php } else { //show button but redirect to login ?>
+													<a id="favDocButton" class="favButtonToggler" href="<?php echo $pageURL;?>/login">Add to Favorites</a>
+													<?php } 
+													} ?>
+
+													<?php
+													$ratingArrayR = $this->viewreviewobject->getRecommendationReviews($this->profiledata->getId());
+													$ratingArrayB = $this->viewreviewobject->getBedsideReviews($this->profiledata->getId());
+													$ratingArrayW = $this->viewreviewobject->getWaitimeReviews($this->profiledata->getId());?>
+													<!--Recommendation:- <img alt="<?php echo $ratingArrayR['recommendation'];?> stars" src="/images/Star-Rating/<?php echo $ratingArrayR['image'];?>-star.png"><br>
+													Bedside Manner:- 
+													<img alt="<?php echo $ratingArrayB['bedside'];?> stars" src="/images/Star-Rating/<?php echo $ratingArrayB['image'];?>-star.png"><br>
+													Wait Time:- 
+													<img alt="<?php echo $ratingArrayW['waittime'];?> stars" src="/images/Star-Rating/<?php echo $ratingArrayW['image'];?>-star.png">-->
+												</div>
+											</div>
+										</div>
+										
+										<div class="col-sm-6">
+											<div class="right">
+												<?php if($membershipLevel != 1) { ?>
+												<div class="recomm">
+													<p class="avg">Average Recommendation</p>
+													<ul>
+														<li><img alt="<?php echo $ratingArrayR['recommendation'];?> stars" src="/images/Star-Rating/<?php echo $ratingArrayR['image'];?>-star.png"></li>
+													</ul>
+													<p class="avg">Average Bedside Manner</p>
+													<ul>
+														<li><img alt="<?php echo $ratingArrayB['bedside'];?> stars" src="/images/Star-Rating/<?php echo $ratingArrayB['image'];?>-star.png"></li>
+													</ul>
+													<p class="avg">Average Wait Time</p>
+													<ul>
+														<li><img alt="<?php echo $ratingArrayW['waittime'];?> stars" src="/images/Star-Rating/<?php echo $ratingArrayW['image'];?>-star.png"></li>
+													</ul>
+												</div>
+												<?php } ?>
+												<div class="sharedoc">
+													<p class="share">Share Doctor:</p>
+													<span class='st_facebook' displayText=''></span>
+													<span class='st_twitter' displayText=''></span>
+													<span class='st_googleplus' displayText=''></span>
+													<span class='st_email' displayText=''></span>
+												</div>
+											</div>
+										</div>
+
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="practice-hour">
+							<div class="practice-box">
+								<header>
+									<h2>Practice Hours</h2>
+								</header>
+								<div class="container-fluid">
+									<div class="row">
+										<div class="col-sm-4">
+											<img src="/images/profile-img/location-grahics.png" alt="location">
+										</div>
+										<div class="col-sm-8">
+											<p><?php echo $this->profiledata->getOfficeHours(); ?></p>
+										</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+	                        <?php if($membershipLevel != 1) { ?>
+							<div class="patient-review">
+								<div class="review-box">
+									<header>
+										<h2>Patient Reviews For <?php echo $this->profiledata->getFullName();?></h2>
+									</header>
+
+									<div id="viewone" >
+
+									<?php if(count($this->reviewobjectdataV)>0){ 
+										foreach ($this->reviewobjectdataV as $reviewdata): ?>
+									<div class="bluebox">
+										<p class="author">
+											<span>Verified:</span> <?php $name = explode(" ",$reviewdata->getUsername()); echo $name[0]." ".substr($name[1], 0, 1)."."; ?> (name withheld for privacy) on <?php echo date("F j, Y", $reviewdata->getAddedOn()); ?>
+										</p>
+										<div class="greysec">
+											<div class="gtop">
+												<?php echo stripslashes($reviewdata->getReview()); ?>
+											</div>
+											<div class="gbottom clearfix">
+												<div class="gbox">
+													<ul>
+														<li>
+															<img alt="<?php echo $reviewdata->getRecommendation(); ?>stars" src="/images/Star-Rating/0<?php echo $reviewdata->getRecommendation();?>-0-star.png"></li>
+															<!-- <li><a href="#"><img src="/images/profile-img/starglow.png" alt="star"></a></li>
+															<li><a href="#"><img src="/images/profile-img/starglow.png" alt="star"></a></li>
+															<li><a href="#"><img src="/images/profile-img/starglow.png" alt="star"></a></li>
+															<li><a href="#"><img src="/images/profile-img/starglow.png" alt="star"></a></li>-->
+														</ul>
+														<p class="ratetext">Recommendation</p>
+													</div>
+													<div class="gbox">
+														<ul>
+															<li><img alt="<?php echo $reviewdata->getBedside(); ?>stars" src="/images/Star-Rating/0<?php echo $reviewdata->getBedside();?>-0-star.png"></li>
+															<!-- <li><a href="#"><img src="/images/profile-img/starglow.png" alt="star"></a></li>
+															<li><a href="#"><img src="/images/profile-img/starglow.png" alt="star"></a></li>
+															<li><a href="#"><img src="/images/profile-img/starglow.png" alt="star"></a></li>
+															<li><a href="#"><img src="/images/profile-img/starglow.png" alt="star"></a></li>-->
+														</ul>
+														<p class="ratetext">Bedside Manner</p>
+													</div>
+													<div class="gbox nb">
+														<ul>
+															<li>
+																<img alt="<?php echo $reviewdata->getWaittime(); ?>stars" src="/images/Star-Rating/0<?php echo $reviewdata->getWaittime();?>-0-star.png">
+															</li>
+															<!-- <li><a href="#"><img src="/images/profile-img/starglow.png" alt="star"></a></li>
+															<li><a href="#"><img src="/images/profile-img/starglow.png" alt="star"></a></li>
+															<li><a href="#"><img src="/images/profile-img/starglow.png" alt="star"></a></li>
+															<li><a href="#"><img src="/images/profile-img/starglow.png" alt="star"></a></li>-->
+														</ul>
+														<p class="ratetext">Wait Time</p>
+													</div>
+												</div>
+											</div>
+										</div>
+										<?php endforeach; 
+									} else { ?>
+									<div class="bluebox">
+										<div class="greysec">
+											<div class="gtop"><h4>No Review Given By Patient.</h4></div>
+										</div>
+									</div>
+									<?php } ?>
+								</div>
+							</div>
+						</div>
+						<?php } ?>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<?php if(!$this->isAjax) { ?>
+<div class="col-sm-2 leftnp">
+	<div class="listplayer">
+		<div class="single-display clearfix">
+			<div class="view-arrow pull-left">
+				<img src="/images/single-arrow.png" alt="arrow">
+			</div>
+			<div class="single-display-box pull-left text-center">
+				<div class="pname">
+					<img src="<?php echo $this->profileImage;?>" alt="<?php echo $this->profiledata->getFullName();?>" class="profileImage">
+					<h2><?php echo $this->profiledata->getFullName(); ?></h2>
+				</div>
+				<div class="pname01">
+					<h3>Specialty</h3>
+					<p><?php echo $specialties; ?></p>
+				</div>
+				<div class="pname02">
+					<h3>Address</h3>
+					<?php echo $address1line; ?>
+				</div>
+			</div>
+		</div>
+		<div class="big-gap">
+		</div>
+	</div>
+</div>
+<?php } ?>
+
+	</div>
+</div>
+<script>
+function favouriteDoctor(doctor_id) {
+	$.ajax({
+		url: "<?php echo $pageURL;?>/user/index/favourite-doctor?doctor_id="+doctor_id,
+		success: function(response) {
+			response = JSON.parse(response);
+			console.log(response);
+			$('#favResultMsg').html(response.msg);
+			if(response.result){
+				$('#favDocButton').hide();				
+				$('#unFavDocButton').show();
+			}
+		},
+		error: function(xhr) {
+			$('#favResultMsg').html('Error while favoriting');
+		}
+	});
+	return false;
+}
+
+function unfavouriteDoctor(doctor_id) {
+	$.ajax({
+		url: "<?php echo $pageURL;?>/user/index/unfavourite-doctor?doctor_id="+doctor_id,
+		success: function(response) {
+			response = JSON.parse(response);			
+			console.log(response);
+			$('#favResultMsg').html(response.msg);
+			if(response.result){
+				$('#favDocButton').show();				
+				$('#unFavDocButton').hide();
+			}
+		},
+		error: function(xhr) {
+			$('#favResultMsg').html('Error while unfavoriting');
+		}
+	});
+	return false;
+
+}
+
+</script>
+<?php 
+$initGeo = trim($this->profiledata->getGeocode());
+
+if($initGeo==''){
+	$settings = new Admin_Model_GlobalSettings();
+	$longtitude = $settings->settingValue('longtitude');
+	$latitude = $settings->settingValue('latitude');
+	if ($result) {
+		$initGeo = "{$latitude},{$longtitude}";
+	}
+}
+?>
+<script type="text/javascript">
+	/* Google maps */
+
+	var map;
+	var marker = null; 
+    function initialize() {
+        var str = '<?php echo $initGeo;?>';
+        var brk = str.split(',');
+        var latitude = parseFloat(brk[0]);
+        var longitude = parseFloat(brk[1]);
+        
+        map = new google.maps.Map(document.getElementById("profileMapContainer"),{
+			zoom: 16,
+			//center: {lat: latitude, lng: longitude},
+			mapTypeId: google.maps.MapTypeId.ROADMAP
+		});
+		var latlon = new google.maps.LatLng(latitude,longitude);
+        map.setCenter(latlon);
+		marker = new google.maps.Marker({
+			position: latlon,
+			map: map,
+			icon: "/images/markers/marker0.png"
+		});
+		var infoWindow = new google.maps.InfoWindow();
+		infoWindow.setContent('<?php echo "<span style=\"font:normal 12px arial;\"><b>".addslashes($this->profiledata->getFullName())."</b><br />".addslashes($this->profiledata->getStreet())."<br />".addslashes($this->profiledata->getCity()).", ".addslashes($this->profiledata->getState())." ".$this->profiledata->getZipcode()."</span>";?>');
+		google.maps.event.addListener(marker, "mouseover", function() {
+            infoWindow.open(map,marker);
+	    });
+	}
+
+	function loadScript() {
+		//console.log("loading map");
+	  var script = document.createElement('script');
+	  script.type = 'text/javascript';
+	  //script.src = 'https://maps.googleapis.com/maps/api/js?v=3.exp' +
+	  //    '&signed_in=true&callback=initialize';
+	  initialize();
+	  map.setCenter(marker.getPosition());
+	  document.body.appendChild(script);
+	}
+
+	//window.onload = loadScript;
+
+	loadScript();
+	google.maps.event.trigger(map, 'resize');
+	//google.maps.event.addDomListener(window, 'load', initialize);
+
+</script>

@@ -1,0 +1,25 @@
+<ul class="toplink">
+	<li><a href="https://www.facebook.com/Likedoctors"><img src="/images/facebook-icon.png" alt="facebook"></a></li>
+	<li><a href="https://twitter.com/doctors"><img src="/images/twitter-icon.png" alt="twitter"></a></li>
+	<!-- <li><a href="#"><img src="/images/linkedin-icon.png" alt="Linked in"></a></li>
+	<li><a href="#"><img src="/images/googleplus-icon.png" alt="Google"></a></li>  -->                   
+	<?php if (Zend_Auth::getInstance()->hasIdentity() && Zend_Auth::getInstance()->getIdentity()!="admin") { ?>
+	<li>
+	    <a href="/user">
+			<img src="/images/myaccount-btn.png" alt="<?php echo $this->lang[21]; ?>">
+		</a>
+	</li>
+	<li>
+		<a href="/logout">
+			<img src="/images/sign-out-btn.png" alt="Logout">
+		</a>
+	</li>
+	<?php } else { ?>
+	<li>
+		<a href="/login" class="leftpad"><img src="/images/sign-in-btn.png" alt="Sign in"></a>
+	</li>
+	<li>
+		<a href="/register"><img src="/images/join-now-btn.png" alt="Join"></a>
+	</li>
+	<?php } ?>
+</ul>

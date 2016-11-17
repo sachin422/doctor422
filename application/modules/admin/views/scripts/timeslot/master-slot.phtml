@@ -1,0 +1,312 @@
+<style>
+.slot-div{
+    margin-right:100px;
+    min-height:100px;
+}
+</style>
+<div id="rightsidemain">
+    <div id="rightcontentpart">
+        <form name="frmSlot" action="<?php echo $this->form->action;?>" method="post">
+			<div id="rightsideheading">Doctor: <?php echo $this->docObject->getFname(); ?></div> <br clear="all" />
+            <table border="0" cellpadding="0" cellspacing="0" width="100%" class="slot_master">
+                <tr>
+                    <th colspan="2" align="center"><!--Doctor: <?php //echo $this->docObject->getFname(); ?><br />--></th>
+                </tr>
+                <tr>
+                    <td align="center" colspan="2">
+                        <input type="hidden" name="drid" value="<?php echo $this->docObject->getId(); ?>" />
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                    </td>
+                </tr>
+
+                <tr class="heading">
+                
+                    <td colspan="2"><h2>Select Your Days</h2></td>
+                    <td width="25%"><h2>Enter Start & End Time</h2></td>
+                    <td><h2>Select Time Interval</h2></td>
+                </tr>
+                <tr>
+                    <td colspan="4" style="text-align: center;padding: 5px; font-size: 15px;"><strong>Time Slot 1</strong></td>
+                </tr>
+                <tr class="odd">
+                    <td>Monday</td>
+                    <td><?php echo $this->form->id1;?><?php echo $this->form->ischecked1;?></td>
+                    <td>
+                        <?php echo $this->form->stime1;?> <span class="f-left">to</span> <?php echo $this->form->etime1;?>
+                    </td>
+                    <td>
+                        <?php echo $this->form->time1;?>
+                        <a href="javascript:;" rel="1" rev="hide" class="del_slots">Delete slots</a>
+                        <span id="del1" style="display:none"><div id="checkboxDiv1" class="slot-div"></div><?php //echo $this->form->display_slots1;?></span>
+                    </td>
+                </tr>
+                <tr class="even">
+                    <td>Tuesday</td>
+                    <td><?php echo $this->form->id2;?><?php echo $this->form->ischecked2;?></td>
+                    <td>
+                        <?php echo $this->form->stime2;?> <span class="f-left">to</span>
+                        <?php echo $this->form->etime2;?>
+                    </td>
+                    <td>
+                        <?php echo $this->form->time2;?>
+                        <a href="javascript:;" rel="2" rev="hide" class="del_slots">Delete slots</a>
+                        <span id="del2" style="display:none"><div id="checkboxDiv2" class="slot-div"></div><?php //echo $this->form->display_slots2;?></span>
+                    </td>
+                </tr>
+                <tr class="odd">
+                    <td>Wednesday</td>
+                    <td><?php echo $this->form->id3;?><?php echo $this->form->ischecked3;?></td>
+                    <td>
+                        <?php echo $this->form->stime3;?> <span class="f-left">to</span>
+                        <?php echo $this->form->etime3;?>
+                    </td>
+                    <td>
+                        <?php echo $this->form->time3;?>
+                        <a href="javascript:;" rel="3" rev="hide" class="del_slots">Delete slots</a>
+                        <span id="del3" style="display:none"><div id="checkboxDiv3" class="slot-div"></div><?php //echo $this->form->display_slots3;?></span>
+                    </td>
+                </tr>
+                <tr class="even">
+                    <td>Thursday</td>
+                    <td><?php echo $this->form->id4;?><?php echo $this->form->ischecked4;?></td>
+                    <td>
+                        <?php echo $this->form->stime4;?> <span class="f-left">to</span>
+                        <?php echo $this->form->etime4;?>
+                    </td>
+                    <td>
+                        <?php echo $this->form->time4;?>
+                        <a href="javascript:;" rel="4" rev="hide" class="del_slots">Delete slots</a>
+                        <span id="del4" style="display:none"><div id="checkboxDiv4" class="slot-div"></div><?php //echo $this->form->display_slots4;?></span>
+                    </td>
+                </tr>
+                <tr class="odd">
+                    <td>Friday</td>
+                    <td><?php echo $this->form->id5;?><?php echo $this->form->ischecked5;?></td>
+                    <td>
+                        <?php echo $this->form->stime5;?> <span class="f-left">to</span>
+                        <?php echo $this->form->etime5;?>
+                    </td>
+                    <td>
+                        <?php echo $this->form->time5;?>
+                        <a href="javascript:;" rel="5" rev="hide" class="del_slots">Delete slots</a>
+                        <span id="del5" style="display:none"><div id="checkboxDiv5" class="slot-div"></div><?php //echo $this->form->display_slots5;?></span>
+                    </td>
+                </tr>
+                <tr class="even">
+                    <td>Saturday</td>
+                    <td><?php echo $this->form->id6;?><?php echo $this->form->ischecked6;?></td>
+                    <td>
+                        <?php echo $this->form->stime6;?> <span class="f-left">to</span>
+                        <?php echo $this->form->etime6;?>
+                    </td>
+                    <td>
+                        <?php echo $this->form->time6;?>
+                        <a href="javascript:;" rel="6" rev="hide" class="del_slots">Delete slots</a>
+                        <span id="del6" style="display:none"><div id="checkboxDiv6" class="slot-div"></div><?php //echo $this->form->display_slots6;?></span>
+                    </td>
+                </tr>
+                <tr class="odd">
+                    <td width="10%">Sunday</td>
+                    <td><?php echo $this->form->id7;?><?php echo $this->form->ischecked7;?></td>
+                    <td>
+                        <?php echo $this->form->stime7;?> <span class="f-left">to</span>
+                        <?php echo $this->form->etime7;?>
+                    </td>
+                    <td>
+                        <?php echo $this->form->time7;?>
+                        <a href="javascript:;" rel="7" rev="hide" class="del_slots">Delete slots</a>
+                        <span id="del7" style="display:none"><div id="checkboxDiv7" class="slot-div"></div><?php //echo $this->form->display_slots7;?></span>
+                    </td>
+                </tr>
+
+                <!--                Timeslot 2-->
+
+                <tr>
+                    <td colspan="4" style="text-align: center;padding: 5px; font-size: 15px;"><strong>Time Slot 2</strong></td>
+                </tr>
+                <tr class="even">
+                    <td>Monday</td>
+                    <td><?php echo $this->form->id8;?><?php echo $this->form->ischecked8;?></td>
+                    <td>
+                        <?php echo $this->form->stime8;?> <span class="f-left">to</span>
+                        <?php echo $this->form->etime8;?>
+                    </td>
+                    <td>
+                        <?php echo $this->form->time8;?>
+                        <a href="javascript:;" rel="8" rev="hide" class="del_slots">Delete slots</a>
+                        <span id="del8" style="display:none"><div id="checkboxDiv8" class="slot-div"></div><?php //echo $this->form->display_slots8;?></span>
+                    </td>
+                </tr>
+                <tr class="odd">
+                    <td>Tuesday</td>
+                    <td><?php echo $this->form->id9;?><?php echo $this->form->ischecked9;?></td>
+                    <td>
+                        <?php echo $this->form->stime9;?> <span class="f-left">to</span>
+                        <?php echo $this->form->etime9;?>
+                    </td>
+                    <td>
+                        <?php echo $this->form->time9;?>
+                        <a href="javascript:;" rel="9" rev="hide" class="del_slots">Delete slots</a>
+                        <span id="del9" style="display:none"><div id="checkboxDiv9" class="slot-div"></div><?php //echo $this->form->display_slots9;?></span>
+                    </td>
+                </tr>
+                <tr class="even">
+                    <td>Wednesday</td>
+                   <td><?php echo $this->form->id10;?><?php echo $this->form->ischecked10;?></td>
+                    <td>
+                        <?php echo $this->form->stime10;?> <span class="f-left">to</span>
+                        <?php echo $this->form->etime10;?>
+                    </td>
+                    <td>
+                        <?php echo $this->form->time10;?>
+                        <a href="javascript:;" rel="10" rev="hide" class="del_slots">Delete slots</a>
+                        <span id="del10" style="display:none"><div id="checkboxDiv10" class="slot-div"></div><?php //echo $this->form->display_slots10;?></span>
+                    </td>
+                </tr>
+                <tr class="odd">
+                    <td>Thursday</td>
+                   <td><?php echo $this->form->id11;?><?php echo $this->form->ischecked11;?></td>
+                    <td>
+                        <?php echo $this->form->stime11;?> <span class="f-left">to</span>
+                        <?php echo $this->form->etime11;?>
+                    </td>
+                    <td>
+                        <?php echo $this->form->time11;?>
+                        <a href="javascript:;" rel="11" rev="hide" class="del_slots">Delete slots</a>
+                        <span id="del11" style="display:none"><div id="checkboxDiv11" class="slot-div"></div><?php //echo $this->form->display_slots11;?></span>
+                    </td>
+                </tr>
+                <tr class="even">
+                    <td>Friday</td>
+                    <td><?php echo $this->form->id12;?><?php echo $this->form->ischecked12;?></td>
+                    <td>
+                        <?php echo $this->form->stime12;?> <span class="f-left">to</span>
+                        <?php echo $this->form->etime12;?>
+                    </td>
+                    <td>
+                        <?php echo $this->form->time12;?>
+                        <a href="javascript:;" rel="12" rev="hide" class="del_slots">Delete slots</a>
+                        <span id="del12" style="display:none"><div id="checkboxDiv12" class="slot-div"></div><?php //echo $this->form->display_slots12;?></span>
+                    </td>
+                </tr>
+                <tr class="odd">
+                    <td>Saturday</td>
+                    <td><?php echo $this->form->id13;?><?php echo $this->form->ischecked13;?></td>
+                    <td>
+                        <?php echo $this->form->stime13;?> <span class="f-left">to</span>
+                        <?php echo $this->form->etime13;?>
+                    </td>
+                    <td>
+                        <?php echo $this->form->time13;?>
+                        <a href="javascript:;" rel="13" rev="hide" class="del_slots">Delete slots</a>
+                        <span id="del13" style="display:none"><div id="checkboxDiv13" class="slot-div"></div><?php //echo $this->form->display_slots13;?></span>
+                    </td>
+                </tr>
+                <tr class="even">
+                    <td width="10%">Sunday</td>
+                    <td><?php echo $this->form->id14;?><?php echo $this->form->ischecked14;?></td>
+                    <td>
+                        <?php echo $this->form->stime14;?> <span class="f-left">to</span>
+                        <?php echo $this->form->etime14;?>
+                    </td>
+                    <td>
+                        <?php echo $this->form->time14;?>
+                        <a href="javascript:;" rel="14" rev="hide" class="del_slots">Delete slots</a>
+                        <span id="del14" style="display:none"><div id="checkboxDiv14" class="slot-div"></div><?php //echo $this->form->display_slots14;?></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="100%" class="submit-time">
+                        <input type="button" onclick="window.location='/admin/timeslot/index/drid/<?php echo $this->docObject->getId(); ?>'" name="back" value="<< back" />
+                        <input type="submit" name="submit" value="Set Time Slot" /></td>
+                </tr>
+
+            </table>
+
+
+        </form>
+    </div>
+</div>
+
+<script language="javascript">
+jQuery(document).ready(function(){
+    jQuery('.del_slots').click(function(){
+        var num = jQuery(this).attr('rel');
+        if(jQuery(this).attr('rev')=='hide'){
+            jQuery('#del'+num).fadeIn(500);
+            jQuery(this).attr('rev','show');
+            jQuery(this).html('Save slots');
+        }else{
+            var id = jQuery('#id'+num).val();
+           // var slots = jQuery('#display_slots'+num).val();
+            var stime = jQuery('#stime'+num).val();
+            var etime = jQuery('#etime'+num).val();
+            var intval = jQuery('#time'+num).val();
+            
+            
+            var slots = '';
+            jQuery("input[name='displayCheck"+num+"[]']").each(function() {
+                if(this.checked==true)slots = slots+jQuery(this).val()+',';
+              });
+            jQuery.post('/admin/timeslot/save-display-slots',
+            {id: id, slots:slots,intval:intval,stime:stime,etime:etime },
+
+            function(data){
+                //alert(data);return false;
+            }, false);
+            
+            jQuery('#del'+num).fadeOut(500);
+            jQuery(this).attr('rev','hide');
+            jQuery(this).html('Delete Slots');
+        }
+    });
+
+
+    // change time interval
+    jQuery('.change_slots').change(function(){
+        var num = jQuery(this).attr('rel');
+        setDelteTimeslots(num, 2);
+        jQuery('#del'+num).fadeIn(500);
+//        var ctls = jQuery(this).siblings('.del_slots');
+        var ctls = jQuery("a[rel='"+num+"']");
+        ctls.attr('rev','show');
+        ctls.html('Save slots');
+    });
+});
+for(var i=1;i<=14;i++){
+    setDelteTimeslots(i, 1);
+}
+function setDelteTimeslots(num, type){
+    
+    if(jQuery('#id'+num).val()!=''){
+        var id = jQuery('#id'+num).val();
+    }else{
+        var id = 0;
+    }
+    var stime = jQuery('#stime'+num).val();
+    var etime = jQuery('#etime'+num).val();
+    var intval = jQuery('#time'+num).val();
+    if(type==1){
+        var url = '/admin/timeslot/get-deleted-slots';
+    }else if(type==2){
+        var url = '/admin/timeslot/make-slots';
+    }
+    jQuery.post(url,
+    {id: id, stime:stime,etime:etime,intval:intval,num:num },
+
+    function(data){
+        
+        //alert(data);return false;
+        var decoded = $.json.decode(data);
+//        jQuery('#display_slots'+decoded['num']).val(decoded['slots']);//1
+        jQuery('#checkboxDiv'+decoded['num']).html(decoded['slots']);//1
+       
+
+    }, false);
+
+}
+</script>

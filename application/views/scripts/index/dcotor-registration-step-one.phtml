@@ -1,0 +1,151 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>:: Doc Mate-Doctor Sign Up ::</title>
+
+<?php    
+        echo $this->headTitle();
+        echo $this->headMeta();
+		
+		$this->headLink()->appendStylesheet('/style/bootstrap.css');
+		$this->headLink()->appendStylesheet('/style/bootstrap-theme.css');
+		$this->headLink()->appendStylesheet('/style/style-doctor-signin-reg.css');
+		
+		?>
+		<!--[if IE]><script src="js/html5.js"></script><![endif]-->
+		<?php
+				
+        echo $this->headLink(); 
+
+		$this->headScript()->appendFile('/js/modernizr.custom.79639.js'); 
+
+		echo $this->headScript();
+?>
+</head>
+
+<body>
+	<div class="sign-reg-box lesspad">
+    	<p class="registration-text text-center">Register with</p>
+    	<div class="admin-logo"><a href="/"><img src="/images/doctors-admin-logo.png" alt="doctors"></a></div>
+        
+        <div class="label-heading">
+        	<div class="wrapper-demo">
+					<div id="dd" class="wrapper-dropdown-5" tabindex="1"><p class="blueform">Create Profile <span>Page 1 of 4</span></p>
+						<ul class="dropdown">
+							<li class="form-opt"><a href="#">Select Plan <span>Page 2 of 4</span></a></li>
+							<li class="form-opt"><a href="#">Almost There <span>Page 3 of 4</span></a></li>
+							<li class="form-opt"><a href="#">Welcome to doctors <span>Page 4 of 4</span></a></li>
+						</ul>
+					</div>
+				​</div>
+        </div>
+         <?php $errors = $this->form->getErrorMessages();?>
+        <form class="regstep" id="signupfrm" name="signupfrm" action="<?php echo $this->form->action ?>" method="post" enctype="multipart/formdata" onsubmit="return checkCheckBoxes(this);">
+        <p class="formname">First Name :</p>      
+		<?php echo $this->form->first_name; ?>
+        <p class="formname">Last Name :</p>
+		<?php echo $this->form->last_name; ?>    
+        <p class="formname">Email :</p>        
+		<?php echo $this->form->email; ?>
+        <p class="formname">Street :</p>
+   
+		<?php echo $this->form->street; ?>
+        <p class="formname">City :</p>
+       <?php echo $this->form->city; ?>
+        <p class="formname">State :</p>
+		<?php echo $this->form->state; ?>
+        
+        <p class="formname">Zip :</p>
+         <?php echo $this->form->zipcode; ?>
+        <p class="formname">Gender :</p>
+       <label>
+              <input type="radio" name="RadioGroup1" tabindex="8" value="m" id="RadioGroup1_0">
+              <span>Male</span></label>
+              <label>
+              <input type="radio" name="RadioGroup1" tabindex="9" value="f" id="RadioGroup1_1">
+              <span>Female</span></label>
+        <p class="formname">Password :</p>
+      
+	   <?php echo $this->form->password; ?>
+        <p class="formname">Confirm Password :</p>
+       
+		<input type="password" class="textField" tabindex="10" value="" id="confirmPassword" name="confirmPassword" />
+        <p class="formname">Specialty :</p>
+        <select name="speciality" tabindex="11" required>
+          <option value="">Select Specialty</option>
+		  <?php 		
+		foreach($this->category as $category){?>
+		<option value="<?php echo $category->id; ?>"><?php echo $category->name; ?></option>
+		<?php }
+		?>
+        </select>
+        <p class="formname">Phone no :</p>
+        <!--<input name="phone_number" type="text">-->
+		<?php echo $this->form->phone; ?>
+        
+        <p class="formname01"><input type="checkbox" tabindex="14" class="form" value="1" id="terms" name="terms"> I have read and accept doctors’s <a href="<?php echo $this->seoUrl('/index/terms');?>" target="_blank">Terms &amp; Conditions</a></p>
+        <ul class="errors">
+										<?php
+										$errors = $this->form->getErrorMessages();
+										if (!empty($errors))
+											foreach ($errors as $error)echo "<li>" . $error . "</li>";
+										?>
+									</ul>
+        <input name="" type="submit" value="Next">
+        
+        </form>
+        
+        
+        
+    </div>
+    
+    <p class="copyright-text">Copyright © A1 Healthcare Technologies LLC 2015. All rights reserved.</p>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+		<script type="text/javascript">
+
+			function DropDown(el) {
+				this.dd = el;
+				this.initEvents();
+			}
+			DropDown.prototype = {
+				initEvents : function() {
+					var obj = this;
+
+					obj.dd.on('click', function(event){
+						$(this).toggleClass('active');
+						event.stopPropagation();
+					});	
+				}
+			}
+
+			$(function() {
+
+				var dd = new DropDown( $('#dd') );
+
+				$(document).click(function() {
+					// all dropdowns
+					$('.wrapper-dropdown-5').removeClass('active');
+				});
+
+			});
+
+		</script>
+		<script type="text/javascript" language="JavaScript">
+<!--
+function checkCheckBoxes(theForm) {
+	if (
+	theForm.terms.checked == false) 
+	{
+		alert ('You have to agree with the terms of use');
+		return false;
+	} else { 	
+		return true;
+	}
+}
+//-->
+</script> 
+</body>
+</html>

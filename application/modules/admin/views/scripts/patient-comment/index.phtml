@@ -1,0 +1,151 @@
+<script language="javascript">
+    $(document).ready(function()
+    { 
+        $("#checkall").click(function()
+        {
+            var checked = false;
+            if(this.checked)checked = true;
+            
+            $("input:checkbox.cid").each(function()
+            {
+                this.checked = checked;
+            });
+        });
+        
+        $(".actions").click(function()
+        {
+            var ids = Array();
+            var i = 0;
+            $("input:checkbox.cid").each(function()
+            {
+                if(this.checked==true){
+                    ids[i] = this.value;
+                    i++;
+                }
+            });
+            if(ids.length < 1){alert('Please make a selection from the list for '+$(this).attr('title')+'.');return false;}
+            $("#ids").val(ids);
+            if($(this).attr('rel')=='delete'){
+                if(!confirm("Are you sure you want to delete the record(s)?")){
+                    return false;
+                }
+            }
+            
+            $("#multiaction").attr('action', '/admin/patient-comment/'+$(this).attr('rel')).submit();
+
+        });
+    });
+</script>
+
+<?php $page = $this->paginator->getCurrentPageNumber();?>
+
+<div id="rightsidemain">
+    <div id="rightcontentpart">
+        <div id="rightsideheading">
+            <img src="/images/admin-images/bl-tl.gif" align="left" /><img src="/images/admin-images/bl-tr.gif" align="right" />
+
+
+
+	Comment - <span class='msg'>Total <?php echo $this->total ?> Record(s) found! </span>
+                  
+        </div>
+        
+
+        <div style="text-align:center;background-color: #fff;">
+            <form id="multiaction" action="" method="post">
+                <input type="hidden" name="ids" id="ids" />
+                <input type="hidden" name="page" value="<?php echo $page?>" />
+                <img border="0" class="actions" style="cursor: pointer" title="Publish" rel="publish" src="/images/admin-images/true.gif">&nbsp;&nbsp;
+                <img border="0" class="actions" style="cursor: pointer" title="Unpublish" rel="unpublish" src="/images/admin-images/false.gif">&nbsp;&nbsp;
+                <img border="0" class="actions" style="cursor: pointer" title="Delete" rel="delete" src="/images/admin-images/delete.gif">&nbsp;
+            </form>
+        </div>
+            <form action="" method="post">
+                <div style="text-align:left;padding-left: 15px;">
+                Search for (e.g. Patient Name, Dr. Name):
+                <input type="text" id="stext" name="stext" value="<?php echo $this->stext?>">
+                <input type="submit" value="Submit" id="search" name="search">
+                </div>
+            </form>
+        <div id="rightsidecontentpart">
+            
+            <?php
+            if ($this->total > 0) {
+            ?>
+                <br><span class='red'>
+                <? echo $this->msg; ?>
+            </span>
+                
+            <br>
+            <?= $this->paginationControl($this->paginator, 'Sliding', 'pagination.phtml'); ?>
+                <br>
+
+                <table width='100%' border='0' class='dataTable' cellspacing='0' cellpadding='0'>
+                    <tr>
+                        <th>#</th>
+                        <th><input type="checkbox" name="checkall" id="checkall" value="" /></th>
+                        
+                        
+                        <th>Comment</th>
+                        <th>Patient</th>
+			<th>Doctor</th>
+			<th>Posted</th>
+                        <th style="width: 10%;">Action</th>
+                    </tr>
+
+                <?php
+                $sno = 0;
+                $Doctor = new Application_Model_Doctor();
+                
+                $items_per_page = $this->paginator->getItemCountPerPage();
+                if ($page > 1) {
+                    $sno = $items_per_page * $page - $items_per_page;
+                }
+                $rowClass = 'trbg1';
+
+                foreach ($this->paginator as $row) {
+		    $sno++;
+                    $docObject = $Doctor->fetchRow("id='{$row['doctor_id']}'");
+                   //print_r($docObject);
+                    if ($rowClass == "trbg1")
+                        $rowClass = 'trbg';
+                    else
+                        $rowClass='trbg1';
+
+                ?>
+                    <tr class='<?= $rowClass ?>'>
+                        <td><?= $sno ?></td>
+                        <td><input type="checkbox" name="cid[]" class="cid" value="<?= $row['id'] ?>" /></td>
+                        <td><?php echo stripslashes($row['review']);  ?></td>
+                        <td><?php echo $row['username'] ?></td>
+			<td><?php echo $docObject->fname;  ?></td>
+			<td><?php echo date("m-d-Y", $row['added_on']);  ?></td>
+                        <td>
+                        <?php
+                        $published = "false.gif";
+                        $published_action = "publish";
+                        $published_title = "Publish";
+                        if ($row['status'] == 1) {
+                            $published = "true.gif";
+                            $published_title = "Unpublished";
+                            $published_action = "unpublish";
+                        }
+                        ?>
+                        <a href='/admin/patient-comment/<?php echo $published_action?>/ids/<?= $row['id'] ?>/page/<?= $page ?>'><img src='/images/admin-images/<?php echo $published ?>' border='0' title='<?php echo $published_title ?>'/></a>&nbsp;&nbsp;
+                        <a href='/admin/patient-comment/add-edit/id/<?= $row['id'] ?>/page/<?= $page ?>'><img src='/images/admin-images/edit.gif' border='0' title='Edit'/></a>&nbsp;&nbsp;
+                        <a href='/admin/patient-comment/delete/ids/<?= $row['id'] ?>/page/<?= $page ?>' onclick="if(!confirm('Are you sure you want to delete?'))return false;"><img src='/images/admin-images/delete.gif' border='0' title='Delete'/></a>&nbsp;&nbsp;
+                    </td>
+
+                </tr>
+                <?
+                    }
+                ?>
+                </table><br />
+            <?= $this->paginationControl($this->paginator, 'Sliding', 'pagination.phtml'); ?><br /><br />
+            <?
+                }
+            ?></div>
+
+    </div>
+    <div class="btm-curve"><img src="/images/admin-images/btm-r-l.gif" align="left" /><img src="/images/admin-images/btm-r-r.gif" align="right" /></div>
+</div>

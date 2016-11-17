@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configdata>
+    <nav>
+        <home>
+            <label>Home</label>
+            <uri>/</uri>
+            <pages>
+                <my_gap_deamon>
+                    <label>My Gap Deamon</label>
+                    <uri>/patient/my-gap-deamon</uri>
+                    <action>my-gap-deamon</action>
+                    <controller>patient</controller>
+                    <pages>
+                        <where_i_am>
+                            <label>Where I am</label>
+                            <uri>/patient/where-i-am</uri>
+                            <action>where-i-am</action>
+                            <controller>patient</controller>
+                        </where_i_am>
+                        <my_profile>
+                            <label>My Profile</label>
+                            <uri>/patient/my-profile/</uri>
+                            <action>my-profile</action>
+                            <controller>patient</controller>
+                            <pages>
+                                <permissions>
+                                    <label>Permissions</label>
+                                    <uri>/patient/permission/</uri>
+                                    <action>permission</action>
+                                    <controller>patient</controller>
+                                </permissions>
+                            </pages>
+                        </my_profile>
+                        <my_travel_wall>
+                            <label>My Travel Wall</label>
+                            <uri>/patient/my-travel-wall</uri>
+                            <action>my-travel-wall</action>
+                            <controller>patient</controller>
+                        </my_travel_wall>
+                        <my_friends>
+                            <label>My Friends</label>
+                            <uri>/patient/my-friends</uri>
+                            <action>my-friends</action>
+                            <controller>patient</controller>
+                            <pages>
+                                <add_a_connection>
+                                    <label>Add a connection</label>
+                                    <uri>/patient/add-a-connection</uri>
+                                    <action>add-a-connection</action>
+                                    <controller>patient</controller>
+                                </add_a_connection>
+                                <requests>
+                                    <label>Requests</label>
+                                    <uri>/patient/requests</uri>
+                                    <action>requests</action>
+                                    <controller>patient</controller>
+                                </requests>
+                            </pages>
+                        </my_friends>
+                        <my_photos>
+                            <label>My Photos</label>
+                            <uri>/patient/my-photos</uri>
+                            <action>my-photos</action>
+                            <controller>patient</controller>
+                        </my_photos>
+                        <my_journal>
+                            <label>My Journals</label>
+                            <uri>/patient/my-journals</uri>
+                            <action>my-journals</action>
+                            <controller>patient</controller>
+                            <pages>
+                                <journal_settings>
+                                    <label>Journal Settings</label>
+                                    <uri>/patient/journal-settings</uri>
+                                    <action>journal-settings</action>
+                                    <controller>patient</controller>
+                                </journal_settings>
+                            </pages>
+                        </my_journal>
+                        <my_messages>
+                            <label>My Messages</label>
+                            <uri>/patient/my-messages</uri>
+                            <action>my-messages</action>
+                            <controller>patient</controller>
+                        </my_messages>
+						
+                        <update_my_email>
+                            <label>Update My Email</label>
+                            <uri>/patient/update-my-email</uri>
+                            <action>update-my-email</action>
+                            <controller>patient</controller>
+                        </update_my_email>
+                    </pages>
+                </my_gap_deamon>
+                <destinations>
+					    
+                    <label>Destinations</label>
+                    <uri>/index/destinations</uri>
+                    <action>destinations</action>
+                    <controller>index</controller>
+                </destinations>
+                <work_study_volunteer>
+                    <label>Work/Study/Volunteer</label>
+                    <uri>/index/work</uri>
+                    <action>work</action>
+                    <controller>index</controller>
+                </work_study_volunteer>
+                <forum>
+                    <label>Forum</label>
+                    <uri>/index/forum</uri>
+                    <action>forum</action>
+                    <controller>index</controller>
+                </forum>
+                <advice>
+                    <label>Advice</label>
+                    <uri>/index/advice</uri>
+                    <action>advice</action>
+                    <controller>index</controller>
+                </advice>
+                <journals>
+                    <label>Journals</label>
+                    <uri>/index/journals</uri>
+                    <action>journals</action>
+                    <controller>index</controller>
+                </journals>
+                <login>
+                    <label>Login</label>
+                    <uri>/index/login/</uri>
+                    <action>login</action>
+                    <controller>index</controller>
+                </login>
+                <register>
+                    <label>Register</label>
+                    <uri>/index/register</uri>
+                </register>
+            </pages>
+        </home>
+    </nav>
+</configdata>

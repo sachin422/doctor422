@@ -1,0 +1,510 @@
+<?php include_once(APPLICATION_PATH.'/configs/lang/config.php'); ?>
+<script type="text/javascript" language="javascript">
+    function getaffiliation(val) {
+        var site_host = '<?php echo $_SERVER['SERVER_NAME']?>';
+        var doctor_id = '<?php echo $this->id; ?>';
+        var url= '/admin/doctor/hospitalaffiliate';
+        var qstr="val="+val+"&doctor_id="+doctor_id;
+        $.post(url,qstr, function(data) {
+			$('#myhaffiliation').html("");
+			$('#myhaffiliation').html(data);
+		});
+    }
+
+    function removeImage() {
+        var site_host = '<?php echo $_SERVER['SERVER_NAME']?>';
+        var doctor_id = '<?php echo $this->id; ?>';
+        var url= '/admin/doctor/deleteimage';
+        var qstr="doctor_id="+doctor_id;
+        if(confirm("Are you sure to remove Image?")) {
+			$.post(url,qstr, function(data) {
+				$('#doctor_image').html("");
+			});
+		}
+    }
+	function updatecatdependentvalues(optionbox) {
+    
+		var arcategories = new Array();
+		var strcategories;
+		for(i=0; i<optionbox.options.length; i++) {
+			arcategories[i]=optionbox.options[i].value;
+		}
+        strcategories = arcategories.join(",");
+        if(strcategories!="") {
+			refreshdata(strcategories,'association');
+			refreshdata(strcategories,'hospitalaffiliation');
+			refreshdata(strcategories,'reasontovisit');
+		}
+	}
+	function refreshdata(ids,content) {
+		var stateid=$('#state_for_affiliate').val();
+		switch(content) {
+			case 'association':
+				url= '/admin/doctor/currentassociation';
+				break;
+			 case 'hospitalaffiliation':
+				 url= '/admin/doctor/currenthomeaffiliation';
+				 break;
+			  case 'reasontovisit':
+				  url= '/admin/doctor/currentreasontovisit';
+				  break;
+		}
+		if(ids!="") {
+			var qstr="ids="+ids+"&stateid="+stateid;
+			$.post(url,qstr, function(data) {
+				switch(content) {
+					case 'association':
+						$('#doctor_current_association_2').html("");
+						$('#doctor_current_association_2').html(data);
+						break;
+					case 'hospitalaffiliation':
+						$('#myhaffiliation').html("");
+						$('#myhaffiliation').html(data);
+						break;
+					case 'reasontovisit':
+						$('#doctor_current_reasonforvisit_2').html("");
+						$('#doctor_current_reasonforvisit_2').html(data);
+						break;
+				}
+			});
+        }
+	}
+
+
+
+	function copy_doctor_prifile(){
+		if(!confirm('Are you sure you want to copy this profile?'))return false;
+		window.location = '/admin/doctor/copy-profile/id/<?php echo $this->id?>';
+	}
+
+</script>
+<?php
+
+$urlargs = array();
+if(!empty($this->doctor_name))
+        $urlargs[] = "/doctor_name/".$this->doctor_name;
+if(!empty($this->category_id))
+        $urlargs[] = "/catid/".$this->category_id;
+if(!empty($this->state))
+        $urlargs[] = "/state/".$this->state;
+if(!empty($this->scriteria))
+        $urlargs[] = "/scriteria/".$this->scriteria;
+if(!empty($this->sorder))
+        $urlargs[] = "/sorder/".$this->sorder;
+if(!empty($this->zip))
+        $urlargs[] = "/zip/".$this->zip;
+if(!empty($this->mlevel))
+        $urlargs[] = "/mlevel/".$this->mlevel;
+
+if(count($urlargs)>0)
+    $urlparams =implode("",$urlargs);
+else
+    $urlparams="";
+
+
+?>
+<div id="rightsidemain">
+<span class='red'><?php echo $this->msg; ?></span>
+    <div id="rightcontentpart">
+        <div id="rightsideheading">
+            <img src="/images/admin-images/bl-tl.gif" align="left" /><img src="/images/admin-images/bl-tr.gif" align="right" />
+            
+	<?php echo $this->lang[548]; ?></div>
+        <div id="rightsidecontentpart">
+            
+            <span class='red'><?php //echo $this->msg; ?></span>
+            <form method="post" action="<?php echo $this->form->action?>" enctype="multipart/form-data" name="frmha" id="frmha">
+    <table cellspacing="0" cellpadding="0" border="0" class="profile-edit">
+        <tbody>
+            <tr>
+                <td width="130"  ></td>
+                <td class="element">
+                <input type="hidden" name="applychanges"  value="0">
+               
+                <a href ="/admin/doctor/index<?php echo $urlparams;?>"><input type="button" tabindex="20" class="signup" value="Back" id="submit" name="button"></a>
+                <?php echo $this->form->submit;?> &nbsp;&nbsp;<?php echo $this->form->apply;?>
+                <input type="button" onclick="copy_doctor_prifile();" class="signup" value="Copy" id="copy" name="copy">
+				<?php $profilePath = $this->seoUrl('/profile/index/id/' . $this->id); ?>
+				<a target="_blank" href ="<?php echo $profilePath; ?>"><input  type="button" tabindex="20" class="signup" value="View Profile" name="button"></a>
+            </td>
+            </tr>
+            <tr><td colspan="2"><span class='red'><?php //echo $this->msg; ?></span>
+                    
+
+                </td></tr>
+            
+             <tr>
+                <td colspan="2">
+                <table>
+                    <td width="130"  ><label for="category_id"><?php echo $this->lang[72]; ?>:*</label></td>
+                <td class="element" >
+				<?php echo $this->form->category_id2;?></td>
+                <td><input type="button" onClick="JSwap('category_id','category_id2');updatecatdependentvalues(this.form.elements['category_id']);" name="addtolist" value=" &laquo; ">
+				<input type="button" onClick="JSwap('category_id2','category_id');updatecatdependentvalues(this.form.elements['category_id']);" name="removefromlist" value=" &raquo; "></td>
+                <td style="width : 300px;"><?php echo $this->lang[437]; ?>:<br>
+
+                    <?php echo $this->form->category_id;?>
+
+                    </td>
+                </table>
+                    </td>
+            </tr>
+
+            <tr style="display:none;">
+                <td colspan="2">
+		            <table>
+		            	<tr>
+		                	<td width="130"><label for="extra_category_id"><?php echo $this->lang[438]; ?>:</label></td>
+		            		<td class="element" ><?php echo $this->form->extra_category_id2;?></td>
+		        			<td>
+		        				<input type="button" onClick="JSwap('extra_category_id','extra_category_id2');" name="addtolist" value=" &laquo; ">
+		    					<input type="button" onClick="JSwap('extra_category_id2','extra_category_id');" name="removefromlist" value=" &raquo; ">
+		    				</td>
+		            		<td style="width: 300px;">
+		            			<?php echo $this->lang[438]; ?>:<br>
+		                		<?php echo $this->form->extra_category_id;?>
+		                	</td>
+		                </tr>
+		            </table>
+                </td>
+            </tr>
+        	<tr><td colspan="2"><span class='red'><?php //echo $this->msg; ?></span></td></tr>
+        	<tr>
+                <td width="130"  ><label for="member_number"><?php echo $this->lang[439]; ?>:</label></td>
+                <td class="element"><?php echo $this->form->member_number;?></td>
+            </tr> 			
+            <tr>
+                <td width="130"  ><label for="email"><?php echo $this->lang[104]; ?>:*</label></td>
+                <td class="element"><?php echo $this->form->email;?>
+                    
+                </td>
+            </tr>
+            <tr>
+                <td width="130"  ><label for="username"><?php echo $this->lang[440]; ?>:*</label></td>
+                <td class="element"><?php echo $this->form->username;?></td>
+            </tr>
+			<tr>
+                <td width="130"  ><label for="fname"><?php echo $this->lang[441]; ?>:*</label></td>
+                <td class="element"><?php echo $this->form->fname;?></td>
+            </tr>
+            <tr>
+                <td width="130"  ><label for="membership_level"><?php echo $this->lang[456]; ?>:*</label></td>
+                <td class="element"><?php echo $this->form->membership_level;?></td>
+            </tr>
+
+            <tr>
+                <td width="130"><label for="membersince">Doctor signup date:*</label></td>
+                <td class="element"><?php echo $this->form->membersince;?></td>
+            </tr>
+            <tr>
+                <td width="130"><label for="expiration">Membership expiration date:*</label></td>
+                <td class="element"><?php echo $this->form->expiration; ?></td>
+            </tr>
+			<!--Assistants-->
+			<?php
+			$usersNs = new Zend_Session_Namespace("members"); 
+			$Usern = new Application_Model_User();
+			$Usern = $Usern->fetchRow("id=$usersNs->userId");
+			if($Usern->getUserLevelId() != 4) { //assistants can't change assistants ?>
+			<tr>
+                <td colspan="2">
+					<table>
+						<td width="130"><label for="doctor_assistant">Assistant:</label></td>
+						<td class="element" id="doctor_current_assistant_2">
+							<?php echo $this->form->doctor_assistant2;?>
+						</td>
+						<td>
+							<input type="button" onClick="JSwap('doctor_assistant','doctor_assistant2');" name="addtolist" value=" &laquo; ">
+							<input type="button" onClick="JSwap('doctor_assistant2','doctor_assistant');" name="removefromlist" value=" &raquo; ">
+						</td>
+						<td style="width : 300px;"> 
+							Selected Assistants:
+							<br>
+							<?php echo $this->form->doctor_assistant;?>
+						</td>
+					</table>
+				</td>
+            </tr>
+			<?php } ?>  
+			<!--/Assistants-->
+			
+			<tr>
+                <td width="130"  ><label for="theUrl"><?php echo $this->lang[442]; ?>:</label></td>
+                <td class="element">http://www.SITENAME.com/<?php echo $this->form->theUrl;?>
+				<br/> <?php echo $this->lang[443]; ?>
+				</td>
+            </tr>
+			<tr>
+                <td width="130"  ><label for="specialty_title"><?php echo $this->lang[335]; ?>:</label></td>
+                <td class="element"><?php echo $this->form->specialty_title;?></td>
+            </tr>
+            <tr>
+                <td width="130"  ><label for="company"><?php echo $this->lang[213]; ?>:</label></td>
+                <td class="element"><?php echo $this->form->company;?></td>
+            </tr>
+             <tr>
+                <td width="130"  ><label for="company_logo"><?php echo $this->lang[444]; ?><br>[400px/234px]:</label></td>
+                <td class="element"><?php echo $this->form->company_logo;?>
+                    <?php
+                    if(!empty($this->doctor_headshot))
+                    { 
+                    ?>
+                    <span id="doctor_image"><img src ="<?php echo $this->doctor_headshot;?>" height="100" width="100"><a href="javascript:;" onclick="removeImage()"><?php echo $this->lang[445]; ?></a></span>
+                    <?php
+                    }
+                    ?>
+                </td>
+            </tr>
+            <tr>
+                <td width="130"  ><label for="assign_phone"><?php echo $this->lang[295]; ?>:</label></td>
+                <td class="element"><?php echo $this->form->assign_phone;?></td>
+            </tr>
+            <tr>
+                <td width="130"  ><label for="actual_phone"><?php echo $this->lang[447]; ?>:</label></td>
+                <td class="element"><?php echo $this->form->actual_phone;?></td>
+            </tr>
+            <tr>
+                <td width="130"  ><label for="street"><?php echo $this->lang[448]; ?>:*</label></td>
+                <td class="element"><?php echo $this->form->street;?></td>
+            </tr>
+			<tr>
+                <td width="130"  ><label for="area"><?php echo $this->lang[298]; ?>:</label></td>
+                <td class="element"><?php echo $this->form->area;?></td>
+            </tr>
+            <tr>
+                <td width="130"  ><label for="city"><?php echo $this->lang[300]; ?>:*</label></td>
+                <td class="element"><?php echo $this->form->city;?></td>
+            </tr>
+            <tr>
+                <td width="130"  ><label for="state"><?php echo $this->lang[302]; ?>:</label></td>
+                <td class="element"><?php echo $this->form->state;?></td>
+            </tr>
+            <tr>
+                <td colspan="2"><label for="zipcode"><?php echo $this->lang[449]; ?></label></td>
+                
+            </tr>
+            <tr>
+                <td width="130"  ><label for="zipcode"><?php echo $this->lang[303]; ?>:*</label></td>
+                <td class="element"><?php echo $this->form->zipcode;?>&nbsp;&nbsp;<?php echo $this->form->use_zip;?></td>
+            </tr>
+
+            <tr>
+                <td width="130"  ><label for="zipcode1"><?php echo $this->lang[450]; ?> 1:</label></td>
+                <td class="element"><?php echo $this->form->zipcode1;?>&nbsp;&nbsp;<?php echo $this->form->use_zip1;?></td>
+            </tr>
+
+            <tr>
+                <td width="130"  ><label for="zipcode2"><?php echo $this->lang[450]; ?> 2:</label></td>
+                <td class="element"><?php echo $this->form->zipcode2;?>&nbsp;&nbsp;<?php echo $this->form->use_zip2;?></td>
+            </tr>
+
+            <tr>
+                <td width="130"  ><label for="zipcode3"><?php echo $this->lang[450]; ?> 3:</label></td>
+                <td class="element"><?php echo $this->form->zipcode3;?>&nbsp;&nbsp;<?php echo $this->form->use_zip3;?></td>
+            </tr>
+
+            <tr>
+                <td width="130"  ><label for="zipcode4"><?php echo $this->lang[450]; ?> 4:</label></td>
+                <td class="element"><?php echo $this->form->zipcode4;?>&nbsp;&nbsp;<?php echo $this->form->use_zip4;?></td>
+            </tr>
+
+            <tr>
+                <td width="130"  ><label for="zipcode5"><?php echo $this->lang[450]; ?> 5:</label></td>
+                <td class="element"><?php echo $this->form->zipcode5;?>&nbsp;&nbsp;<?php echo $this->form->use_zip5;?></td>
+            </tr>
+            
+            <tr>
+                <td width="130"  ><label for="geocode"><?php echo $this->lang[452]; ?>:</label></td>
+                <td class="element"><?php echo $this->form->geocode;?></td>
+            </tr>
+            <tr>
+                <td width="130"  ><label for="geocode"><?php echo $this->lang[451]; ?>:</label></td>
+                <td class="element">
+                    <?php
+                     $config = new Zend_Config_Ini(APPLICATION_PATH.'/configs/'.APPLICATION_INI, APPLICATION_ENV);
+                    ?>
+                    <script src="http://maps.googleapis.com/maps/api/js?language=en&amp;sensor=false" type="text/javascript"></script>
+                    <?php
+                    require_once("geocode/geo_front.php");
+					
+                    ?>
+                    <a onClick="showLocation();	" style="cursor:pointer;"><?php echo $this->lang[453]; ?></a>
+					
+                    <div id="map" style="border: 1px solid rgb(204, 204, 204); height: 325px; width: 500px;"></div>
+                </td>
+            </tr>
+            <tr>
+                <td width="130"  ><label for="office_hour"><?php echo $this->lang[264]; ?>:</label></td>
+                <td class="element"><?php echo $this->form->office_hour;?></td>
+            </tr>
+            <tr>
+                <td width="130"  ><label for="language"><?php echo $this->lang[454]; ?>:</label></td>
+                <td class="element"><?php echo $this->form->language;?></td>
+            </tr>
+            <tr>
+                <td width="130"  ><label for="education"><?php echo $this->lang[222]; ?>:</label></td>
+                <td class="element"><?php echo $this->form->education;?></td>
+            </tr>
+            <tr>
+                <td width="130"  ><label for="about"><?php echo $this->lang[221]; ?>:</label></td>
+                <td class="element"><?php echo $this->form->about;?></td>
+            </tr>
+            <tr style="display:none">
+                <td width="130"  ><label for="county"><?php echo $this->lang[461]; ?>:</label></td>
+                <td class="element"><?php echo $this->form->county;?></td>
+            </tr>
+            <tr>
+                <td width="130"  ><label for="website"><?php echo $this->lang[463]; ?>:</label></td>
+                <td class="element">http://<?php echo $this->form->website;?></td>
+            </tr>
+			<tr>
+                <td colspan="2">
+                <table>
+                    <td width="130"  ><label for="doctor_insurance"><?php echo $this->lang[464]; ?>:</label></td>
+                <td class="element" >
+                <?php echo $this->form->doctor_insurance2;?></td>
+                <td>
+                    <input type="button" onClick="updateLeftPlanOptions('doctor_insurance');JSwap('doctor_insurance','doctor_insurance2');updatePlanOptions();" name="addtolist" value=" &laquo; ">
+                    <input type="button" onClick="JSwap('doctor_insurance2','doctor_insurance');updatePlanOptions();" name="removefromlist" value=" &raquo; ">
+                </td>
+                <td style="width : 300px;"> <?php echo $this->lang[465]; ?>:<br>
+
+                    <?php echo $this->form->doctor_insurance;?>
+
+                    </td>
+                </table>
+                    </td>
+            </tr>
+			<tr>
+                <td colspan="2">
+                <table>
+                    <td width="130"  ><label for="doctor_reason_for_visit"><?php echo $this->lang[515]; ?>:</label></td>
+                <td class="element" id="doctor_current_reasonforvisit_2">
+        <?php echo $this->form->doctor_reason_for_visit2;?></td>
+                <td><input type="button" onClick="JSwap('doctor_reason_for_visit','doctor_reason_for_visit2');" name="addtolist" value=" &laquo; ">
+        <input type="button" onClick="JSwap('doctor_reason_for_visit2','doctor_reason_for_visit');" name="removefromlist" value=" &raquo; "></td>
+                <td style="width : 300px;"><?php echo $this->lang[466]; ?>:<br>
+
+                    <?php echo $this->form->doctor_reason_for_visit;?>
+
+                    </td>
+                </table>
+                    </td>
+            </tr>
+            
+
+            <tr>
+                <td colspan="2">
+                <table>
+                    <td width="130"  ><label for="doctor_association"><?php echo $this->lang[229]; ?>:</label></td>
+                <td class="element" id="doctor_current_association_2">
+        <?php echo $this->form->doctor_association2;?></td>
+                <td><input type="button" onClick="JSwap('doctor_association','doctor_association2');" name="addtolist" value=" &laquo; ">
+        <input type="button" onClick="JSwap('doctor_association2','doctor_association');" name="removefromlist" value=" &raquo; "></td>
+                <td style="width : 300px;"> <?php echo $this->lang[467]; ?>:<br>
+
+                    <?php echo $this->form->doctor_association;?>
+
+                    </td>
+                </table>
+                    </td>
+            </tr>
+            <tr>
+                <td width="130"  ><label for="text_award"><?php echo $this->lang[228]; ?>:</label></td>
+                <td class="element"><?php echo $this->form->text_award;?></td>
+            </tr>
+            
+            <tr>
+                <td width="130"  ><label for="state"><?php echo $this->lang[468]; ?>:</label></td>
+                <td class="element"><?php echo $this->form->state_for_affiliate;?></td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                <table>
+                    <td width="130"  ><label for="doctor_affiliation"><?php echo $this->lang[469]; ?>:</label></td>
+                <td class="element" id="myhaffiliation">
+        <select multiple size="10" name="doctor_affiliation2" id="doctor_affiliation2" style="width : 300px;"></select></td>
+                <td><input type="button" onClick="JSwap('doctor_affiliation','doctor_affiliation2');" name="addtolist" value=" &laquo; ">
+        <input type="button" onClick="JSwap('doctor_affiliation2','doctor_affiliation');" name="removefromlist" value=" &raquo; "></td>
+                <td style="width : 300px;"><?php echo $this->lang[341]; ?>:<br>
+                    
+                    <?php echo $this->form->doctor_affiliation;?>
+                    
+                    </td>
+                </table>
+                    </td>
+            </tr>
+            
+        </table>
+            </form>
+            <?php echo $this->form;?>
+        </div>
+    </div>
+    <div class="btm-curve"><img src="/images/admin-images/btm-r-l.gif" align="left" /><img src="/images/admin-images/btm-r-r.gif" align="right" /></div>
+</div>
+
+<script language="javascript">
+	
+	$(function() {
+		$( "#expiration" ).datepicker();	
+	});
+    
+
+
+    var default_state = "<?php echo $this->defaultAffiliateState; ?>";
+    
+    getaffiliation(default_state);
+    function applychanges() {
+        document.frmha.applychanges.value=1;
+        if(document.frmha) {
+			$('#frmha').submit();
+		}
+    }
+
+    var id;
+	id=<?php echo (!empty($this->id))?$this->id:0; ?>;
+	if(id <1) {
+		$('#username').attr("readonly",false);
+	}
+        
+	function updatePlanOptions(){
+		var ids = Array();
+		var i = 0;
+		$('#doctor_insurance option').each(function(){
+			ids[i] = this.value;
+			i++;
+		})
+		var encoded = $.json.encode(ids)
+		$.post('/admin/doctor/get-plan-options/', {
+			ids:encoded
+		},
+		function(html){
+			jQuery('#doctor_plan2').html(html);
+		});
+
+	}
+	function updateLeftPlanOptions(id){
+		var ids = Array();
+		var i = 0;
+
+		jQuery('#'+id+' option').each(function(){
+			if(this.selected){
+				ids[i] = this.value;
+				i++;
+		   }
+		});
+		var encoded = $.json.encode(ids)
+		 $.post('/admin/doctor/get-plan-options-ids/', {
+			ids:encoded
+		},
+		function(html){
+			var decoded = $.json.decode(html);
+			retIds = decoded['ids'];
+			if(retIds){
+				for(var i in retIds){
+					jQuery('#doctor_plan option[value="'+retIds[i]+'"]').remove();// remove from source select box
+				}
+			}
+		});
+	}
+</script>

@@ -1,0 +1,183 @@
+<?php
+
+	$locale = new Zend_Locale();
+    $Calendar = new Zend_Session_Namespace("calendar");
+    $PHPCalendar = new Base_PHPCalendar();
+    
+    $usersNs = new Zend_Session_Namespace("members");
+    $Doctor = new Application_Model_Doctor();
+    $docObject = $Doctor->fetchRow("user_id='{$usersNs->userId}'");
+    $profileImage = "/images/doctor_image/" . $docObject->getCompanylogo();
+    if (!file_exists(getcwd() . $profileImage) || $docObject->getCompanylogo()=='')$profileImage = "/images/doctor_image/png.png";
+?>
+<?php echo $this->doctype() ?>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+		<?php
+    echo $this->headTitle();
+    echo $this->headMeta();
+    $this->headLink()->appendStylesheet('/style/user/bootstrap.css');
+    $this->headLink()->appendStylesheet('/style/user/bootstrap-theme.css');
+    $this->headLink()->appendStylesheet('/style/user/style.css');
+    $this->headLink()->appendStylesheet('/style/user/font-awesome.css');
+	$this->headLink()->appendStylesheet('/style/user/reviewmanagement.css');
+	$this->headLink()->appendStylesheet('/style/list.css');
+	$this->headLink()->appendStylesheet('/style/custom.css');
+	$this->headLink()->appendStylesheet('/js/jqtransform/jqtransform.css');	
+	$this->headLink()->appendStylesheet('/js/bxslider/jquery.bxslider.css');
+	$this->headLink()->appendStylesheet('/style/social.css');
+	$this->headLink()->appendStylesheet('/style/user/patients.css');
+	$this->headLink()->appendStylesheet('/style/user/calender.css');
+	$this->headLink()->appendStylesheet('/style/cal/pickmeup.css');
+	$this->headLink()->appendStylesheet('/style/app-scr.css');
+    echo $this->headLink();
+    
+	$this->headScript()->appendFile('/js/jquery-1.7.1.min.js'); 
+    $this->headScript()->appendFile("/js/jquery-ui.js");
+    $this->headScript()->appendFile("/js/jquery.ui.touch-punch.min.js");
+    $this->headScript()->appendFile("/js/ddaccordion.js");
+    $this->headScript()->appendFile("/js/dddrop.js");
+    $this->headScript()->appendFile("/js/jquery.json-2.2.js");
+    $this->headScript()->appendFile("/js/jqtransform/jquery.jqtransform.js");
+    $this->headScript()->appendFile("/js/bxslider/jquery.bxslider.min.js");
+    $this->headScript()->appendFile("/js/bootstrap.min.js");
+    $this->headScript()->appendFile("/js/menu-collapsed.js");
+    $this->headScript()->appendFile("/js/docs.min.js");
+    $this->headScript()->appendFile("/js/highlight.pack.js");
+	$this->headScript()->appendFile("/js/jquery.popn-socialbutton.js");
+	$this->headScript()->appendFile("/js/jquery.mytweets.js");
+	$this->headScript()->appendFile("/js/cal/jquery.pickmeup.js");
+	$this->headScript()->appendFile("/js/jquery.json-2.2.js");
+	$this->headScript()->appendFile("/js/jqtransform/jquery.jqtransform.js");
+	$this->headScript()->appendFile("/js/jquery.blockUI.js");
+	$this->headScript()->appendFile("/js/typeahead.js");
+    echo $this->headScript();
+    ?>
+<!--	
+<script type="text/javascript" src="/js/jquery.json-2.2.js"></script>
+<script type="text/javascript" src="/js/jquery.blockUI.js"></script>
+<script type="text/javascript" src="/js/jqtransform/jquery.jqtransform.js"></script>-->
+<!--Start of Zopim Live Chat Script-->
+<script type="text/javascript">
+window.$zopim||(function(d,s){var z=$zopim=function(c){z._.push(c)},$=z.s=
+d.createElement(s),e=d.getElementsByTagName(s)[0];z.set=function(o){z.set.
+_.push(o)};z._=[];z.set._=[];$.async=!0;$.setAttribute("charset","utf-8");
+$.src="//v2.zopim.com/?2w6QTWYC4OicEQ5KkssvmVrj1RPOKm5t";z.t=+new Date;$.
+type="text/javascript";e.parentNode.insertBefore($,e)})(document,"script");
+</script>
+<!--End of Zopim Live Chat Script-->
+
+
+<!--End of Zopim Live Chat Script-->
+<?php 
+
+	$url_parse = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+
+	$explode_url=explode('/',$url_parse);
+
+	$secure_msg = $explode_url[3];
+
+?>
+
+<script type="text/javascript">
+
+	var url_msg ='<?php echo $secure_msg;?>';
+	//alert(url_msg);
+	var ajax_req;	
+	function updateReceivedMessageCounterAll(){
+		id = 0; 
+		if(ajax_req){ ajax_req.abort(); }
+		 ajax_req =$.getJSON("/user/messages/update_message_counter",{id:id}, function(result){
+
+			//if(result.total){
+
+				$("#messageAlert").text('');
+
+				$("#message_counter_top").text('');
+
+				$("#message_counter").text('');
+
+				$("#messageAlert").text(result.total);
+
+				$("#message_counter_top").text(result.total);
+
+				$("#message_counter").text(result.total);
+
+			//}	
+
+		});
+
+	}
+
+	$(document).ready(function(){
+
+		if(url_msg !='secure-messaging' && url_msg !='patient-list' && url_msg !='doctor-referal-step02'){
+
+			setInterval(function(){ updateReceivedMessageCounterAll()}, 15000);
+
+		}
+
+	});
+
+	
+
+</script>
+
+</head>
+
+<body>
+<div id="admin-sidemenu"></div>
+<div class="admin-contentin">
+  <div class="username">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-5"> <img src="<?php echo $profileImage; ?>" alt="<?php echo $docObject->getFullName()?>"> </div>
+        <div class="col-sm-7">
+	    	<?php
+			$drname ="";
+			$usersNs = new Zend_Session_Namespace("members");
+			$objDoc = new Application_Model_Doctor();
+			$objDoctor = $objDoc->find($usersNs->doctorId);
+			if(!empty($objDoctor) )$drname = $objDoctor->getFullName();
+			?>
+          <p class="aut"><?php echo $drname;?></p>
+          <ul>
+            <li><a href="/user/index/my-profile"><img src="/images/custom/user01.png" alt=""></a></li>
+            <!--<li><a href="#"><img src="/images/custom/user02.png" alt=""></a></li>-->
+            <li><a href="<?php echo $objDoctor->getUrl(); ?>" target="_blank"><img src="/images/custom/user03.png" alt=""></a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <?php echo $this->render('/page/blocks/menu/doctorleftmenu.phtml');?>
+</div>
+<?php echo $this->render('/page/blocks/menu/doctorbar.phtml');?>
+
+<!--ADMIN CONTENT -->
+<!--<div id="admin-content-inner">
+	<div class="dashboard-top">-->
+
+		<?php echo $this->layout()->content; ?>
+
+	<!--</div>
+</div>-->
+<div class="container-fluid div-space">
+    <div class="row">
+      <div class="col-sm-6">
+        
+      </div>
+      <div class="col-sm-6">
+        
+      </div>
+    </div>
+  </div>
+ 
+</div>
+<!--/ADMIN CONTENT --> 
+
+</body>
+</html>

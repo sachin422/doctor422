@@ -1,0 +1,86 @@
+
+<?php 
+$Doctor = new Application_Model_Doctor();
+$doctor = $Doctor->find($this->doctorId);
+$membershipLevel = $doctor->getMembershipPlan();
+$seourl = $doctor->getUrl();
+$seourl = Zend_Registry::get('siteurl').$seourl;
+?>
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.0";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+<div class="row">
+	<div class="col-sm-12">
+		<div class="whitebox avg-review" style="margin-top:0;">
+			<div class="container-fluid">
+				<div class="profile-left">
+					<div class="profileimg">
+						<figure>
+							<img src="<?php echo $this->profileImage;?>" alt="<?php echo $doctor->getFullName();?>">
+							<div class="solidbg">Verified</div>
+						</figure>
+					</div>
+
+					<div class="profile-detail">
+						<h3><?php echo $doctor->getFullName();?></h3>
+						<p class="address"><?php echo $doctor->getStreet()." ".$doctor->getCity()." ".$doctor->getState().", ".$doctor->getZipcode(); ?></p>
+						<p class="speciality"><strong>Specialties:</strong>
+						<?php
+						$DocCategory = new Application_Model_DoctorCategory();
+						$categoryArr = $DocCategory->getDoctorCategories("doctor_id='{$doctor->getId()}'");
+						asort($categoryArr);
+						$specialties = "";
+						if(!empty($categoryArr)){
+							foreach($categoryArr as $catname): 
+								$specialties .= $catname." ";
+							endforeach;
+							echo $specialties;
+						}
+						?></p>
+						<div class="doc-blog"><a href="<?php echo $seourl; ?>" target="_blank">View Profile</a></div>
+						<?php if($membershipLevel >1 ) { //not free doctor ?>
+						<div class="book-appo"><a href="<?php echo Zend_Registry::get('siteurl'); ?>/appointment/index/drid/<?php echo $doctor->getId(); ?>" target="_blank">Book an Appointment</a></div>
+						<?php } ?>
+					</div>
+				</div>
+				<div class="profile-right">
+					<?php if($membershipLevel > 1 ) {
+						$DoctorReview = new Application_Model_DoctorReview();
+						$reviews = $DoctorReview->getRatingReviews($doctor->getId());
+					?>
+					<div class="recomendationline clearfix">
+						<div class="avg-block">
+							<p>Average Recommendation </p>
+							<img alt="<?php echo $this->review["recomendation"]; ?>stars" src="/images/Star-Rating/0<?php echo floor($this->review["recomendation"]); ?>-0-star.png"></li>
+						</div>
+						<div class="avg-block">
+							<p>Average Bedside Manner </p>
+							<img alt="<?php echo $this->review["bedside"]; ?>stars" src="/images/Star-Rating/0<?php echo $this->review["bedside"]; ?>-0-star.png"></li>
+						</div>
+						<div class="avg-block">
+							<p>Average Wait Time </p>
+							<img alt="<?php echo $this->review["waittime"]; ?>stars" src="/images/Star-Rating/0<?php echo $this->review["waittime"]; ?>-0-star.png"></li>
+						</div>
+					</div>
+					<?php } ?>
+					
+					<div class="social-share">
+						<div class="fb-like" data-href="<?php echo $seourl; ?>" data-layout="button_count" data-action="like" data-show-faces="false" data-share="false"></div>
+						<a href="https://twitter.com/share" class="twitter-share-button" data-url="<?php echo $seourl; ?>">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+					</div>
+					<div class="share-media clearfix">
+						<div class="shareblock"><a href="mailto:?subject=<?php echo $doctor->getFullName();?>&body=<?php echo $seourl; ?>">Email to friend<img src="/images/email-frend.png" alt=""></a> </div>
+						<!-- <div class="shareblock"><a href="#">Send to phone <img src="/images/send-phone.png" alt=""></a> </div> -->
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

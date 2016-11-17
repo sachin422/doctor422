@@ -1,0 +1,98 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>:: Doc Mate-Doctor Sign Up ::</title>
+
+<?php    
+        echo $this->headTitle();
+        echo $this->headMeta();
+		
+		$this->headLink()->appendStylesheet('/style/bootstrap.css');
+		$this->headLink()->appendStylesheet('/style/bootstrap-theme.css');
+		$this->headLink()->appendStylesheet('/style/style-doctor-signin-reg.css');
+		
+		?>
+		<!--[if IE]><script src="js/html5.js"></script><![endif]-->
+		<?php
+				
+        echo $this->headLink(); 
+
+		$this->headScript()->appendFile('/js/modernizr.custom.79639.js'); 
+
+		echo $this->headScript();
+?>
+</head>
+
+<body>
+	<div class="sign-reg-box lesspad">
+    	<p class="registration-text text-center">Register with</p>
+    	<div class="admin-logo"><a href="/"><img src="/images/doctors-admin-logo.png" alt="doctors"></a></div>
+        
+        <div class="label-heading">
+        	<div class="wrapper-demo">
+					<div id="dd" class="wrapper-dropdown-5" tabindex="1"><p class="blueform">Create Profile <span>Page 1 of 4</span></p>
+						<ul class="dropdown">
+							<li class="form-opt"><a href="#">Select Plan <span>Page 2 of 4</span></a></li>
+							<li class="form-opt"><a href="#">Almost There <span>Page 3 of 4</span></a></li>
+							<li class="form-opt"><a href="#">Welcome to doctors <span>Page 4 of 4</span></a></li>
+						</ul>
+					</div>
+				​</div>
+        </div>
+        
+        <form class="regstep" id="signupfrm" name="signupfrm" action="<?php echo $this->form->action ; ?>" method="post" enctype="multipart/formdata">
+        <p class="formname">Enter Security Code :</p>      
+		<?php echo $this->form->first_name; ?>
+        <ul class="errors">
+									
+	</ul>
+        <input name="" type="submit" value="Next">
+        
+        </form>
+        
+        
+        
+    </div>
+    
+    <p class="copyright-text">Copyright © A1 Healthcare Technologies LLC 2015. All rights reserved.</p>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+		<script type="text/javascript">
+
+			function DropDown(el) {
+				this.dd = el;
+				this.initEvents();
+			}
+			DropDown.prototype = {
+				initEvents : function() {
+					var obj = this;
+
+					obj.dd.on('click', function(event){
+						$(this).toggleClass('active');
+						event.stopPropagation();
+					});	
+				}
+			}
+
+			$(function() {
+
+				var dd = new DropDown( $('#dd') );
+
+				$(document).click(function() {
+					// all dropdowns
+					$('.wrapper-dropdown-5').removeClass('active');
+				});
+
+			});
+
+		</script>
+		<script type="text/javascript" language="JavaScript">
+<!--
+
+//-->
+</script> 
+</body>
+</html>
+

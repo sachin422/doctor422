@@ -1,0 +1,49 @@
+<div class="calendartab-box">
+  <ul class="calendar-tabs" id="calendertabs">
+    <li><a class="<?php if($this->tab=='day' || $this->tab=='')echo 'selected';?> opentab" rel="daily" href="#"><?php echo $this->lang[485]?></a></li>
+    <li><a class="<?php if($this->tab=='week')echo 'selected';?> opentab" rel="weekly" href="#" class=""><?php echo $this->lang[486]?></a></li>
+  </ul>
+  <div class="calendar-tabs-data">
+    <div class="tabcontent" id="daily" style="display: <?php if($this->tab=='day' || $this->tab=='')echo 'block';else echo 'none';?>;">
+        <?php echo $this->render('/doctor/daily.phtml');?>
+    </div>
+    <div class="tabcontent" id="weekly" style="display: <?php if($this->tab == 'week')echo 'block';else echo 'none';?>">
+      <?php echo $this->render('/doctor/weekly.phtml');?>
+    </div>
+  </div>
+</div>
+<script type="text/javascript" src="/js/jquery.json-2.2.js"></script>
+<script type="text/javascript">
+    jQuery(document).ready(function(){
+        jQuery('.opentab').click(function(){
+            if(jQuery(this).hasClass('selected'))return false;
+            
+            var id = jQuery(this).attr('rel');
+            jQuery('.opentab').removeClass('selected');
+            jQuery(this).addClass('selected');
+
+
+            jQuery('.tabcontent').hide(10, function(){
+                jQuery('#'+id).show(10);
+            });
+        })
+    });
+	
+	function nextDay(pageUrl, today){
+
+    jQuery('#loading').fadeIn(100);
+    jQuery.post(pageUrl, { today: today },
+
+        function(data){
+            
+            //alert(data);return false;
+            var decoded = $.json.decode(data);
+            jQuery('#daily').html(decoded['daily']);
+            jQuery('#weekly').html(decoded['weekly']);
+            jQuery('#monthly').html(decoded['monthly']);
+            jQuery('#loading').fadeOut(100);
+
+        }, false);
+    jQuery('#loading').fadeOut(100);
+}
+</script>

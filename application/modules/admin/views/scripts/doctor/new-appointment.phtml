@@ -1,0 +1,128 @@
+<form id="doctor_appoint_form"  method="post" class="steps_form jqtransform">
+<?php echo '<h2>'.$this->lang[600].' '.$this->app_date.', '.$this->lang[601].' '.$this->app_time.'</h2>';?>
+<?php if($this->return['err'] == 1){
+	echo '<div class="red_error">'.$this->return['msg'].'</div>';
+}
+?>
+	<div class="clearfix">
+		<label for="reason_to_visit"><?php echo $this->lang[92]; ?></label>	
+		<select id="reason_to_visit" name="reason_to_visit" class="styled required">
+			<option value="-1">--<?php echo $this->lang[93]; ?>--</option>
+			<?php
+			foreach($this->reasonforvisit as $reasonid=>$reasonforvisit):?>
+			<option value='<?php echo $reasonid?>' <?php if($reasonid==$this->reason_to_visit)echo "selected='selected'";?>><?php echo $reasonforvisit?></option>						
+			<?php endforeach;?>
+			<option <?php if('0'==$this->reason_to_visit)echo "selected='selected'";?> value="0"><?php echo $this->lang[94]; ?></option>
+		</select>
+	</div>
+	<div <?php if($this->reason_to_visit == '-1' || $this->reason_to_visit == ''){ ?> style="display: none;" <?php } ?> id="other_reason" class="clearfix">
+		<label for="needs"><?php echo $this->lang[94]; ?></label>
+		<textarea id="needs" name="needs"><?php echo $this->needs;?></textarea>
+	</div>
+	<div class="clearfix">
+		<label for="paying"><?php echo $this->lang[96]; ?></label>
+		<span><?php echo $this->lang[97]; ?></span><input type="radio" <?php if($this->paying != '2'){ ?> checked="checked" <?php } ?> value="1" name="paying" class="jqtransform" id="pay_mode1"/>
+		<span><?php echo $this->lang[98]; ?></span><input type="radio" <?php if($this->paying == '2'){ ?> checked="checked" <?php } ?> value="2" name="paying" id="pay_mode2" class="jqtransform">
+	</div>
+	<div id="did_insurance" <?php if($this->paying != '2'){ ?> style="display: none;" <?php } ?> class="clearfix"> 
+		<label for="insurance_company" id="insuranceLabel"><?php echo $this->lang[99]; ?></label>
+		<select id="insurance_company" name="insurance_company" class="styled">
+			<option value=""><?php echo $this->lang[100]; ?></option>
+			<?php foreach($this->insurancedataArr as $key=>$value) {
+			?>
+			<option value="<?php echo $key;?>" <?php if($this->insuranceCompany==$key)echo "selected='selected'";?>><?php echo $value;?></option>
+			<?php
+			} ?>
+		</select>
+	</div>
+	<div class="clearfix">
+		<label for="name"><?php echo $this->lang[112]; ?>*</label>
+		<input type="text" class="required textfield" id="name" name="name" value="<?php echo $this->name; ?>"/>
+	</div>
+	<div class="clearfix">
+		<label for="lastname"><?php echo $this->lang[549]; ?>*</label>
+		<input type="text" class="required textfield" id="lastname" name="lastname" value="<?php echo $this->surname ?>"/>
+	</div>
+	<div class="clearfix">
+		<label for="email"><?php echo $this->lang[104]; ?></label>
+		<input type="text" class="required textfield" id="email" name="email" value="<?php echo $this->email ?>"/>
+	</div>
+	<div class="clearfix">
+		<label for="telephone"><?php echo $this->lang[113]; ?></label>
+		<input type="text" class="required textfield" id="phone" name="phone" value="<?php echo $this->phone ?>"/>
+	</div>
+	<div class="clearfix">
+		<label for="zipcode"><?php echo $this->lang[53]; ?></label>
+		<input type="text" class="required textfield" id="zipcode" name="zipcode" value="<?php echo $this->zipcode ?>"/>
+	</div>
+	<label for="day"><?php echo $this->lang[114]; ?></label>
+	<div class="clearfix">
+		<div id="the_day" class="left">
+			<select name="day" id="day" class="required styled">
+				<?php foreach($this->days as $key=>$day):?>
+				<option value="<?php echo $key?>" <?php if($this->day==$key)echo "selected='selected'";?>><?php if($day<10 && $day!=0)echo '0';echo $day;?></option>
+				<?php endforeach;?>
+			</select>
+		</div>
+		<div id="the_month" class="left">
+			<select name="month" id="month" class="required styled">
+				<?php foreach($this->months as $key=>$month):?>
+				<option value="<?php echo $key?>" <?php if($this->month==$key)echo "selected='selected'";?>><?php echo $month?></option>
+				<?php endforeach;?>
+			</select>
+		</div>
+		<div id="the_year" class="left">
+		<select name="year" id="year" class="required styled">
+			<?php foreach($this->years as $key=>$year):?>
+			<option value="<?php echo $key?>" <?php if($this->year==$key)echo "selected='selected'";?>><?php echo $year;?></option>
+			<?php endforeach;?>
+		</select>
+		</div>
+	</div>
+	<div class="clearfix">
+		<label for="gender1"><?php echo $this->lang[116]; ?> <?php echo $this->gender; ?></label>
+		<span><?php echo $this->lang[117]; ?></span><input type="radio" value="m" id="gender1" name="gender" <?php if($this->gender == 'm') echo 'checked="checked"'; ?> >
+		<span><?php echo $this->lang[118]; ?></span><input type="radio" value="f" id="gender2" name="gender" <?php if($this->gender == 'f') echo 'checked="checked"'; ?>>
+	</div>
+	<div class="clearfix">
+		<label for="send_email"><?php echo $this->lang[602]; ?></label>
+		<input type="checkbox" name="send_email" id="send_email" value="1" <?php if($this->send_email == '1') echo 'checked="checked"'; ?>/>
+	</div>
+	<div class="clearfix">
+		<label for="notes"><?php echo $this->lang[603]; ?></label>
+		<textarea id="notes" name="notes"><?php echo $this->notes;?></textarea>
+	</div>
+	<div class="clearfix">
+		<input id="submit" class="myButton" type="submit" value="save" />
+	</div>
+	<input type="hidden" name="appointment_time" value="<?php echo $this->app_time; ?>"/>
+	<input type="hidden" name="appointment_date" value="<?php echo $this->app_date; ?>"/>
+</form>
+
+<script type="text/javascript">
+$(function(){
+	jQuery("#reason_to_visit").change(function(){
+		if(jQuery(this).val() == 0){
+			jQuery('#other_reason').removeClass('wh-heading').addClass('wh-heading-dwn');
+			jQuery('#other_reason').slideDown(500);
+		}else{
+			jQuery('#other_reason').removeClass('wh-heading-dwn').addClass('wh-heading');
+			jQuery('#other_reason').slideUp(500);
+		}
+	});
+});
+
+
+jQuery("input[name='paying']").change(function(){
+	console.log(jQuery("input[name='paying']:checked").val());
+	if(jQuery("input[name='paying']:checked").val() == 2){
+		jQuery('#did_insurance').removeClass('wh-heading').addClass('wh-heading-dwn');
+		jQuery('#did_insurance').slideDown(500);
+	}
+	else{
+		jQuery('#did_insurance').removeClass('wh-heading-dwn').addClass('wh-heading');
+		jQuery('#did_insurance').slideUp(500);
+	}
+});
+</script>
+

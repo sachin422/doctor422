@@ -1,0 +1,81 @@
+<div id="admin-content-profile">
+	<h2 class="profile-heading">Account Details</h2>
+	<span><?php echo $this->msg; ?></span>
+	<span class='red'><?php echo $this->emailerror; ?></span>
+	<form id="account_details_form" method="post" action="<?php echo $this->form->action?>">
+		<div class="profile-section-bottom clearfix">
+
+			<div class="profile-section-bottom-left">
+				<h3>Edit Email Address</h3>
+				<?php echo $this->form->email; ?>
+				<?php echo $this->form->email2; ?>
+				<?php echo $this->form->email3; ?>
+				<!--Email used for notification <?php //echo $this->form->email_used; ?>-->
+				<input name="" id="save_email_address" type="submit" value="Save Email Address">
+	     	</div>
+
+	     	<div class="profile-section-bottom-right">
+	     		<h3>Edit password</h3>
+	     		<?php echo $this->form->oldPassword; ?>
+				<?php echo $this->form->password; ?>
+				<?php echo $this->form->confirmPassword; ?>
+				<input name="" type="submit" value="Save Password">
+			</div>
+		</div>
+	</form>
+</div>
+
+<div class="container-fluid div-space">
+    <div class="row">
+      <div class="col-sm-6">
+        
+      </div>
+      <div class="col-sm-6">
+        
+      </div>
+    </div>
+  </div>
+  <script>
+  $(function () {
+    $('#myTab a:first').tab('show')
+  })
+</script> 
+<script>
+  $(function () {
+    $('#myTab01 a:first').tab('show')
+  })
+</script>
+<script>
+  $(function () {
+    $('#myTab02 a:first').tab('show')
+  })
+</script>  
+</div>
+<!--/ADMIN CONTENT --> 
+
+<script>
+	$("#save_email_address").on("click",function(event){
+		event.preventDefault();
+		var email1 = $.trim($("#email").val());
+		var email2 = $.trim($("#email2").val());
+		var email3 = $.trim($("#email3").val());
+		var flag = 1;
+		if(email1==email2 || email1==email3){
+			flag = 0;
+		}
+		if(email2==email1 || email2==email3){
+			flag = 0;
+		}
+		if(email3==email1 || email3==email2){
+			flag = 0;
+		}
+		if(flag==1){
+			$("#account_details_form").submit();
+		}else{
+			alert("Email addresses must be unique!");
+			$("#email").focus();
+		}
+	});
+</script>
+<!--/ADMIN CONTENT --> 
+

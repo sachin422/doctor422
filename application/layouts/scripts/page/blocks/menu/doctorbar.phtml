@@ -1,0 +1,174 @@
+<!--ADMIN BAR -->
+<?php 
+$usersNs = new Zend_Session_Namespace("members");
+$Doctor = new Application_Model_Doctor();
+$docObject = $Doctor->fetchRow("user_id='{$usersNs->userId}'");
+$profileImage = "/images/doctor_image/" . $docObject->getCompanylogo();
+if (!file_exists(getcwd() . $profileImage) || $docObject->getCompanylogo()=='')$profileImage = "/images/doctor_image/png.png";
+?>
+<div id="admin-bar" class="clearfix">
+	<div class="logo pull-left border-right"> <a href="/"><img src="/images/user/doctors-logo.png" alt="Doc Mate Admin"></a> </div>
+
+	<div class="admin-bar-notification-panel clearfix pull-left border-right" id="step7">
+		<div class="notification pull-left">
+			<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+				<img src="/images/user/bell-icon.png" alt="Notofication">
+				<?php $notificationCount = count($this->notifications); ?>
+				<div class="alert orange-bg" id="notificationsAlert"><?php echo $notificationCount; ?></div>
+			</a> 
+			<ul class="dropdown-menu" id="notificationsList" style="height:600px;width:300px;overflow:hidden; overflow-y:scroll !important;">
+				<li class="header" id="notificationsCounter">You have <span><?php echo $notificationCount; ?></span> notifications</li>
+			</ul>
+		</div>
+		<div class="notification pull-left">
+
+			<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+
+				<img src="/images/mail-icon.png" alt="Messages">
+
+				<?php $message_count = count($this->messages_list); ?>
+
+				<div class="alert green-bg" id="messageAlert"><?php echo $message_count; ?></div>
+
+			</a> 
+
+			<ul class="dropdown-menu" id="messagesList">
+
+				<li class="header" id="messagesCounter">You have <span id="message_counter_top"><?php echo $message_count; ?></span> messages</li>
+
+			</ul>
+
+		</div>
+ 
+  <!--
+    <div class="notification pull-left"> <a class="dropdown-toggle" data-toggle="dropdown" href="#"><img src="/images/user/mail-icon.png" alt="Notofication">
+      <div class="alert green-bg">00</div>
+      </a> 
+      
+      <ul class="dropdown-menu">
+            <li class="header">You have 3 messages</li>
+            <div class="container-fluid">
+            	<div class="row">
+                	<div class="col-sm-3">
+                    	<img src="/images/user/avatar1.png" class="img-circle">
+                        
+                    </div>
+                    <div class="col-sm-6">
+                    <h4 class="headtt"><a href="#">Support Team </a></h4>
+                    <p class="drop-text">Why not buy a new awesome theme?</p>
+                    </div>
+                    <div class="col-sm-3">
+                    <div class="slt">5 Mins</div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+            	<div class="row">
+                	<div class="col-sm-3">
+                    	<img src="/images/user/avatar1.png" class="img-circle">
+                        
+                    </div>
+                    <div class="col-sm-6">
+                    <h4 class="headtt"><a href="#">Support Team </a></h4>
+                    <p class="drop-text">Why not buy a new awesome theme?</p>
+                    </div>
+                    <div class="col-sm-3">
+                    <div class="slt">5 Mins</div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+            	<div class="row">
+                	<div class="col-sm-3">
+                    	<img src="/images/user/avatar1.png" class="img-circle">
+                        
+                    </div>
+                    <div class="col-sm-6">
+                   <h4 class="headtt"><a href="#">Support Team </a></h4>
+                    <p class="drop-text">Why not buy a new awesome theme?</p>
+                    </div>
+                    <div class="col-sm-3">
+                    <div class="slt">5 Mins</div>
+                    </div>
+                </div>
+            </div>
+            <li class="footer"><a href="#">See All Messages</a></li>
+          </ul></div>
+          -->
+	</div>
+
+
+  <div class="admin-search pull-left clearfix"  id="step8">
+    <form action="/user/index/patient-list" method="get">
+      <input name="searchname" type="text" placeholder="SEARCH BY PATIENTS..." style="width:180px;">
+      <input name="" type="image" src="/images/user/searc-btn.png" alt="">
+    </form>
+  </div>
+
+  
+  <div class="admin-logout pull-right border-left"><a href="/index/logout">Log Out &gt;&gt;</a> </div>
+  <?php if($this->actionName=="doctor-dashboard") { ?>
+  <div class="pull-right"><a  class="btn btn-large btn-success" href="javascript:void(0);" onclick="startIntro();" style="margin: 10px 10px 0" >Start Tour</a></div>
+  <?php } ?>
+
+</div>
+<!--/ADMIN BAR --> 
+<script>
+jQuery(document).ready(function() {
+	jQuery.post('/user/index/get-notifications', {},
+			function(html){
+				var size = 0;
+				var decoded = $.json.decode(html);
+				var content ="";
+				if(decoded){
+					size = decoded.length;
+					for(i=0; i<size; i++){
+						var notedate = new Date(decoded[i]["published"]*1000);
+						var hour = notedate.getHours();
+						var minute = notedate.getMinutes();
+						var ampm = "am";
+						if(hour>12) {
+							hour = hour-12;
+							ampm = "pm";
+						}
+						if(minute<10) {
+							minute = "0"+minute;
+						}
+						var month = notedate.getMonth() +1;
+						var readableDate = month+"/"+notedate.getDate()+"/"+notedate.getFullYear()+" at "+hour+":"+minute+" "+ampm;
+						content += '<div class="container-fluid">\
+			            	<div class="row">\
+			                	<div class="col-sm-3">\
+			                    	<img src="<?php echo $profileImage; ?>" class="img-circle">\
+			                    </div>\
+			                    <div class="col-sm-6">\
+			                    	<h4 class="headtt"><a href="'+decoded[i]["link"]+'" id="'+decoded[i]["id"]+'" class="noteClick">'+decoded[i]["title"]+'</a></h4>\
+			                    	<p class="drop-text">'+decoded[i]["content"]+'</p>\
+			                    </div>\
+			                    <div class="col-sm-3">\
+			                    <div class="slt">'+readableDate+'</div>\
+			                    </div>\
+			                </div>\
+			            </div>';
+					}
+				}
+			jQuery("#notificationsCounter span").html(size);
+			/*if(size<10) {
+				size="0"+size;
+			}
+			jQuery("#notificationsAlert").html(size);*/
+			jQuery("#notificationsList").append(content);
+		}
+	);
+
+
+	jQuery( "#notificationsList" ).on( "click", ".noteClick", function() {
+		var noteid =jQuery(this).attr('id');
+		jQuery.post('/user/index/read-notification', {notificationid:noteid},
+			function(html){
+				//do something with the error code?
+			}
+		);
+	});
+});
+</script>

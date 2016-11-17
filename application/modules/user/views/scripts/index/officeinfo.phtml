@@ -1,0 +1,88 @@
+<div id="rightsidemain">
+	<div id="rightcontentpart">
+		<div id="rightsidecontentpart">
+			<h2 class="page-heading"><?php echo $this->lang[31]; ?></h2>      
+			<!--Code added by Deve on 04 Jan 2010 for tab based forms-->
+			<div class="appointment-content">
+				<?php	echo $this->partial("index/topmenu.phtml",array('active'=>'officeinfo'));?>
+			</div>
+		</div>
+	</div>
+	<div class="edit-profile-tbl"> 
+		<!--Tab based changes has been done--> 
+		<span class='red'><?php echo $this->msg; ?></span>
+		<form method="post" action="<?php echo $this->form->action?>" enctype="multipart/form-data" name="frm_personalinfo" id="frm_personalinfo">
+			<input type="hidden" name ="frmposted" value="1">
+			<table cellpadding="0" cellspacing="0" border="0">
+				<tr>
+					<td width="130" id="firstname-label"><label for="company"><?php echo $this->lang[213]; ?></label></td>
+					<td class="element" colspan="4"><?php echo $this->form->company;?></td>
+				</tr>
+				<tr>
+					<td width="130" id="firstname-label"><label for="street"><?php echo $this->lang[295]; ?>*:</label></td>
+					<td class="element" colspan="4"><?php echo $this->form->assign_phone;?></td>
+				</tr>
+				<tr>
+					<td width="130" id="firstname-label"><label for="street"><?php echo $this->lang[296]; ?>*:</label></td>
+					<td class="element" colspan="4"><?php echo $this->form->street;?><span class="titledesc"><?php echo $this->lang[297]; ?></span></td>
+				</tr>
+				<tr>
+					<td width="130" id="firstname-label"><label for="area"><?php echo $this->lang[298]; ?>*:</label></td>
+					<td class="element" colspan="4"><?php echo $this->form->area;?><span class="titledesc"><?php echo $this->lang[299]; ?></span></td>
+				</tr>
+				<tr>
+					<td width="130" id="firstname-label"><label for="city"><?php echo $this->lang[300]; ?>*:</label></td>
+					<td class="element" colspan="4"><?php echo $this->form->city;?><span class="titledesc"><?php echo $this->lang[301]; ?></span></td>
+				</tr>
+				<tr>
+					<td width="130" id="firstname-label"><label for="state"><?php echo $this->lang[302]; ?>*:</label></td>
+					<td class="element" colspan="4"><?php echo $this->form->state;?></td>
+				</tr>
+				<tr>
+					<td width="130" id="firstname-label"><label for="zipcode"><?php echo $this->lang[303]; ?>*:</label></td>
+					<td class="element" colspan="4"><?php echo $this->form->zipcode;?></td>
+				</tr>	
+				<tr>
+					<td width="130" id="firstname-label"><label for="office_hours"><?php echo $this->lang[223]; ?>:</label></td>
+					<td class="element" colspan="4"><?php echo $this->form->office_hours;?>
+					<span class="titledesc"><?php echo $this->lang[514]; ?></span></td>
+				</tr>
+				<tr>  
+					<td width="130" id="firstname-label"><label for="doctor_reason_for_visit"><?php echo $this->lang[515]; ?>:</label></td>
+					<td class="element" id="doctor_current_reasonforvisit_2"><?php echo $this->form->doctor_reason_for_visit2;?></td>
+					<td>
+						<input type="button" onclick="JSwap('doctor_reason_for_visit','doctor_reason_for_visit2');" name="addtolist" value=" « ">
+						<input type="button" onclick="JSwap('doctor_reason_for_visit2','doctor_reason_for_visit');" name="removefromlist" value=" » ">
+					</td>
+					<td class="element">
+						<?php echo $this->lang[516]; ?>:<br>
+						<?php echo $this->form->doctor_reason_for_visit;?>
+					</td>            
+				</tr>
+				<tr>
+					<td colspan="4">
+						<table>
+							<td width="130"><label for="doctor_assistant">Assistant:</label></td>
+							<td class="element" id="doctor_current_assistant_2">
+								<?php echo $this->form->doctor_assistant2;?>
+							</td>
+							<td>
+								<input type="button" onClick="JSwap('doctor_assistant','doctor_assistant2');" name="addtolist" value=" &laquo; ">
+								<input type="button" onClick="JSwap('doctor_assistant2','doctor_assistant');" name="removefromlist" value=" &raquo; ">
+							</td>
+							<td style="width : 300px;"> 
+								Selected Assistants:
+								<br>
+								<?php echo $this->form->doctor_assistant;?>
+							</td>
+						</table>
+					</td>
+				</tr>
+				<tr>
+				  <td width="130" id="firstname-label"></td>
+				  <td class="element" colspan="4"><?php echo $this->form->submit;?></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>

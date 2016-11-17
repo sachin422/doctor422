@@ -1,0 +1,11 @@
+
+<?php 
+if($this->reviews) {
+	foreach($this->reviews as $review) {
+		echo $review["stars"];
+		echo $review["review"];
+	}
+} else {
+	echo "no reviews";
+}
+?>

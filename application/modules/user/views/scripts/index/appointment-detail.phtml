@@ -1,0 +1,176 @@
+<?php 
+$settings = new Admin_Model_GlobalSettings();
+$locale = $settings->settingValue('locale');
+setlocale(LC_ALL, $locale);
+
+$hours = $settings->settingValue('hours');
+if($hours) {
+	$timeFormat = "%I:%M %P";
+} else {
+	$timeFormat = "%H:%M";
+}
+?>
+<div class="inner_wrapperReg">	
+	<div class="clearfix">
+		<div class="patientMenuWrap left">
+			<h2><?php echo $this->lang[488]; ?></h2>
+			<ul id="patientMenu">
+				<li><a href="/user" class="current"><?php echo $this->lang[489]; ?></a></li>
+				<li><a href="/user/index/patient-edit"><?php echo $this->lang[490]; ?></a></li>
+				<li><a class="schedule-app-btn-sml" href="/"><?php echo $this->lang[491]; ?></a></li>
+			</ul>
+		</div>		
+		<div class="apointData right">
+			<h2 class="article-title"><?php echo $this->lang[492]; ?></h2>
+			<?php
+			if(!empty($this->appObject)){
+			$category = new Application_Model_DoctorCategory();
+			$dob = date($this->dateFormat, strtotime("{$this->appObject->getDateDob()}-{$this->appObject->getMonthDob()}-{$this->appObject->getYearDob()}"));
+			$cat_res = $category->getDoctorCategories("doctor_id='{$this->appObject->getDoctorId()}'");
+			$str = implode(', ', $cat_res);
+			?>
+			<div class="clearfix">
+				<div id="left_side" class="left">
+					<div id="doctor_id">
+						<img width="164" src="<?php echo  $this->profileImage;?>" title="<?php $this->docObject->getFullName(); ?>" alt="<?php echo $this->docObject->getFullName(); ?>" id="profile_pic" />				
+						<h4><?php echo $this->lang[493]; ?></h4>
+						<p id="appointDate"><?php
+							  if(is_object($this->appObject))
+							  echo date($this->dateFormat,strtotime($this->appObject->getappointmentDate()))." ".strftime($this->timeformat,strtotime($this->appObject->getappointmentTime()));
+							  else
+								  echo "";
+							  ?>
+						</p>
+						<h4><?php echo $this->lang[494]; ?></h4>
+						<p id="docName"><?php echo $this->docObject->getFullName(); ?> <span id="docSpecialty"> <?php echo $str; ?></span></p>
+
+						<h4><?php echo $this->lang[495]; ?></h4>
+						<p><?php
+                      if(is_object($this->docObject))
+						echo  $this->docObject->getCompany()."<br>".$this->docObject->getStreet()."<br>".$this->docObject->getCity().", ".$this->docObject->getState()." Τ.Κ.".$this->docObject->getZipcode();
+					  else
+						echo "";
+                      ?></p>
+					</div>			
+				</div>
+				<div class="right"> 	
+					<table id="patientTable">
+						<tr>
+						  <th colspan="2"><?php echo $this->lang[496]; ?></th>
+						</tr>
+						<tr>
+							<td><?php echo $this->lang[497]; ?></td>
+							<td>
+							<?php 
+							if($this->appObject->getApprove() == -1){ 
+								echo $this->lang[498]; 
+							}elseif($this->appObject->getApprove() == 0){
+								echo $this->lang[499];
+							}elseif($this->appObject->getApprove() == 1){
+								echo $this->lang[500];
+							}elseif($this->appObject->getApprove() == 2){
+								echo $this->lang[501];
+							}
+							?>
+							</td>
+						</tr>
+						<tr>
+							<td><?php echo $this->lang[502]; ?></td>
+							<td><?php
+							if(is_object($this->appObject))
+								echo strftime("%A %d %b, %Y",$this->appObject->getbookingDate());
+							else
+								echo "";
+							?>
+							</td>
+						</tr>
+						<tr>
+							<td class="title"><?php echo $this->lang[112]; ?></td>
+							<td class="data" id="nameData">
+							<?php
+							if(is_object($this->appObject))
+								echo $this->appObject->getFullName();
+							else
+								echo "";
+							?>
+							</td>
+						</tr>
+						<tr>
+							<td class="title"><?php echo $this->lang[104]; ?></td>
+							<td class="data" id="emailData">
+							<?php
+							if(is_object($this->appObject))
+								echo $this->appObject->getEmail();
+							else
+								echo "";
+						   ?>
+							</td>
+						</tr>
+						<tr>
+							<td class="title"><?php echo $this->lang[113]; ?></td>
+							<td class="data" id="phoneData">
+							<?php 
+							if(is_object($this->appObject))
+								echo $this->appObject->getPhone();
+							else
+								echo "";
+							?>
+							</td>
+						</tr>
+						<tr>
+							<td class="title"><?php echo $this->lang[450]; ?></td>
+							<td class="data" id="zipData">
+							<?php 
+							if(is_object($this->appObject))
+								echo $this->appObject->getZipcode();
+							else
+								echo "";
+							?>
+							</td>
+						</tr>
+						<tr>
+							<td class="title"><?php echo $this->lang[114]; ?></td>
+							<td class="data" id="birthData">
+								<?php echo $dob;?>
+							</td>
+						</tr>
+						<tr>
+							<td class="title"><?php echo $this->lang[116]; ?></td>
+							<td class="data" id="genderData">
+							<?php
+							if($this->appGender)
+								echo $this->appGender;
+							?>
+							</td>
+						</tr>
+						<tr>
+							<td><?php echo $this->lang[52]; ?></td>
+							<td><?php 
+								if($this->insuranceObject)
+									echo $this->insuranceObject->getCompany();
+								else
+									echo "";
+								?>
+							</td>
+						</tr>
+						<tr>
+							<td><?php echo $this->lang[54]; ?></td>
+							<td>
+							<?php
+							if(!empty($this->visitObject))
+								echo $this->visitObject;
+							else
+								echo (is_object($this->appObject))?$this->appObject->getNeeds():"";
+							?>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+					<?php  
+					}else{?>
+						<div id="no_randWrap"><?php echo $this->lang[229]; ?></div>
+					<?php }?>
+		</div>
+	</div>	
+</div>

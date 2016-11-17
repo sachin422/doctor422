@@ -1,0 +1,94 @@
+<?php
+$prname ="";
+						$usersNs = new Zend_Session_Namespace("members");
+						$objPat = new Application_Model_Patient();
+						$objPatient = $objPat->find($usersNs->patientId);
+						
+						
+						$objUser = new Application_Model_User();
+						$objUserd =$objUser ->find($objPatient->userId);
+	//print_r($objUserd);die;
+	
+	//$usersNs = new zend_Session_Namespace("members");
+        $Patient = new Application_Model_Patient();
+        $docPatient = $Patient->fetchRow("user_id='{$usersNs->userId}'");
+        $Appointment = new Application_Model_Appointment();
+		$upcomingWhere = "deleted!=1 AND user_id={$usersNs->userId} AND DATEDIFF(NOW(),appointment_date)<=0 AND  approve!=2";
+        $pastWhere = "deleted!=1 AND (user_id={$usersNs->userId} AND DATEDIFF(NOW(),appointment_date)>0) OR (user_id={$usersNs->userId} AND approve=2)";
+		
+		$cancellWhere = "approve=2 AND user_id={$usersNs->userId}";
+
+        $upcomingObject = $Appointment->fetchAll($upcomingWhere, "appointment_date DESC");
+        $pastObject = $Appointment->fetchAll($pastWhere, "appointment_date DESC");
+		$cancelObject = $Appointment->fetchAll($cancellWhere, "appointment_date DESC");
+
+?>
+
+<div class="admin-contentin">
+  <div class="username">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-5"> <img src="/images/custom/author.png" alt="Author"> </div>
+        <div class="col-sm-7">
+          <p class="aut"><?php   echo ucfirst($objUserd->firstName);?> <br><?php echo ucfirst($objUserd->lastName);?></p>
+          <ul>
+            <li><a href="#"><img src="/images/custom/user01.png" alt=""></a></li>
+            <li><a href="#"><img src="/images/custom/user02.png" alt=""></a></li>
+            <li><a href="#"><img src="/images/custom/user03.png" alt=""></a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="navhead">Communication center </div>
+      </div>
+    </div>
+  </div>
+  <div class="sidemenu">
+   
+    
+    	<ul id="menu">
+		<li <?php if($this->actionName=="patient-dashboard") { ?>class="selected" <?php } ?>>
+			<a href="/user"><img src="/images/patient/icon01.png" alt=""> Dashboard</a>
+		</li>
+		<li <?php if($this->actionName=="patient-appointment") { ?>class="selected" <?php } ?>>
+			<a href="/user/index/patient-appointment"><img src="/images/patient/icon02.png" alt=""> Appointments <span><?php echo count($pastObject)+count($upcomingObject)+count($cancelObject);?></span></a>
+		</li>
+		<li <?php if($this->actionName=="") { ?>class="selected" <?php } ?>>
+			<a href="#"><img src="/images/patient/icon03.png" alt=""> Referrals <span>00</span></a>
+		</li>
+		<li <?php if($this->actionName=="") { ?>class="selected" <?php } ?>>
+			<a href="#"><img src="/images/patient/icon04.png" alt=""> Review </a>
+		</li>
+		<li <?php if($this->actionName=="") { ?>class="selected" <?php } ?>>
+			<a href="/user/index/patient-edit"><img src="/images/patient/icon05.png" alt=""> My Profile </a>
+		</li>
+		<li <?php if($this->actionName=="") { ?>class="selected" <?php } ?>>
+			<a href="#"><img src="/images/patient/icon06.png" alt=""> Secure Messages</a>
+		</li>
+		<li <?php if($this->actionName=="") { ?>class="selected" <?php } ?>>
+			<a href="#"><img src="/images/patient/icon07.png" alt=""> Medical Expenses <span>00</span></a>
+		</li>
+		<li <?php if($this->actionName=="patient-favourite-doctor") { ?>class="selected" <?php } ?>>
+			<a href="/user/index/patient-favourite-doctor"><img src="/images/patient/icon08.png" alt=""> Favorites</a>
+		</li>
+		<li <?php if($this->actionName=="") { ?>class="selected" <?php } ?>>
+			<a href="#"><img src="/images/patient/icon09.png" alt=""> Patient History <span>00</span></a>
+		</li>
+		<li <?php if($this->actionName=="") { ?>class="selected" <?php } ?>>
+			<a href="#"><img src="/images/patient/icon10.png" alt=""> Help <span>00</span></a>
+		</li>
+	</ul>
+    
+    
+    
+  </div>
+  
+  
+  
+</div>
+
+

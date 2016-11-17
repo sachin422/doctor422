@@ -1,0 +1,143 @@
+<div id="rightsidemain">
+    <div id="rightcontentpart">
+        <div class="m">
+            <style type="text/css">
+                .td-date {width:50px; height:50px; text-align:left; vertical-align:top; background-color:#f2f2f2;font-size:12px;}
+                .td-date div{width:100%; text-align:right;}
+                .td-date-blank {width:50px; height:50px; text-align:center; vertical-align:top; background-color:#fff;}
+            </style>
+            <form name="frmSlot" id="frmSlot" action="/admin/timeslot/index/" method="get">
+				<div id="rightsideheading"><?php echo $this->docObject->getFname(); ?></div>
+				<br clear="all"  />
+                <table align="right" width="100%" cellpadding="5" cellspacing="2" border="0" bgcolor="#fff">
+                	<tr>
+            
+            		</tr>
+                    <tr>
+                        <th>
+                        	<input type="button" class="set-master" value="Set Master Slot" onclick="window.location='/admin/timeslot/master-slot/drid/<?php echo $this->docObject->getId(); ?>'" />
+                        </th>
+                        <th></th>
+                        <th align="right">
+                        	<select name="month" id="month">
+                                <?php
+                                foreach ($this->monthArr as $m => $mName) {
+                                    $sel = "";
+                                    if ($m == $this->month)
+                                        $sel = "selected='true'";
+                                ?><option value='<?php echo $m; ?>' <?php echo $sel; ?>><?php echo $mName; ?></option><?php
+                                }
+                                ?>
+                            </select>
+                            <select name="year" id="year">
+                                <?php
+                                for ($y = date("Y"); $y <= (date("Y") + 1); $y++) {
+                                    $sel = "";
+                                    if ($y == $this->year)
+                                        $sel = "selected='true'";
+                                ?>
+                                    <option value='<?php echo $y; ?>' <?php echo $sel; ?>><?php echo $y; ?></option>
+                                <?php } ?>
+                            </select>
+                            <input type="submit" name="submit" value="Select" id="show" />
+                            <input type="hidden" name="drid" id="drid" value="<?php echo $this->docObject->getId(); ?>" />
+                        </th>
+                    </tr>
+                </table>
+            </form>
+        	<br clear="all">
+            <div id="monthview">
+                <table width="100%" cellpadding="0" cellspacing="1" border="0" class="timeslot">
+                    <tr>
+                        <th valign="middle">Monday</th>
+                        <th>Tuesday</th>
+                        <th>Wednesday</th>
+                        <th>Thursday</th>
+                        <th>Friday</th>
+                        <th>Saturday</th>
+                        <th>Sunday</th>
+                    </tr>
+
+                    <?php
+                    $DoctorAppointment = new Application_Model_DoctorAppointmentCal();
+                    $TimeSlot = new Base_Timeslot();
+                    $isTrStart = false;
+                    $isTrEnd = false;
+                    $isBlank = true;
+                    $tdCtr = 0;
+                    for ($day = 1; $day <= date("t"); $day++) {
+	                    $tdCtr++;
+	                    if ($tdCtr % 7 == 1)
+	                        $isTrStart = true;
+	                    if ($tdCtr % 7 == 0)
+	                        $isTrEnd = true;
+	                    $slotDate = $this->year . "-" . $this->month . "-" . $day;
+	                    $blankTd = date("w", strtotime($slotDate));
+
+	                    //Set the monday as firstday of the week
+	                    if ($blankTd == 0)
+	                        $blankTd = 6;
+	                    else
+	                        $blankTd -= 1;
+
+	                    if ($isTrStart) {
+	                        echo "<tr>";
+	                        $isTrStart = false;
+	                    }
+	                    if ($isBlank) {
+	                        $isBlank = false;
+	                        for ($loop = 0; $loop < $blankTd; $loop++) {
+	                            $tdCtr++;
+	                            echo "<td class='td-date-blank'>&nbsp;</td>";
+	                        }
+	                    }
+                        //######## Fetch slot data ##############
+                        $slotsAvailable = array();
+
+                        
+                        $object = $DoctorAppointment->fetchAll("doctor_id='{$this->docObject->getId()}' AND slot_date='{$slotDate}'", "slot_time");
+                        if ($object) {
+                            foreach ($object as $s => $slot) {
+                                $slotsAvailable[] = date("H:i", strtotime($slotDate . " " . $slot->getSlotTime()));
+                            }
+                        }else{
+                            $isDeletedSlot = $TimeSlot->isDeletedSlot($this->docObject->getId(), $slotDate);
+                            if($isDeletedSlot===false){
+                                $slotsAvailable = $TimeSlot->getDoctorTimeSlots($this->docObject->getId(), $slotDate);
+                            }
+                        }
+                        //######## Fetch slot data end ##############
+
+                        echo "<td class='td-date'>";//.date('W', strtotime($slotDate)).'--'.$slotDate.'--';
+
+                        if (strtotime($this->year . "-" . $this->month . "-" . $day) >= strtotime(date("Y-n-j"))) {
+                        	$href = "/admin/timeslot/edit/drid/" . $this->docObject->getId() . "/date/" . $this->year . "-" . $this->month . "-" . $day;
+                    		?>
+                        	<a href='<?php echo $href; ?>' style='display:block'><span class='date'><?php echo $day; ?></span>
+	                            <?php 
+	                            if($isDeletedSlot){ // doctor delete the all slots for this date
+	                           		echo '<div style="text-align:center;padding-top:50px;"><span>Deleted</span><br /></div>';
+	                    		}elseif (count($slotsAvailable)){
+	                                echo "<div>" . implode("<br />", $slotsAvailable) . "</div>";
+	        	                }?>
+                            </a>
+                    		<?php
+                        } else {
+                        	echo "<span class='date'>" . $day . "</span>";
+                            if (count($slotsAvailable))
+                            	echo "<div>" . implode("<br />", $slotsAvailable) . "</div>";
+                            }
+                            echo "</td>";
+                            if ($isTrEnd) {
+                                $isTrEnd = false;
+                                echo "</tr>";
+                            }
+                        }
+                    ?>
+                </table>
+            </div>
+
+            <div class="clr"></div>
+        </div>
+    </div>
+</div>

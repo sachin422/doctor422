@@ -1,0 +1,384 @@
+<div class="col-sm-10 rightnp fullMapContainer" id="fullContainer">
+	<?php
+	$settings = new Admin_Model_GlobalSettings();
+	$locale = $settings->settingValue('locale');
+	setlocale(LC_ALL, $locale);
+	
+	$this->headMeta()->appendName('description', $this->metaDescription);
+	$this->headMeta()->appendName('keywords', $this->metaKeywords);
+	$this->headTitle()->append($this->metaTitle);
+	
+	?>
+	<div class="fullmap" id="contentCanvas" style=" width:100%;">
+		<!-- JAVASCRIPT CONTENT -->
+	</div>
+</div>
+
+<!-- doctors List -->
+<div class="col-sm-2 leftnp">
+	<?php 
+	if($this->paginator){ 
+		// initializations if there are results (doctors)
+		$page = $this->paginator->getCurrentPageNumber();
+		$items_per_page = $this->paginator->getItemCountPerPage();
+		$geoArray = array();
+		$initGeo = "";
+		$Doctor = new Application_Model_Doctor();
+		$sno = 0;
+		$gmapJS = "";
+		$gmapInfo = array();
+		?>
+	<div class="listplayer">
+		<div class="listfix">
+        	<div class="dis-box">
+        		<?php 
+        		foreach ($this->paginator as $docId) { 
+        			$sno++; //doctor numbering for this results set
+					$object = $Doctor->fetchRow("id='{$docId->id}'");
+					
+					$profilePath = $object->getUrl(); //$this->seoUrl('/profile/index/id/' . $object->getId());
+					$categoryStr = $Doctor->getDoctorCategoryList($object->getId());
+					
+					// for google map
+					$geocodes = "";
+					$geocodes = trim($object->getGeocode());
+					$geoArray['geo'][$sno] = $geocodes;
+					$geoArray['htmlInfo'][$sno] = "";
+					$geoArray[] = $object->getGeocode();
+
+					if($initGeo==''){
+						$initGeo = $geocodes;
+					}
+				
+					$profileImage = "/images/doctor_image/" . $object->getCompanylogo();
+					if (!file_exists(getcwd() . $profileImage) || $object->getCompanylogo()=='') {
+						$profileImage = "/images/doctor_image/png.png";
+					}
+					$docName = $object->getFullName();
+				 	//DOCTOR LISTING
+					?>
+				<div class="white-box clearfix">
+    				<div class="profile-img">
+    					<a href="<?php echo $profilePath; ?>"><img src="<?php echo $profileImage; ?>" alt="<?php echo $docName; ?>" class="fullimg"></a>
+    					<div class="blue-grad">Verified</div>
+    					<div class="no"><?php echo $sno; ?></div>
+    				</div>
+    				<div class="profile-text">
+    					<h2>
+    						<a href="<?php echo $profilePath; ?>">
+    							<?php echo $docName; ?>
+							</a>
+						</h2>
+    					<p class="add">
+    						<a href="<?php echo $profilePath; ?>">
+    							<?php echo $object->getStreet(); ?><br>
+    							<?php echo $object->getCity(); ?> <?php echo $object->getState(); ?><br>
+    							<?php echo $object->getZipcode(); ?>
+    						</a>
+    					</p>
+    					<p class="spl">Specialties</p>
+    					<p class="maptext">
+    						<?php
+    						$DocCategory = new Application_Model_DoctorCategory();
+							$categoryArr = $DocCategory->getDoctorCategories("doctor_id='{$object->getId()}'");
+							asort($categoryArr);
+							$specialties = "";
+							if(!empty($categoryArr)){
+								foreach($categoryArr as $catname): 
+									$specialties .= $catname." ";
+								endforeach;
+								echo $specialties;
+							}
+							?>
+    						<span>
+    							<a href="<?php echo $profilePath; ?>">
+    								<?php 
+    								
+    								echo $object->distance($this->lat, $this->lon); ?>mi
+	    						</a>
+    						</span>
+    					</p>
+    				</div>
+    			</div>
+				<?php 
+    			
+    			$address = "";
+    			if($object->getStreet()) {
+    				$address .= $object->getStreet()."<br>";
+    			}
+    			if($object->getCity()) {
+    				$address .= $object->getCity()."<br>";
+    			}
+    			if($object->getState()) {
+    				$address .= $object->getState();
+    			}
+    			if($object->getZipcode()) {
+    				if($object->getState()) {
+	    				$address .=", ";
+	    			}
+    				$address .= $object->getZipcode();
+    			}
+    			?>
+				<?php
+				/* Google Map Javascript Start */
+                $gmapJS = <<<EOT
+						<div class="docInfo" id="whitefull{$sno}">
+                    		<div class="whitebox clearfix">
+								<div class="doctor">
+		                        	<div class="doctor-left">
+		                            	<div class="doctor-row">
+		                                	<h4>
+		                                    <span>Doctor Name</span><br>
+		                                    <a href="{$profilePath}">{$docName}</a>
+		                                    </h4>
+		                                </div>
+		                                
+		                                <div class="doctor-row">
+		                                	<h4>
+		                                    <span>Address</span><br>
+		                                    {$address}
+		                                    </h4>
+		                                </div>
+		                                
+		                                <div class="doctor-row01">
+		                                	<h4>
+		                                    <span>Specialties </span><br>
+		                                    {$specialties}
+		                                    </h4>
+		                                </div>
+		                                
+		                                <div class="doctor-gry">
+		                                	<a href="{$profilePath}" class="ajaxLink"> <img src="/images/popup/view.png" alt=""> View More</a>
+		                                    <a href="/appointment/index/drid/{$object->getId()}"> <img src="/images/popup/book.png" alt=""> Book Now</a>
+		                                    <div class="clearfix"></div>
+		                                </div>
+		                                
+		                            </div>
+		                            <div class="doctor-right">
+		                            	<img src="{$object->getImage()}" alt="{$docName}">
+		                            </div>
+		                            <div class="clearfix"></div>
+		                        </div>
+		                    </div>
+		                </div>
+EOT;
+                $gmapInfo[$sno]['html'] = $gmapJS;
+                $gmapInfo[$sno]['long'] = '';
+                $latLong = explode(',', $object->getGeocode());
+                if(!empty($latLong)){
+                    $gmapInfo[$sno]['lat'] = $latLong[0];
+                    if(isset($latLong[1]))
+                    $gmapInfo[$sno]['long'] = $latLong[1];
+                }else{
+                    $gmapInfo[$sno]['lat'] = '';
+                    $gmapInfo[$sno]['long'] = '';
+                }
+
+        		/*                  Google Map Javascript End              */
+
+        	} //end foerach
+                ?>
+    		</div>
+    	</div>
+    	<div id="pagination" class="text-center">
+			<ul class="list-inline list">
+				<?php if($this->prevUrl !=''){
+					echo '<li class="navPages"><a class="prevPageBtn up" href="/search?'.$this->prevUrl.'">&nbsp;<span>Previous</span></a></li>';
+				} else { ?>
+					<li class="navPages"><span>Previous</span></li>
+				<?php }?>
+				
+				<?php 
+				if($this->paginator) {
+					$currPage = $this->paginator->getCurrentPageNumber();
+				} else { 
+					$currPage = 1;
+				}
+				$start = $currPage -3;
+				if($start < 1 ) {
+					$start = 1;
+				}
+
+				$end = $currPage +3;
+				if($end > $this->paginator->count()) {
+					$end = $this->paginator->count();
+				}
+				for ($i=$start; $i <= $end; $i++) { ?>
+				    <li>
+				    	<?php if($currPage == $i) {  echo $i; } else { ?>
+				    	<a href="/search?<?php echo $this->paginationUrl; ?>&amp;page=<?php echo $i; ?>"><?php echo $i; ?></a>
+				    	<?php } ?>
+				    </li>
+				<?php } ?>
+				
+				<?php if($this->nextUrl !=''){
+					echo '<li class="navPages"><a class="nextPageBtn up" href="'.$this->seoUrl('/search?'.$this->nextUrl).'">&nbsp;<span>Next</span></a></li>';
+				} else { ?>
+					<li class="navPages"><span>Next</span></li>
+				<?php }?>
+			</ul>
+		</div>
+    </div>
+    <?php } else { //NO results
+    		echo $this->lang[423]; 
+
+    		/*$setting = new Admin_Model_GlobalSettings();
+			$default_long = $setting->settingValue('longitude');
+			$default_lat = $setting->settingValue('latitude');
+		
+			$geocodes = $default_long.",".$default_lat;
+
+			if($initGeo==''){
+				$initGeo = $geocodes;
+			}*/
+		}
+	?>
+</div>
+
+<?php $config = new Zend_Config_Ini(APPLICATION_PATH.'/configs/'.APPLICATION_INI, APPLICATION_ENV); ?>
+
+<?php if($this->paginator) { ?>
+<script type="text/javascript">
+       
+	<?php if(isset($geoArray)) { ?>
+        var geostr = '<?php echo implode('::', $geoArray['geo']);?>';
+        var LangLatArray = Array();
+        LangLatArray = geostr.split('::');
+        
+   		var htmlstr = "<?php  echo str_replace("\n", " ", implode('::', $geoArray['htmlInfo']));?>";
+
+        var HtmlInfoArray = Array();
+        HtmlInfoArray = htmlstr.split('::');
+	<?php } ?>
+    <?php
+    $zoom = 11;
+    ?>
+	var map;
+	function initialize() {
+        map = new google.maps.Map(document.getElementById("contentCanvas"),{
+			zoom: <?php echo $zoom;?>,
+			mapTypeId: google.maps.MapTypeId.ROADMAP
+		});
+        var str = '<?php echo trim($initGeo);?>';
+        var brk = str.split(',');
+        
+        map.setCenter(new google.maps.LatLng(parseFloat(brk[0]),parseFloat(brk[1])), <?php echo $zoom;?>);
+
+       
+        // Creates a marker whose info window displays the letter corresponding
+        // to the given index.
+		var infoWindow = new google.maps.InfoWindow();
+        function createMarker(point, index, infoHtml) {
+
+			var marker = new google.maps.Marker({
+				position: point,
+				map: map,
+				icon: "/images/markers/marker" + index + ".png"
+			});
+			
+			google.maps.event.addListener(marker, "click", function() {
+				if (infoWindow) {
+					infoWindow.close();
+				}
+				infowindow = new google.maps.InfoWindow();
+				infoWindow.setContent(infoHtml);
+				infoWindow.open(map,marker);
+			});
+			
+			return marker;
+        }
+
+
+        var i = 1;
+        <?php foreach($gmapInfo as $g){ ?>
+            var latlng = new google.maps.LatLng(parseFloat(<?php echo $g['lat']?>),parseFloat(<?php echo $g['long']?>));
+            //var html = "<?php //echo (string)htmlspecialchars(str_replace(array("\r","\t","\n"),"",$g['html']),ENT_QUOTES)?>";
+            var html = "<?php echo addslashes(str_replace(array("\r","\t","\n"),"",$g['html']))?>";
+			createMarker(latlng, i, html);
+           i++;
+        <?php } ?>
+  
+
+	}
+	
+	
+
+	/* doctor ajax */
+	
+	$(document).on('click', '.white-box a, .whitebox .ajaxLink', function(event){
+	    event.preventDefault();
+	    //console.log($(this).attr('href'));
+	    var link = $(this).attr('href') +"?ajax=true";
+		var doclink = $(this).attr('href');
+		doclink = doclink.substr(1);
+		$.post(link, {},
+			function(html){			
+				jQuery('#contentCanvas').html(html); //add content	
+				document.location.hash = doclink;
+				jQuery('#fullContainer').removeClass("fullMapContainer");
+				jQuery('#contentCanvas').css("background", "#fff");
+			}
+		);
+	});
+    </script>
+
+
+<?php } else {  //zero results 
+
+	if($this->area) {
+		$default_long = $this->lon;
+		$default_lat = $this->lat;
+	} else {
+		$setting = new Admin_Model_GlobalSettings();
+		$default_long = $setting->settingValue('longitude');
+		$default_lat = $setting->settingValue('latitude');
+	}
+	?>
+<script type="text/javascript">
+	var map;
+	function initialize() {
+		var latitude = parseFloat(<?php echo $default_lat; ?>);
+		var longitude = parseFloat(<?php echo $default_long; ?>);
+		map = new google.maps.Map(document.getElementById("contentCanvas"),{
+			zoom: 12,
+			center: {lat: latitude, lng: longitude},
+			mapTypeId: google.maps.MapTypeId.ROADMAP
+		});
+
+		//map.setCenter(new google.maps.LatLng(parseFloat(<?php echo $default_long; ?>),parseFloat(<?php echo $default_lat; ?>)), 11);
+		//console.log("lon lat "+<?php echo $default_long.", ".$default_lat; ?>);
+	}
+
+//google.maps.event.addDomListener(window, 'load', initialize);
+
+</script>
+
+<?php } ?>
+
+
+<script>
+$(document).ready(function() {
+	var docLocation = location.hash;
+	//console.log(docLocation);
+	if(docLocation) {
+		if(docLocation.charAt(0) == "#"){
+			docLocation = docLocation.substr(1);
+		}
+
+		var link = "/"+docLocation+"?ajax=true";
+		$.post(link, {},
+			function(html){
+				jQuery('#contentCanvas').html(html); //add content	
+				jQuery('#fullContainer').removeClass("fullMapContainer");
+				jQuery('#contentCanvas').css("background", "#fff");
+			}
+		);
+				
+	} else {
+		google.maps.event.addDomListener(window, 'load', initialize);
+	}
+});
+
+</script>
+
+</div>

@@ -1,0 +1,342 @@
+
+<script>
+function submitf(id)
+{
+ // alert("aa");
+
+  var x = document.forms["frmr"+id]["doctor_reply"].value;
+    if (x == null || x == "") {
+        alert("Doctor Reply cannot be blank");
+        return false;
+    } 
+}
+function patientform()
+{
+ 
+
+  var first_namep = document.forms["patientf"]["first_name"].value;
+    if (first_namep == null || first_namep == "") {
+        alert("First Name cannot be blank");		
+        return false;
+    } 
+	var last_namep = document.forms["patientf"]["last_name"].value;
+    if (last_namep == null || last_namep == "") {
+        alert("Last Name cannot be blank");		
+        return false;
+    } 
+	var emailp = document.forms["patientf"]["email"].value;
+    if (emailp == null || emailp == "") {
+        alert("Email cannot be blank");		
+        return false;
+    } 
+}
+</script>
+
+
+<div id="admin-content-inner">
+  <div class="dashboard-top">
+    <div class="reviewmanage-section">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-sm-8">
+            <h2 class="title-heading"><img src="/images/img/refresh-icon.png" alt="">Review Management</h2>
+          </div>
+        </div>
+      </div>
+      <div class="container-fluid">
+        <div class="row">
+        	<div class="col-sm-6">
+            <div class="whitebox avg-review">
+            	<h3>Your Average Reviews :</h3>	
+                <div class="container-fluid">
+                	<div class="col-sm-3">
+					
+					<?php $ratingArray = $this->viewreviewobject->getRatingReviews($this->doctorId);
+					
+				//	print_r($ratingArray['votes']);
+					?>
+					
+					<img src="/images/img/uder-review.png" width="77" height="61" alt=""></div>
+                    <div class="col-sm-9">
+                        <div class="avg-reviewbox clearfix">
+                            <ul class="rating">
+							
+							<?php if(floor($ratingArray['votes'])==1){
+									?>
+										<li><a href="#"><img src="/images/img/star-yellow.png" alt=""></a></li>
+										<li><a href="#"><img src="/images/img/star-blue.png" alt=""></a></li>
+										<li><a href="#"><img src="/images/img/star-blue.png" alt=""></a></li>
+										<li><a href="#"><img src="/images/img/star-blue.png" alt=""></a></li>
+										<li><a href="#"><img src="/images/img/star-blue.png" alt=""></a></li>
+									<?php } else if(floor($ratingArray['votes'])==2){ ?>
+										<li><a href="#"><img src="/images/img/star-yellow.png" alt=""></a></li>
+										<li><a href="#"><img src="/images/img/star-yellow.png" alt=""></a></li>
+										<li><a href="#"><img src="/images/img/star-blue.png" alt=""></a></li>
+										<li><a href="#"><img src="/images/img/star-blue.png" alt=""></a></li>
+										<li><a href="#"><img src="/images/img/star-blue.png" alt=""></a></li>
+									<?php } else if(floor($ratingArray['votes'])==3){  ?>
+										
+										<li><a href="#"><img src="/images/img/star-yellow.png" alt=""></a></li>
+										<li><a href="#"><img src="/images/img/star-yellow.png" alt=""></a></li>
+										<li><a href="#"><img src="/images/img/star-yellow.png" alt=""></a></li>
+										<li><a href="#"><img src="/images/img/star-blue.png" alt=""></a></li>
+										<li><a href="#"><img src="/images/img/star-blue.png" alt=""></a></li>
+										<?php } else if(floor($ratingArray['votes'])==4){  ?>
+										<li><a href="#"><img src="/images/img/star-yellow.png" alt=""></a></li>
+										<li><a href="#"><img src="/images/img/star-yellow.png" alt=""></a></li>
+										<li><a href="#"><img src="/images/img/star-yellow.png" alt=""></a></li>
+										<li><a href="#"><img src="/images/img/star-yellow.png" alt=""></a></li>
+										<li><a href="#"><img src="/images/img/star-blue.png" alt=""></a></li>
+										<?php } else if(floor($ratingArray['votes'])==5){  ?>
+								<li><a href="#"><img src="/images/img/star-yellow.png" alt=""></a></li>
+                                <li><a href="#"><img src="/images/img/star-yellow.png" alt=""></a></li>
+                                <li><a href="#"><img src="/images/img/star-yellow.png" alt=""></a></li>
+                                <li><a href="#"><img src="/images/img/star-yellow.png" alt=""></a></li>
+								<li><a href="#"><img src="/images/img/star-yellow.png" alt=""></a></li>
+										<?php } else { ?>
+								<li><a href="#"><img src="/images/img/star-blue.png" alt=""></a></li>
+								<li><a href="#"><img src="/images/img/star-blue.png" alt=""></a></li>
+								<li><a href="#"><img src="/images/img/star-blue.png" alt=""></a></li>
+								<li><a href="#"><img src="/images/img/star-blue.png" alt=""></a></li>
+								<li><a href="#"><img src="/images/img/star-blue.png" alt=""></a></li>
+										<?php } ?>
+							
+							
+							
+							
+                               
+                            </ul>
+                            <div class="rating-number"><?php echo floor($ratingArray['votes']); ?></div>
+                        </div>
+                    </div>	
+                </div>
+            </div>
+            </div>
+            <div class="col-sm-6">
+            <div class="whitebox reviewnumer">
+            	<h3>Number of Reviews :</h3>
+                <div class="numberrev-box clearfix">
+                	<div class="col-sm-4"><img src="/images/user/review-user-new.png" alt=""></div>
+                    <div class="col-sm-8">
+                    	<div class="reciewcount"><?php echo count($this->totalreview);?></div>
+                    </div>
+                </div>
+            </div>
+            </div>	
+        </div>
+      </div>
+      <div class="container-fluid">
+        <div class="row">
+        	<div class="col-sm-12">
+            	<div class="whitebox clearfix">
+				  	<h3>Send Review Request</h3>
+					<?php echo $this->msg;?>
+                    <form id="patientf" name="patientf" action="/user/index/request-patient-review" method="post" onsubmit="return patientform(this);" enctype="multipart/formdata">	
+                    <div class="formbox">
+                    	<input name="first_name" type="text" placeholder="First Name" class="lf">
+                        <input name="last_name" type="text" placeholder="Last Name" class="rf">
+                        <input name="email" type="email" placeholder="Email Address">
+                    </div>
+                    <div class="formbox rightbox">
+                    	<textarea name="message" cols="" rows="" placeholder="Message"></textarea>
+                    	<?php $usersNs = new Zend_Session_Namespace("members"); ?>
+                    	<input type="hidden" name="doctoruserid" value="<?php echo $usersNs->userId; ?>"/>
+                        <input name="Submit" type="submit" value="Submit">
+                    </div>
+                    </form>
+                </div>	
+            </div>
+        </div>
+      </div>  
+      
+
+
+
+     <div class="container-fluid">
+     	 <div class="row">
+        	<div class="col-sm-12">
+		    	<div class="whitebox clearfix">
+		    		
+		    		<div class="clr"></div>
+
+		    		<div class="reviews06">
+		    		 	<div class="reviews06-left">
+		    		    	<p>Sort Reviews By: <a href="/user/index/doctor-review?sort=date"><span>Date</span></a> Or <a href="/user/index/doctor-review?sort=rating"><span>Rating</span></a></p>
+		    		    </div>
+
+		    			<?php 
+		    			if($this->paginator) {
+		    				$currPage = $this->paginator->getCurrentPageNumber();
+		    			} else { 
+		    				$currPage = 1;
+		    			} ?>
+		    			<div class="reviews06-right">
+		    				<ul>Page:
+		    					<?php for ($i=1; $i <= $this->paginator->count(); $i++) { ?>
+		    					<li><a href="/user/index/doctor-review?page=<?php echo $i; ?>&amp;sort=<?php echo $this->sort; ?>" class="<?php if($currPage == $i) echo 'currentPage'; ?>"><?php echo $i; ?></a></li>
+		    					<?php } ?>
+		    				</ul>
+		    			</div>
+		    			<div class="clr"></div>
+		    		</div>
+
+		    		<?php 
+		    		$Doctor = new Application_Model_Doctor();
+		    		$Appointment = new Application_Model_Appointment();
+		    		$User = new Application_Model_User();
+		    		$Review = new Application_Model_DoctorReview();
+
+		    		if($this->paginator) {
+		    			$sno=0;
+		    			foreach($this->paginator as $row) { 
+		    				 $sno++;
+		    				$docObject = $Doctor->fetchRow("id='{$row['doctor_id']}'");
+		    				if($row['appointment_id']) {
+			    				$appointmentObject = $Appointment->fetchRow("id='{$row['appointment_id']}'");	
+			    			}
+		    				
+		    				$reviewObj = $Review->find($row['id']);
+		    				$patientUserid = $reviewObj->getUserId();	
+		    				if($patientUserid) {
+			    				$patientUser = $User->find($patientUserid);
+			    			} else {
+			    				$patientUser = "";
+			    			}
+		    				?>
+		    		<div class="reviews07 clearfix">
+		    			<div class="reviews07-img">
+		    				<img src="/images/user/man02.png" alt="">
+		    			</div>
+		    			<div class="reviews07-text">
+		    				<ul>
+		    					<?php if($row['vote']==1){ ?>
+		    					<li><a href="#"><img src="/images/user/staricon01.png" alt=""></a></li>
+		    					<li><a href="#"><img src="/images/user/staricon02.png" alt=""></a></li>
+		    					<li><a href="#"><img src="/images/user/staricon02.png" alt=""></a></li>
+		    					<li><a href="#"><img src="/images/user/staricon02.png" alt=""></a></li>
+		    					<li><a href="#"><img src="/images/user/staricon02.png" alt=""></a></li>
+		    				<?php } else if($row['vote']==2){ ?>
+		    					<li><a href="#"><img src="/images/user/staricon01.png" alt=""></a></li>
+		    					<li><a href="#"><img src="/images/user/staricon01.png" alt=""></a></li>
+		    					<li><a href="#"><img src="/images/user/staricon02.png" alt=""></a></li>
+		    					<li><a href="#"><img src="/images/user/staricon02.png" alt=""></a></li>
+		    					<li><a href="#"><img src="/images/user/staricon02.png" alt=""></a></li>
+		    				<?php } else if($row['vote']==3){  ?>
+		    					<li><a href="#"><img src="/images/user/staricon01.png" alt=""></a></li>
+		    					<li><a href="#"><img src="/images/user/staricon01.png" alt=""></a></li>
+		    					<li><a href="#"><img src="/images/user/staricon01.png" alt=""></a></li>
+		    					<li><a href="#"><img src="/images/user/staricon02.png" alt=""></a></li>
+		    					<li><a href="#"><img src="/images/user/staricon02.png" alt=""></a></li>
+		    					<?php } else if($row['vote']==4){  ?>
+		    					<li><a href="#"><img src="/images/user/staricon01.png" alt=""></a></li>
+		    					<li><a href="#"><img src="/images/user/staricon01.png" alt=""></a></li>
+		    					<li><a href="#"><img src="/images/user/staricon01.png" alt=""></a></li>
+		    					<li><a href="#"><img src="/images/user/staricon01.png" alt=""></a></li>
+		    					<li><a href="#"><img src="/images/user/staricon02.png" alt=""></a></li>
+		    					<?php } else if($row['vote']==5){  ?>
+		    					<li><a href="#"><img src="/images/user/staricon01.png" alt=""></a></li>
+		    					<li><a href="#"><img src="/images/user/staricon01.png" alt=""></a></li>
+		    					<li><a href="#"><img src="/images/user/staricon01.png" alt=""></a></li>
+		    					<li><a href="#"><img src="/images/user/staricon01.png" alt=""></a></li>
+		    					<li><a href="#"><img src="/images/user/staricon01.png" alt=""></a></li>
+		    					<?php } 
+		    					 echo $row['review'];
+		    					?>
+		    				</ul>
+		    				<p><span><?php 
+
+						if($patientUser > 0) { echo $patientUser->getFirstName()." ".$patientUser->getLastName(); } else if($reviewObj->getUsername() !=''){ echo $reviewObj->getUsername(); }else{ echo 'Anonymous'; } 
+//if($patientUser) { echo $patientUser->getFirstName()." ".$patientUser->getLastName(); } else { echo $reviewObj->getUsername(); }
+ ?></span> </p>
+		    				
+		    				<?php if($reviewObj->getDocterReply()) { ?>
+		    				<p>
+		    					<b>Your reply:</b>
+		    					<textarea name="doctor_reply" cols="" rows="" placeholder="Doctor's Reply"><?php echo $reviewObj->getDocterReply(); ?></textarea>
+		    				</p>
+		    				<?php } else { ?>
+		    				<form id="frmr<?php echo $sno;?>" name="frmr<?php echo $sno;?>" action="" method="post" onsubmit="return submitf(<?php echo $sno;?>);" enctype="multipart/formdata">
+			    				<p>
+			    					<b>Your Reply:</b>
+									<textarea name="doctor_reply" cols="" rows="" placeholder="Doctor's Reply"></textarea>
+									<input type="hidden" name="review_id" value="<?php echo $row['id'];?>">
+									<input type="hidden" name="review_status" value="<?php echo $row['status'];?>">
+									<input type="hidden" name="user_id" value="<?php echo $row['user_id'];?>">
+									<input type="hidden" name="doctor_id" value="<?php echo $row['doctor_id'];?>">
+									<input type="hidden" name="review" value="<?php echo $row['review'];?>">
+									<input type="hidden" name="username" value="<?php echo $row['username'];?>">
+									<input type="hidden" name="email" value="<?php echo $row['email'];?>">
+									<input type="hidden" name="added_on" value="<?php echo $row['added_on'];?>">
+									<input type="hidden" name="vote" value="<?php echo $row['vote'];?>">
+									<input type="hidden" name="recommendation" value="<?php echo $row['recommendation'];?>">
+									<input type="hidden" name="waittime" value="<?php echo $row['waittime'];?>">
+									<input type="hidden" name="bedside" value="<?php echo $row['bedside'];?>">
+									<input type="hidden" name="appointment_id" value="<?php echo $row['appointment_id'];?>">
+								</p>
+								<p><input type="submit" name="Reply" value="Reply"></p>
+							</form>
+		    				<?php } ?>
+		    			</div>
+		    			<div class="rightReviewButtonsContainer">
+			    			<div class="reviews07-date">
+			    				<p>
+			    					<img src="/images/user/date.png" alt=""> &nbsp; <?php echo date('F j, Y',$reviewObj->getAddedOn()); ?>
+			    				</p>
+			    			</div>
+			    			<div class="recentreviews-section-right01-bottom-right">
+			    				<?php if($row['status']==1){ ?>
+	                          	<a href="/user/index/unpublish/id/<?php echo  $row['id'] ?>/page/1" title="remove this review from your public profile" >  <input name="" type="submit" class='dd' value="Published"></a>
+	                          	<?php } else { ?>
+	                          	<a href="/user/index/publish/id/<?php echo  $row['id'] ?>/page/1" title="publish this review to your profile" >  <input name="" type="submit" value="Publish"></a>
+	                          	<?php } ?>
+	                          	<?php 
+	                          	$link = "";
+	                          	$title = "";
+	                          	if($row['admin_approved']==1){
+	                          		$link = "/user/index/unfeatured/id/".$row['id']."/page/1";
+	                          		$title = "move this review to the top of the reviews in your public profile";
+	                          	} else {
+	                          		$link = "/user/index/featured/id/".$row['id']."/page/1";
+	                          		$title = "remove from featured reviews";
+	                          	} ?>
+	                          	<a href="<?php echo $link; ?>" title="<?php echo $title; ?>"><input name="" type="submit" value="Featured Review" <?php if($row['admin_approved']==1){ echo 'class="featuredButton"'; } ?>></a>
+	                      	</div>
+	                    </div>
+		    		</div>
+
+		    	<?php } 
+		    	} else { ?>
+		    		<div class="reviews07">
+		    			<p>You have not left review for doctor </p>
+		    		</div>
+		    	<?php } ?>
+		    		 
+		    		<div class="reviews06">
+		    		 	<div class="reviews06-left">
+		    		    	<p>Sort Reviews By: <a href="/user/index/doctor-review?sort=date"><span>Date</span></a> Or <a href="/user/index/doctor-review?sort=rating"><span>Rating</span></a></p>
+		    		    </div>
+
+
+		    			<?php 
+		    			if($this->paginator) {
+		    				$currPage = $this->paginator->getCurrentPageNumber();
+		    			} else { 
+		    				$currPage = 1;
+		    			} ?>
+		    			<div class="reviews06-right">
+		    				<ul>Page:
+		    					<?php for ($i=1; $i <= $this->paginator->count(); $i++) { ?>
+		    					<li><a href="/user/index/doctor-review?page=<?php echo $i; ?>&amp;sort=<?php echo $this->sort; ?>" class="<?php if($currPage == $i) echo 'currentPage'; ?>"><?php echo $i; ?></a></li>
+		    					<?php } ?>
+		    				</ul>
+		    			</div>
+		    			<div class="clr"></div>
+		    		</div>
+		    	</div>
+		    </div>
+		</div>
+    </div>
+      
+    </div>
+  </div>
+</div>

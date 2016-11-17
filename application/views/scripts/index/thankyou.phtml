@@ -1,0 +1,18 @@
+<div class="inner_wrapperReg clearfix">
+	<div id="termsHeader" class="clearfix">
+		<h1 class="left" id="termsTitle"><?php echo $this->lang[78]; ?></h1>
+	</div>
+	<div class="clearfix" id="pageContent">
+		<?php
+		$url= $this->SeoUrl("/");
+		?>
+		<?php if($this->message=='contact'):?>
+		<h2><?php echo $this->lang[202]; ?></h2>
+        <p><?php echo $this->lang[203]; ?> <a href="<?php echo $url;?>"><?php echo $this->lang[181]; ?></a>.</p> 
+		<?php else:?>
+		<h2><?php echo $this->lang[183]; ?></h2>
+		<p><?php echo $this->lang[203]; ?> <a href="<?php echo $url;?>"><?php echo $this->lang[181]; ?></a>.</p>
+		<?php endif;?>
+	</div>
+</div>
+

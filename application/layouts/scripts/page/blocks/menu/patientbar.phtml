@@ -1,0 +1,144 @@
+<div id="admin-bar" class="clearfix">
+  <div class="logo pull-left border-right"> <a href="/"><img src="/images/patient/doctors-logo.png" alt="Doc Mate Admin"></a> </div>
+   	<div class="admin-bar-notification-panel clearfix pull-left border-right">
+	    <div class="notification pull-left"> <a class="dropdown-toggle" data-toggle="dropdown" href="#"><img src="/images/user/bell-icon.png" alt="Notofication">
+			<?php $notificationCount = count($this->notifications); ?>
+			<div class="alert orange-bg" id="notificationsAlert"><?php echo $notificationCount; ?></div>
+			</a> 
+			<ul class="dropdown-menu" id="notificationsList">
+				<li class="header" id="notificationsCounter">You have <span><?php echo $notificationCount; ?></span> notifications</li>
+			</ul>
+		</div>
+	 <!--
+    <div class="notification pull-left"> <a class="dropdown-toggle" data-toggle="dropdown" href="#"><img src="/images/patient/mail-icon.png" alt="Notofication">
+      <div class="alert green-bg">00</div>
+      </a> 
+      
+      <ul class="dropdown-menu">
+            <li class="header">You have 3 messages</li> <?php ///TODO add unread messages count ?>
+            <div class="container-fluid">
+            	<div class="row">
+                	<div class="col-sm-3">
+                    	<img src="/images/patient/avatar1.png" class="img-circle">
+                        
+                    </div>
+                    <div class="col-sm-6">
+                    <h4 class="headtt"><a href="#">Support Team </a></h4>
+                    <p class="drop-text">Why not buy a new awesome theme?</p>
+                    </div>
+                    <div class="col-sm-3">
+                    <div class="slt">5 Mins</div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+            	<div class="row">
+                	<div class="col-sm-3">
+                    	<img src="/images/patient/avatar1.png" class="img-circle">
+                        
+                    </div>
+                    <div class="col-sm-6">
+                    <h4 class="headtt"><a href="#">Support Team </a></h4>
+                    <p class="drop-text">Why not buy a new awesome theme?</p>
+                    </div>
+                    <div class="col-sm-3">
+                    <div class="slt">5 Mins</div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+            	<div class="row">
+                	<div class="col-sm-3">
+                    	<img src="/images/patient/avatar1.png" class="img-circle">
+                        
+                    </div>
+                    <div class="col-sm-6">
+                   <h4 class="headtt"><a href="#">Support Team </a></h4>
+                    <p class="drop-text">Why not buy a new awesome theme?</p>
+                    </div>
+                    <div class="col-sm-3">
+                    <div class="slt">5 Mins</div>
+                    </div>
+                </div>
+            </div>
+            <li class="footer"><a href="#">See All Messages</a></li>
+          </ul></div>
+          -->
+  </div>
+<!--
+  <div class="admin-search pull-left clearfix">
+    <form>
+      <input name="" type="text" placeholder="Search here...">
+      <input name="" type="image" src="/images/patient/searc-btn.png" alt="">
+    </form>
+
+  </div>
+-->
+  <div class="admin-logout pull-right border-left"><a href="/logout">Log Out &gt;&gt;</a> </div>
+  <?php if($this->actionName=="patient-dashboard") { ?>
+  <div class="pull-right"><a class="btn btn-large btn-success" href="javascript:void(0);" onclick="startIntro();" style="margin: 10px 10px 0">Start Tour</a></div>
+  <?php } ?>
+</div>
+<!--/ADMIN BAR --> 
+<script>
+
+$(document).ready(function() {
+	$.post('/user/index/get-notifications', {},
+			function(html){
+				var size = 0;
+				var decoded = $.json.decode(html);
+				var content ="";
+				if(decoded){
+					size = decoded.length;
+					if(size>0) {
+						for(i=0; i<size; i++){
+							var notedate = new Date(decoded[i]["published"]*1000);
+							var hour = notedate.getHours();
+							var minute = notedate.getMinutes();
+							var ampm = "am";
+							if(hour>12) {
+								hour = hour-12;
+								ampm = "pm";
+							}
+							if(minute<10) {
+								minute = "0"+minute;
+							}
+							var month = notedate.getMonth() +1;
+							var readableDate = month+"/"+notedate.getDate()+"/"+notedate.getFullYear()+" at "+hour+":"+minute+" "+ampm;
+							
+							content += '<div class="container-fluid">\
+				            	<div class="row">\
+				                	<div class="col-sm-3">\
+				                    	<img src="<?php echo $profileImage; ?>" class="img-circle">\
+				                    </div>\
+				                    <div class="col-sm-6">\
+				                    	<h4 class="headtt"><a href="'+decoded[i]["link"]+'" id="'+decoded[i]["id"]+'" class="noteClick">'+decoded[i]["title"]+'</a></h4>\
+				                    	<p class="drop-text">'+decoded[i]["content"]+'</p>\
+				                    </div>\
+				                    <div class="col-sm-3">\
+				                    <div class="slt">'+readableDate+'</div>\
+				                    </div>\
+				                </div>\
+				            </div>';
+						}
+					}
+				}
+			jQuery("#notificationsCounter span").html(size);
+			if(size<10) {
+				size="0"+size;
+			}
+			jQuery("#notificationsAlert").html(size);
+			jQuery("#notificationsList").append(content);
+		}
+	);
+
+	$( "#notificationsList" ).on( "click", ".noteClick", function() {
+		var noteid =jQuery(this).attr('id');
+		$.post('/user/index/read-notification', {notificationid:noteid},
+			function(html){
+				//do something with the error code?
+			}
+		);
+	});
+});
+</script>

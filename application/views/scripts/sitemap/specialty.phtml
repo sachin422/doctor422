@@ -1,0 +1,25 @@
+<div class="inner_wrapperReg">
+	<div id="searchHeaderReg" class="clearfix">
+		<h1 class="left"><?php echo $this->lang[48]; ?> <span><?php echo $this->lang[209]; ?></span></h1>
+	</div>
+	<div class="clearfix"  id="sitemapWrapper">
+		<ul class="doc-sitemap-link left">
+		<?php 
+		$i=0;
+		foreach ($this->object as $obj) :
+			if(($i%3==0) && $i!=0) {
+			?>
+				</ul>
+				<ul class="doc-sitemap-link left">		
+			<?php
+			}
+			$setting = new Admin_Model_GlobalSettings();
+			$default_city = $setting->settingValue('default_city');
+			?>
+			<li><a href="/search?<?php echo $this->lang[934]; ?>=<?php echo $default_city; ?>&amp;<?php echo $lang[933]; ?>=<?php echo $obj->getName(); ?>"><?php echo $obj->getName()?></a></li>
+		<?php
+			$i++;
+		endforeach;?>
+		</ul>
+	</div>
+</div>

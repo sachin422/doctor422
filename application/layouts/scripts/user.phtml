@@ -1,0 +1,77 @@
+<?php echo $this->doctype() ?>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="el-gr">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta property="og:image" content="<?php echo Zend_Registry::get('siteurl') ?>images/fb_like.png"/>
+		<?php
+        echo $this->headTitle();
+        echo $this->headMeta();
+        $this->headLink()->appendStylesheet('/style/user.css');
+        $this->headLink()->appendStylesheet('/js/calendar/src/css/jscal2.css');
+        $this->headLink()->appendStylesheet('/js/calendar/src/css/border-radius.css');
+        $this->headLink()->appendStylesheet('/js/calendar/src/css/win2k/win2k.css');
+		$this->headLink()->appendStylesheet('/style/user2.css');
+        echo $this->headLink();
+        $this->headScript()->appendFile("/js/jquery-1.4.2.js");
+        $this->headScript()->appendFile("/js/jquery.blockUI.js");
+        $this->headScript()->appendFile("/js/jquery.json-2.2.js");
+        $this->headScript()->appendFile("/js/patient.js");
+        $this->headScript()->appendFile("/js/patient.js");
+        $this->headScript()->appendFile("/js/calendar/src/js/jscal2.js");
+        $this->headScript()->appendFile("/js/calendar/src/js/lang/en.js");
+        echo $this->headScript();
+        ?>
+		<?php echo $this->render("/page/googlecode.phtml"); ?>
+<!--Start of Zopim Live Chat Script-->
+<script type="text/javascript">
+window.$zopim||(function(d,s){var z=$zopim=function(c){z._.push(c)},$=z.s=
+d.createElement(s),e=d.getElementsByTagName(s)[0];z.set=function(o){z.set.
+_.push(o)};z._=[];z.set._=[];$.async=!0;$.setAttribute("charset","utf-8");
+$.src="//v2.zopim.com/?2w6QTWYC4OicEQ5KkssvmVrj1RPOKm5t";z.t=+new Date;$.
+type="text/javascript";e.parentNode.insertBefore($,e)})(document,"script");
+</script>
+<!--End of Zopim Live Chat Script-->
+	</head>
+	<body id="doctorAdminBody">
+		<?php include_once(APPLICATION_PATH ."/layouts/scripts/page/analyticstracking.php"); ?>
+		<div id="wrapper">  
+			<div id="main-container" class="clearfix">
+				<div class="clearfix" id="doctorAdminIntro">
+					<a href="/" class="left" id="logoLink">
+						<img alt="SITENAME" src="/images/doctor_admin_logo.png" />
+					</a>
+					<div class="left" id="docName">
+						<h2><?php echo $this->lang[543]; ?></h2>
+						<?php
+						$drname ="";
+						$usersNs = new Zend_Session_Namespace("members");
+						$objDoc = new Application_Model_Doctor();
+						$objDoctor = $objDoc->find($usersNs->doctorId);
+						if(!empty($objDoctor) )$drname = $objDoctor->getFname();
+						?>
+						<h3><?php echo $drname;?></h3>
+					</div>
+				</div>
+				<div id="dashbord-nav" class="clearfix"> 
+					<?php echo $this->render('/page/blocks/menu/doctor.phtml');?>
+				</div>
+				<div class="clearfix">
+					<?php echo $this->render('/page/blocks/left/doctor.phtml');?>
+					<div id="right-side"> <?php echo $this->layout()->content ?> </div>
+					<div class="shadow-right">
+						<div id="squareShadow">&nbsp;</div>
+					</div>
+				</div>	
+			</div>
+			<div id="shadow-bottom">&nbsp;</div>	
+			<script type="text/javascript">
+				$(document).ready(function() {
+				   var height=$("#right-side").height();
+				   $("#left-side").css("height", height-3);
+				   $(".shadow-right").css("height", height+1);
+				
+				});
+			</script>
+		</div>
+	</body>
+</html>

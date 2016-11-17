@@ -1,0 +1,644 @@
+<?php 
+$settings = new Admin_Model_GlobalSettings();
+$locale = $settings->settingValue('locale');
+setlocale(LC_ALL, $locale); 
+$pstTimezone = new DateTimeZone('PST'); 
+
+?>
+<div id="admin-content-inner">
+  <div class="dashboard-top">
+    <div class="patients-section">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-sm-8">
+            <h2 class="title-heading"><img src="/images/user/docpatient/patients-icon.png" alt=""><?php echo $this->patient->getName(); ?></h2>
+          </div>
+          <div class="col-sm-4 text-right">
+          	<a href="/user/index/doctor-patient-edit/patuserid/<?php echo $this->user->getId(); ?>">
+				<input type="submit" class="whiteLetters" value="Edit Patient Details" style="margin-right: 15px;">
+			</a>
+		  	<a href="/user/index/patient-list" class="backButton" title="back to patients list">Back</a>
+		  </div>
+        </div>
+      </div>
+      <div class="container-fluid">
+			<div class="row">
+				<div class="col-sm-6">
+				<div class="whitebox">
+					<h3>Patient Since : <span><?php echo date('F j, Y', $this->user->getRegisterDate()); ?></span></h3>
+					<div class="container-fluid">
+						<div class="col-sm-2"><img src="/images/user/docpatient/patients-icon01.png" width="50" height="50" alt=""></div>
+						<div class="col-sm-10 buf">
+							<div class="row" style="font-size:13px !important;font-weight:normal !important;">
+								<div class="col-md-12">
+									<div class="rowleft rows01"><img alt="" src="/images/user/docpatient/usericon01.png"> Name: <span> <font style="color:#2FAFF3 !important;"><?php echo ucfirst($this->patient->getName()); ?></font></span></div>
+								</div>
+							</div>
+							<div class="row" style="font-size:13px !important;font-weight:normal !important;margin-top:8px;">
+								<div class="col-md-12">
+									<div class="rowleft"><img alt="" src="/images/mail-icon.png"> Email: <span> <font style="color:#2FAFF3 !important;"><?php 
+												$email = $this->patient->getEmail();
+												if(!empty($email)){
+													$exploded = explode('@',$email);
+													$domain_part = $exploded[1]; 
+													if($domain_part !='doctors.com' && $domain_part !='doctors.COM'){
+														$new_email = (strlen($email) > 30) ? substr($email,0,30).'..' : $email;
+														$hover_email = $email;
+													}else{
+														$new_email = 'No Email';
+														$hover_email = 'No Email';
+													}	
+												}else{
+													$new_email = 'No Email';
+													$hover_email = 'No Email';
+												}
+												echo '<a style="color:#2FAFF3 !important;" href="javascript:void(0)" title="'.$hover_email.'">'.$new_email.'</a>';
+											?></font></span></div>
+								</div>
+							</div>
+							<div class="row" style="font-size:13px !important;font-weight:normal !important;margin-top:8px;">
+								<div class="col-md-6">
+									<div class="rowleft"><i class="fa fa-mobile"></i> Mobile: <span> <font style="color:#2FAFF3 !important;"><?php if($this->patient->getMobile()) { echo $this->patient->getMobile(); } else { echo "Not available"; } ?></font></span></div>
+								</div>
+								<div class="col-md-6">
+									<div class="rowleft"><i class="fa fa-phone"></i> Phone: <span> <font style="color:#2FAFF3 !important;"><?php if($this->patient->getPhone()) { echo $this->patient->getPhone(); } else { echo "Not available"; } ?></font></span></div>
+								</div>
+							</div>
+							<div class="row" style="font-size:13px !important;font-weight:normal !important;margin-top:8px;margin-bottom:8px;">
+								<div class="col-md-12">
+									<div class="rowleft"><img alt="" src="/images/markers/location-icon.png"> Address: <span> <font style="color:#2FAFF3 !important;"><?php if($this->patient->getZipcode()) { echo $this->patient->getStreet().", ".$this->patient->getCity().", ".$this->patient->getZipcode()." ".$this->patient->getState(); } else { echo "Unknown"; }?></font></span></div>
+								</div>
+							</div>
+						</div>	
+						<div class="row">
+							<div class="col-lg-5">
+								<?php 
+								$PatientH = new Application_Model_PatientHistory();
+								$patint_history_pdf = $PatientH->fetchRow("patient_id={$this->user->getId()}");
+								if($patint_history_pdf->status==1){ ?>
+								<a href="/user/index/sharepdf/userid/<?php echo base64_encode($patint_history_pdf->getPatientId());?>" title="Download patient medical history">
+									<input type="submit" class="whiteLetters" value="Download patient history" style="margin-right: 15px;">
+								</a>
+								<?php } ?>
+							</div>
+
+							<div class="col-lg-7">
+								<input type="submit" style="float:right:" class="whiteLetters welcome" value="Book New Appointment">	
+								<div class="account doctor-patient-details" style="margin-right:-13px;">
+									<div class="dropmenu-head">Schedule Appointment</div>
+									<div class="dropform">
+										<form method="post" id="doctorNewPatient">
+											<p>Procedure :</p>
+											<?php echo $this->form->procedure; ?>
+											<p>Date:</p>
+											<div class="daterow clearfix">
+												<div class="dateimg"><img src="/images/user/calendershort.png" alt="Date"></div>
+												<div class="fulldateContainer">
+													<?php echo $this->form->fulldate; ?>
+												</div>
+											</div>
+
+											<p>Time:</p>
+											<div class="timerow clearfix">
+												<div class="timeclock"><img src="/images/user/clocksmall-icon.png" alt="">
+												</div>
+												<div class="timein">
+													<?php echo $this->form->hour; ?>:<?php echo $this->form->minutes; ?><?php echo $this->form->am; ?>
+												</div>
+											</div>
+											<!--
+											<p><?php //echo $this->form->preventative_maintenance_other; ?></p>
+											<p>Ada Code :</p>
+											<p><?php //echo $this->form->ada_code; ?></p>-->
+											<input name="" type="image" src="/images/user/save.png" id="savePatientBtn">
+											<span id="message"></span>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				</div>
+				<div class="col-sm-6">
+				<div class="whitebox last-activity">
+					<h3>Last Activity :</h3>	
+					<div class="container-fluid">
+						<div class="appo-box">
+						  <h4>Last Appointment:</h4>
+							<?php if($this->lastAppointment) { ?>
+							<p><img src="/images/user/docpatient/datesml-icon.png" alt="">Date: <span><?php echo date("F j, Y",strtotime($this->lastAppointment->getAppointmentDate())); ?></span></p>
+							<p><img src="/images/user/docpatient/timesml-icon.png" alt="">Time: <span><?php echo $this->lastAppointment->getAppointmentTime(); ?></span></p>
+							<?php } else { ?>
+							<p>No appointments yet</p>                        
+							<?php } ?>
+						</div>
+						<div class="appo-box">
+						  <h4>Next Appointment:</h4>	
+							<?php if($this->nextAppointment) { ?>
+							<p><img src="/images/user/docpatient/datesml-icon.png" alt="">Date: <span><?php echo date("F j, Y",strtotime($this->nextAppointment->getAppointmentDate())); ?></span></p>
+							<p><img src="/images/user/docpatient/timesml-icon.png" alt="">Time: <span><?php echo date("g:i a", strtotime($this->nextAppointment->getAppointmentTime())); ?></span></p>
+							<?php } else { ?>
+							<p>No appointment scheduled yet.</p>
+							<?php } ?>
+						</div>		
+							
+					</div>
+				</div>
+				</div>	
+			</div>
+			<div class="row">
+				<div class="col-sm-6">
+				<div class="whitebox avg-review">
+					<div class="whitebox-title clearfix">
+					  <h3>Referrals :</h3>
+						
+					</div>	
+
+					<div class="container-fluid">
+						<div class="col-sm-3"><img src="/images/user/docpatient/referral-icon.png"  alt=""></div>
+						<div class="col-sm-9">
+							<div class="referral">
+								<p><img src="/images/user/docpatient/usericon01.png" alt="">Total Referral By Patient: <span><?php 
+
+							   foreach($this->patientrecordno1 as $patientrecordno) { 
+
+
+							  echo $patientrecordno->patient_count ; 
+							}
+						  ?>
+						  </span></p>
+							   
+						  </div>
+						</div>	
+					</div>
+				</div>
+				</div> 
+
+				<div class="col-sm-6">
+					<div class="whitebox avg-review">
+						<div class="whitebox-title clearfix">
+						  <h3>Reviews :</h3>
+							 <!-- Controls -->
+						 <div class="slide-control">
+							  <a class="" href="#carousel-example-generic1" role="button" data-slide="prev">
+								<img src="/images/user/docpatient/slide-before.png" alt="">
+							  </a>
+							  <a class="" href="#carousel-example-generic1" role="button" data-slide="next">
+								<img src="/images/user/docpatient/slide-after.png" alt="">
+							  </a></div>
+						</div>	
+						
+						<div id="carousel-example-generic1" class="carousel slide" data-ride="carousel">
+
+							  <!-- Wrapper for slides -->
+								<div class="carousel-inner" role="listbox">
+									<?php 
+										if($this->reviews) {
+											$total = count($this->reviews);
+											$i=1;
+											foreach($this->reviews as $review) { 
+												$style = "";
+												
+												$appId = $review->getAppointmentId();
+												if($appId) {
+													$Appointment = new Application_Model_Appointment();
+													$appoint = $Appointment->find($appId);
+												}
+										 ?>
+										<div class="item <?php echo ($i==1) ? 'active' : '';?>">
+											<div class="container-fluid carousel_div">
+													<div class="col-sm-3"><img src="/images/user/docpatient/review-icon.png"  alt=""></div>
+													<div class="col-sm-9">
+														<div class="referral">
+															<?php if(!empty($appoint)) { ?>
+														<p><img src="/images/user/docpatient/usericon01.png" alt="">Date of appointment: <span><?php echo date("F j, Y",strtotime($appoint->getAppointmentDate())); ?></span></p>
+														<p><img src="/images/user/docpatient/pen-icon.png" alt="">Procedure: <?php echo $appoint->getNeeds(); ?>.</p>
+														<?php } ?>
+														<p><img src="/images/user/docpatient/shout-icon.png" alt="">"<?php echo $review->getReview(); ?>"</p>
+														<ul class="rating-star">
+															<?php $rating = $review->getAverageReviews($review->getDoctorId());
+															
+																$i=0;
+																for($i=0; $i<$rating["recomendation"]; $i++) { ?>
+																	<li style="display: inline;list-style-type: none;padding-right: 5px; float: left;"><img src="/images/img/star-yellow.png" alt=""></li>
+																<?php } 
+																for($j=$i; $j<5; $j++) {?>
+																	<li style="display: inline;list-style-type: none;padding-right: 5px; float: left;"><img src="/images/img/star-blue.png" alt=""></li>
+																<?php }
+															?>		                           	  	
+														</ul>
+													  </div>
+													</div>	
+												</div>
+										</div>
+									<?php } ?>
+									<?php } ?>
+								</div>
+							</div>
+						</div>
+					</div>
+
+			</div>
+	 
+			<div class="row">
+				<div class="col-sm-6">
+				<div class="whitebox">
+				<h3>Past Due Amount :</h3>	
+					<div class="container-fluid">
+							<div class="col-sm-3"><img src="/images/remind-dues.png"  alt=""></div>
+							<div class="col-sm-9">
+								<span><input type="text" class="form" placeholder="$000.00" id="due_amount" name="due_amount" style="background:#1697DC;color:#FFF;width:105% !important;"></span>
+								<input type="hidden" id="patient_id" value="<?php echo $this->patient->getId();?>">
+							</div>	
+							<div class="col-sm-12 right"><br/><input type="submit" id="send_payment_dues" value="Send Reminder"></div>
+					</div>
+				</div>
+		  </div>
+
+			</div>
+			
+			<div class="row">
+				<div class="col-sm-12">
+					 <div style="font-size:20px; margin-top:25px;"><center>Communication History</center></div>
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="col-sm-12">
+							
+			<div class="table-responsive" id="communication_history_list" style="margin-top:20px;font-size:12px;">
+                    <table class="table table-striped table-bordered table-hover">
+                    <thead>
+                    <tr style="background-color:#376CB0;">
+                        <th style="color:#fefefe;width:18%;text-align:center;">Sender</th>
+                        <th style="color:#fefefe;width:18%;text-align:center;">Receiver</th>
+                        <th style="color:#fefefe;width:29%;text-align:center;">Type</th>
+                        <th style="color:#fefefe;width:20%;text-align:center;">Sent/Received At</th>
+                        <th style="color:#fefefe;width:15%;text-align:center;">Message</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+					<?php 
+					
+					if(count($this->communicationHistory)!=0) {
+						$User = new Application_Model_User();
+						foreach($this->communicationHistory as $history) { 
+							$sender = $User->find(trim($history->getSenderUserId()));
+							if($sender){
+								$sender_name = $sender->getFirstName().' '.$sender->getLastName();
+							}else{
+								$sender_name = 'NA';
+							}
+							$receiver = $User->find(trim($history->getReceiverUserId()));
+							if($receiver){
+								$receiver_name = $receiver->getFirstName().' '.$receiver->getLastName();
+							}else{
+								$receiver_name = 'NA';
+							}
+							
+							
+							 $datetime = $history->getSentAt();
+							
+							 if(trim($history->getTimezone())=='UTC'){
+								 $myDateTime = new DateTime($datetime, $pstTimezone);
+								 $offset = $pstTimezone->getOffset($myDateTime);
+								 $time = strtotime($datetime);
+								 $time = $time + $offset;  //we use + instead of using - sign because it already returns with - offset
+								 $converted_date = date("Y-m-d H:i:s", $time);
+							 }else{
+								 $converted_date = $datetime;
+							 }	
+						?>
+						<tr class="gradeX" id="<?php echo trim($history->getId());?>" data-pid="<?php echo trim($this->patient->getUserId());?>">
+							<td><?php echo ucwords($sender_name);?></td>
+							<td><?php echo ucwords($receiver_name);?></td>
+							<td><?php echo $history->getType();?></td>
+							<td><?php echo date('F d, Y g:i A',strtotime($converted_date));?></td>
+							<td class="center" style="text-align:center;"><button data-modal_id="<?php echo trim($history->getId());?>" class="btn btn-info view_msg_info"><i class="fa fa-eye"></i> View</button> 
+							</td>
+						</tr>
+                    <?php } }else{?>
+						<tr class="gradeX">
+							<td colspan="5" align="center"><font color="red">No communication history found.</font></td>
+						</tr>
+                      <?php }?>
+                    </tbody>
+                    </table>
+					</div>
+
+			</div>
+
+		</div>
+			<?php 
+				if(trim($this->totalCommunicationHistory) > 10) {
+			?>
+			<div class="row">
+				<div class="col-sm-12">
+					 <div ><center><img alt="message_ajax_loader" src="/images/loader_msg.GIF" id="display_loader_message_list" style="display: none;"><button class="btn btn-success" id="load_more_history">Load More</button></center></div>
+				</div>
+			</div>
+			<?php }?>
+	 </div>
+</div>
+
+<div class="modal fade" id="preview" tabindex="-1" style="margin-top:50px !important;text-align:justify;margin-left:17% !important;" role="dialog" aria-labelledby="messageModalLabel">
+  <div class="modal-dialog" role="document" style="min-width:790px !important;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" id="close_message_popup_icon" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="messageModalLabel">Message Preview</h4>
+      </div>
+      <div class="modal-body">
+       <div class="row"><div class="col-md-12" id="appendPreview"></div></div>
+      </div>
+      <div class="modal-footer">
+		<button type="button" class="btn btn-default" id="close_message_popup">Close</button>
+      </div>
+   </div>
+  </div>
+</div>
+
+<script>
+  $(function () {
+    $('#myTab a:first').tab('show')
+  })
+</script>
+<script>
+  $(function () {
+    $('#myTab01 a:first').tab('show')
+  })
+</script>
+<script>
+  $(function () {
+    $('#myTab02 a:first').tab('show')
+  })
+</script>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/js/select2.min.js"></script>
+
+
+<script>
+$(document).ready(function(){
+		$('#ada_code').select2();
+	
+  $('.bxslider').bxSlider({
+	nextSelector: '#reviewNext',
+	prevSelector: '#reviewPrev',
+	nextText: '',
+	prevText: '',
+	pager: false
+  });  
+  
+	$(document).on('click','.view_msg_info',function(){
+		var id = $(this).data('modal_id');
+		if(id > 0){
+			previewMessage(id);
+		}else{
+			alert("Unable to show message this time, please try again!");
+		}
+    });
+    
+	$("#close_message_popup").on('click',function(){
+		$("#appendPreview").html('');
+		$("#preview").modal('hide');
+	});
+	
+	$("#close_message_popup_icon").on('click',function(){
+		$("#appendPreview").html('');
+		$("#preview").modal('hide');
+	});
+  
+	
+	 $(document).on('click','#load_more_history',function(){
+        var last_id = $('#communication_history_list tr:last').attr('id');
+        var pid = $('#communication_history_list tr:last').data('pid');
+        if(last_id > 0 && pid > 0){
+			 $.ajax({
+				type:'POST',
+				url:'/user/index/load-more-communication-history',
+				data:'pid='+pid+'&last_id='+last_id,
+				dataType:'json',
+				success:function(response){
+					if(response.key==1){
+						$('#communication_history_list tbody').append(response.html);
+					}else{
+						alert("No more record found!");
+					}
+				}
+			}); 
+		}else{
+			alert("Unable to load record this time, please try after some time!");
+		}
+    });
+  
+  	
+	$('#send_payment_dues').live('click',function(event){
+		event.preventDefault();
+		var payment_dues = $("#due_amount").val();
+		var patientId = $("#patient_id").val();
+		
+		//var regex = /^[1-9]\d*(((,\d{3}){1})?(\.\d{0,2})?)$/;
+		
+		var regex = /^[0-9]+([,.][0-9]+)?$/g;
+
+		if(regex.test(payment_dues)){
+			if(patientId > 0 && payment_dues !=''){
+				var formData = 'patient_id='+patientId+'&due_amount='+payment_dues;
+				$('#send_payment_dues').attr({'disabled':true});
+				$('#due_amount').attr({'disabled':true});
+				$.post('/user/index/send-due-reminder', formData, function(response) {
+					$("#due_amount").val('');
+					if(response.key==1){
+						alert("Reminder sent successfully.");
+					}else{
+						alert('Unable to send reminder this time. Please try again!');
+						$("#due_amount").focus();
+					}
+					$('#send_payment_dues').attr({'disabled':false});
+					$('#due_amount').attr({'disabled':false});
+				},'json');
+			}else{
+				alert('Unable to send reminder this time. Please try again!');
+				$("#due_amount").focus();
+			}
+		}else{
+			alert('Only numbers and decimal allowed!');
+			$("#due_amount").focus();
+		}
+	
+	});
+  
+
+});
+</script>
+<script>
+	jQuery("#fulldate").pickmeup({
+		hide_on_select: true,
+		min: new Date,
+		format: "m-d-Y"
+	});
+	jQuery("#savePatientBtn").click(function(event){
+		event.preventDefault();
+		var name_val = "<?php echo $this->user->getFirstName(); ?>";
+		var lastname_val = "<?php echo $this->user->getLastName(); ?>";
+		var phone_val = "<?php echo $this->patient->getMobile(); ?>";
+		var email_val = "<?php echo $this->user->getEmail(); ?>";
+		var procedure_val = jQuery("#procedure").val();
+		var hour_val = jQuery("#hour").val();
+		var min_val = jQuery("#minutes").val();
+		var am_val = jQuery("#am").val();
+		var fulldate_val = jQuery("#fulldate").val();
+		var ada_code = jQuery("#ada_code option:selected").val();
+		var preventative_maintenance_other = jQuery("input[name=preventative_maintenance_other]:checked").val();
+		jQuery("#message").html("Saving...");
+
+		$.post('/user/index/new-patient-appointment/', {
+            name: name_val,
+            lastname: lastname_val,
+            email: email_val,
+            phone: phone_val,
+            procedure: procedure_val,
+            hour: hour_val,
+            minutes: min_val,
+            am: am_val,
+			fulldate: fulldate_val,
+			ada_code: ada_code,
+			preventative_maintenance_other : preventative_maintenance_other
+        },
+        function(html){
+           // location.reload();
+           jQuery(".welcome").click();           
+           // location.reload();
+
+        });
+        
+	
+		
+        
+	});
+	
+	function previewMessage(id){
+		id = id || 0; 
+		$("#display_loader_message_list").css("display","inline-block");
+		if(id !=0){
+			$.getJSON("/user/index/template-message",{id:id}, function(result){
+				if(result.html !=''){
+					$("#appendPreview").html('');
+					$("#appendPreview").html(result.html);
+					$("#preview").modal('show');
+				}	
+			});
+		}else{
+			$("#appendPreview").html('');
+			$("#preview").modal('hide');
+		}
+		$("#display_loader_message_list").css("display","none");
+	}
+	
+</script>
+</div>
+
+<style>
+	::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+		color: #FFFFFF !important;
+	}
+	:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+	   color: #FFFFFF !important;
+	   opacity:  1;
+	}
+	::-moz-placeholder { /* Mozilla Firefox 19+ */
+	   color: #FFFFFF !important;
+	   opacity:  1;
+	}
+	:-ms-input-placeholder { /* Internet Explorer 10-11 */
+	   color: #FFFFFF !important;
+	}
+	:placeholder-shown { /* Standard (https://drafts.csswg.org/selectors-4/#placeholder) */
+	  color: #FFFFFF !important;
+	}
+	#carousel-example-generic1{
+		margin-left: -3.2% !important;
+		width:106.6% !important;
+		background: #fff !important;
+		padding-bottom: 20px !important;
+		border-bottom-left-radius: 5px !important;
+		border-bottom-right-radius: 5px !important;
+		-webkit-border-bottom-left-radius: 5px !important;
+		-webkit-border-bottom-right-radius: 5px !important;
+		-moz-border-bottom-left-radius: 5px !important;
+		-moz-border-bottom-right-radius: 5px !important;
+		-ms-border-bottom-left-radius: 5px !important;
+		-ms-border-bottom-right-radius: 5px !important;
+	}
+	@media only screen and (min-width:600px) and (max-width:767px) {
+		#carousel-example-generic1{
+			margin-left: -4.5% !important;
+			width:109.5% !important;
+			background: #fff !important;
+			padding-bottom: 20px !important;
+			border-bottom-left-radius: 5px !important;
+			border-bottom-right-radius: 5px !important;
+			-webkit-border-bottom-left-radius: 5px !important;
+			-webkit-border-bottom-right-radius: 5px !important;
+			-moz-border-bottom-left-radius: 5px !important;
+			-moz-border-bottom-right-radius: 5px !important;
+			-ms-border-bottom-left-radius: 5px !important;
+			-ms-border-bottom-right-radius: 5px !important;
+		}
+	}
+	
+	@media only screen and (min-width:768px) and (max-width:1024px) {
+		#carousel-example-generic1{
+			margin-left: -6.1% !important;
+			width:112.5% !important;
+			background: #fff !important;
+			padding-bottom: 20px !important;
+			border-bottom-left-radius: 5px !important;
+			border-bottom-right-radius: 5px !important;
+			-webkit-border-bottom-left-radius: 5px !important;
+			-webkit-border-bottom-right-radius: 5px !important;
+			-moz-border-bottom-left-radius: 5px !important;
+			-moz-border-bottom-right-radius: 5px !important;
+			-ms-border-bottom-left-radius: 5px !important;
+			-ms-border-bottom-right-radius: 5px !important;
+		}
+	}
+	
+	
+	@media only screen and (min-width:480px) and (max-width:599px) {
+		#carousel-example-generic1{ 
+		margin-left: -4.5% !important;
+		width:109.5% !important;
+		background: #fff !important;
+		padding-bottom: 20px !important;
+		border-bottom-left-radius: 5px !important;
+		border-bottom-right-radius: 5px !important;
+		-webkit-border-bottom-left-radius: 5px !important;
+		-webkit-border-bottom-right-radius: 5px !important;
+		-moz-border-bottom-left-radius: 5px !important;
+		-moz-border-bottom-right-radius: 5px !important;
+		-ms-border-bottom-left-radius: 5px !important;
+		-ms-border-bottom-right-radius: 5px !important;
+		}
+	
+	}
+	@media only screen and (max-width:479px) {
+		#carousel-example-generic1{ 
+			margin-left: -4.5% !important;
+			width:109.5% !important;
+			background: #fff !important;
+			padding-bottom: 20px !important;
+			border-bottom-left-radius: 5px !important;
+			border-bottom-right-radius: 5px !important;
+			-webkit-border-bottom-left-radius: 5px !important;
+			-webkit-border-bottom-right-radius: 5px !important;
+			-moz-border-bottom-left-radius: 5px !important;
+			-moz-border-bottom-right-radius: 5px !important;
+			-ms-border-bottom-left-radius: 5px !important;
+			-ms-border-bottom-right-radius: 5px !important;
+		 }
+	}
+
+</style>

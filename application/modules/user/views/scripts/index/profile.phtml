@@ -1,0 +1,310 @@
+<style>
+.namesection03 input[type="text"] {
+    background: none repeat scroll 0 0 #f6f6f6;
+    border: 1px solid #d6d6d6;
+    border-radius: 5px;
+    height: 25px;
+    padding: 0 10px;
+    width: 65%;
+}
+select {
+    background: none repeat scroll 0 0 #f6f6f6;
+    border: 1px solid #d6d6d6;
+    border-radius: 5px;
+    height: 25px;
+    padding: 0 10px;
+    width: 23%;
+}
+textarea {
+    background: none repeat scroll 0 0 #f6f6f6;
+    border: 1px solid #d6d6d6;
+    border-radius: 6px;
+    margin: 0 0 0 2%;
+    min-height: 61px;
+    padding: 1%;
+    width: 95%;
+}
+</style>
+
+<div id="admin-content-profile">
+	<h2 class="profile-heading">My Profile</h2>
+	<form method="post" action="<?php echo $this->form->action?>" enctype="multipart/form-data" >
+		<div class="profile-brief">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="auctor-new clearfix">
+						<div class="col-sm-2">
+							<img src="<?php echo $this->doctor_headshot; ?>" alt="<?php ?>" class="fullborder-img">
+							<a href="#" class="uplode"><img src="/images/user/uplode-icon-new.png" alt="">Upload Picture</a>
+							<?php echo $this->form->company_logo;?> <div class="numbersection"><input name="" type="submit" value="Save Image"></div>
+						</div>
+						<div class="col-sm-10">
+							<h1><?php echo $this->doctor->getFname(); ?></h1>
+							<h3><?php echo $this->doctor->getStreet()." ".$this->doctor->getCity()." ".$this->doctor->getZipcode()." ".$this->doctor->getState(); ?></h3>
+							<p><?php echo $this->doctor->getAbout(); ?></p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="container-fluid">
+		<div class="row">
+			<div class="auctormiddle">
+				
+					<input type="hidden" name="formno" value="1" />
+					<div class="row" style="font-size:13px !important;font-weight:normal !important;">
+						<div class="col-md-5">
+							<img src="/images/user/usericon.png" alt="name"> <label for="firstname"> First Name: </label><?php echo $this->form->firstname;?>
+						</div>
+						<div class="col-md-4">
+							<label for="lasttname">Last Name: </label><?php echo $this->form->lastname;?>
+						</div>
+						<div class="col-md-3">
+							<label for="specialty_title">Title: </label><?php echo $this->form->specialty_title;?>
+						</div>
+					</div>
+					<div class="address clearfix">
+						<div class="address01" style="width:29%;float:left;">
+							<p>
+								<img src="/images/user/location-icon.png" alt="address"><label for="street"> Street: </label><?php echo $this->form->street;?>
+							</p>
+						</div>
+						<div class="address03" style="width:70%;float:right;">
+							<p>
+								<label for="city">City: </label><?php echo $this->form->city; ?> 
+								<label for="state">State: </label><?php echo $this->form->state; ?>
+								<label for="zipcode">Zip: </label><?php echo $this->form->zipcode; ?>
+							</p>
+						</div>
+					</div>
+
+					<div class="numbersection">
+						<p>
+							<img src="/images/user/telphone-icon.png" alt="telephone"><label for="phone">Phone Number: </label><?php echo $this->form->phone; ?>
+							<label for="mobile">Mobile: </label><?php echo $this->form->actualphone; ?>
+						</p>
+					</div>
+
+					<div class="numbersection">
+						<input name="" type="submit" value="Save Changes">
+
+					</div>
+                                            
+                           <div class="numbersection">
+                                 <div id="updateapimsg"></div>
+						<p>
+							<label for="phone">Doctor's Api Key : </label><span style="color:#000000;" id="apidiv"><?php  echo $this->doctor->getApi(); ?></span>
+
+						</p>
+						<?php 
+                                 $doctorap= $this->doctor->getApi();
+                         if(empty($doctorap)){
+						?>
+						<p>
+							<label for="phone">Please  Click  <span style="color:red;" onclick="updateUID(<?php  echo $this->doctor->getId(); ?>)">Here</span> For insert API Key </label>
+
+						</p>
+						<?php
+					    }
+						?>
+			  </div>
+			</div>
+
+			<!--overview-section -->
+			<div class="overview-section">
+				<div class="overview-section01">
+					<p>
+						<img src="/images/user/newicon01.png" alt="overview"> Overview
+					</p>
+					<?php echo $this->form->about; ?>
+				</div>
+
+				<div class="overview-section02">
+					<div class="overview-section02-left" id="hospitalAffiliations">
+						<p>
+							<img src="/images/user/newicon02.png" alt="hospital affiliations"> Hospital Affiliations
+						</p>
+						<h6 id="hospitalContainer">
+							<dt id="hospital-label">&nbsp;</dt>
+							<?php echo $this->form->hospital; ?>
+						</h6>
+						<!-- <h6><a href="#" id="addHospital">Add More</a></h6> -->
+					</div>
+
+					<div class="overview-section02-middle">
+						<p>
+							<img src="/images/user/newicon03.png" alt="education"> Education
+						</p>
+						<h6 id="educationContainer"><?php echo $this->form->education; ?></h6>
+						<h6><a href="#" id="addEducation">Add More</a></h6>
+						
+					</div>
+					<div class="overview-section02-right">
+						<p> <img src="/images/user/newicon04.png" alt="Board Certifications"> Board Certifications</p>
+						<h6 id="certificationContainer"><?php echo $this->form->certification; ?></h6>
+						<h6><a href="#" id="addCertification">Add More</a></h6>
+					</div>
+					<div class="clr"></div>
+				</div>
+
+				<div class="overview-section02">
+					<div class="overview-section02-left">
+						<p> <img src="/images/user/newicon05.png" alt="Languages"> Language Spoken</p>
+						<h6 id="languageContainer"><div><?php echo $this->form->languages; ?></div></h6>
+						<h6><a href="#" id="addLanguages">Add More</a></h6>
+					</div>
+					<div class="overview-section02-middle">
+						<p>
+							<img src="/images/user/newicon06.png" alt="awards"> Awards and Publications
+						</p>
+						<h6 id="awardContainer"><?php echo $this->form->text_award; ?></h6>
+						<h6><a href="#" id="addAward">Add More</a></h6>
+					</div>
+					<!-- <div class="overview-section02-right">
+						<p> <img src="/images/user/newicon07.png" alt="Insurance"> Insurance Accepted</p>
+						<p>
+							<h6 id="insuranceContainer"><a href="/user/index/insurance" id="changeInsurance">Edit accepted insurance plans</a></h6>
+						</p>
+					</div> -->
+					<div class="overview-section02-right">
+						<p> <img src="/images/user/newicon07.png" alt="Insurance"> Working Hours</p>
+						<p>
+							<h6 id="insuranceContainer"><?php echo $this->form->working_hours; ?></h6>
+						</p>
+					</div>
+					<div class="clr"></div>
+				</div>
+
+				<div class="overview-section02">
+					<div class="overview-section02-left">
+						<p> <img src="/images/user/newicon08.png" alt="Specialties"> Specialities</p>
+						<h6 id="categoryContainer"><div><?php echo $this->form->category; ?></div></h6>
+						<h6><a href="#" id="addCategory">Add More</a></h6>
+					</div>
+					<div class="overview-section02-middle">
+						<p> <img src="/images/user/newicon09.png" alt="time zone"> Timezone</p>
+						<h6><?php echo $this->form->timezone; ?></h6>
+					</div>
+					<div class="overview-section02-right">&nbsp;</div>
+					<div class="clr"></div>
+				</div>
+
+				<div class="overview-section02">
+					<input name="" type="submit" value="Save Changes">
+				</div>
+			</div>
+			<!--/overview-section -->
+			
+				
+		</div>
+	</div>
+	</form>
+
+</div>
+
+
+
+<div class="container-fluid div-space">
+	<div class="row">
+		<div class="col-sm-6">
+		</div>
+		<div class="col-sm-6">
+		</div>
+	</div>
+</div>
+
+<script>
+  $(function () {
+    $('#myTab a:first').tab('show')
+  })
+</script> 
+<script>
+  $(function () {
+    $('#myTab01 a:first').tab('show')
+  })
+</script>
+<script>
+  $(function () {
+    $('#myTab02 a:first').tab('show')
+  })
+</script>
+<script>
+
+$(document).ready(function() {
+    var languages_wrapper = $("#languageContainer"); //Fields wrapper
+    var categories_wrapper = $("#categoryContainer"); //Fields wrapper
+    var education_wrapper = $("#educationContainer"); //Fields wrapper
+    var award_wrapper = $("#awardContainer"); //Fields wrapper
+    var certification_wrapper = $("#certificationContainer"); //Fields wrapper
+    var hospital_wrapper = $("#hospitalContainer"); //Fields wrapper
+    
+    var add_language_button = $("#addLanguages"); //Add button ID
+    var add_category_button = $("#addCategory"); //Add button ID
+    var add_education_button = $("#addEducation"); //Add button ID
+    var add_award_button = $("#addAward"); //Add button ID
+    var add_certification_button = $("#addCertification"); //Add button ID
+    var add_hospital_button = $("#addHospital"); //Add button ID
+    	
+    $(add_hospital_button).click(function(e){ //on add input button click
+        e.preventDefault();
+       	var field = $("#hospital0").clone();
+       	id = $.now();
+		field.attr("id", id);
+		field.attr("name", "hospital["+id+"]");
+       	$(hospital_wrapper).append('<div class="elemetContainer">');
+       	$(hospital_wrapper).append(field);
+       	$(hospital_wrapper).append('<a class="remove_field" href="#"><img src="/images/remove.png" alt="remove"></a></div>');
+    });
+    $(add_language_button).click(function(e){ //on add input button click
+        e.preventDefault();
+        id = $.now();
+        $(languages_wrapper).append('<div class="elemetContainer"><input type="text" name="languages['+id+']"><a class="remove_field" href="#"><img src="/images/remove.png" alt="remove"></a></div>');      
+    });
+    $(add_education_button).click(function(e){ //on add input button click
+        e.preventDefault();
+        id = $.now();
+        $(education_wrapper).append('<div class="elemetContainer"><input type="text" name="education['+id+']"><a class="remove_field" href="#"><img src="/images/remove.png" alt="remove"></a></div>');
+    });
+    $(add_certification_button).click(function(e){ //on add input button click
+        e.preventDefault();
+        id = $.now();
+        $(certification_wrapper).append('<div class="elemetContainer"><input type="text" name="certification['+id+']"><a class="remove_field" href="#"><img src="/images/remove.png" alt="remove"></a></div>');
+    });
+    $(add_award_button).click(function(e){ //on add input button click
+        e.preventDefault();
+        id = $.now();
+        $(award_wrapper).append('<div class="elemetContainer"><input type="text" name="text_award['+id+']"><a class="remove_field" href="#"><img src="/images/remove.png" alt="remove"></a></div>');
+    });
+    $(add_category_button).click(function(e){ //on add input button click
+        e.preventDefault();
+        var field = $("#category0").clone();
+       	id = $.now();
+		field.attr("id", id);
+		field.attr("name", "category["+id+"]");
+		$(categories_wrapper).append('<div class="elemetContainer"><select name="category['+id+']">'+$(field).html()+'</select><a class="remove_field" href="#"><img src="/images/remove.png" alt="remove"></a></div>');
+    });
+    
+    $('.overview-section').on("click",".remove_field", function(e){ //user click on remove text
+        e.preventDefault(); $(this).parent('div').remove();
+    })
+
+     $('.elemetContainer').append('<a href="#" class="remove_field"><img src="/images/remove.png" alt="remove"></a>');
+});
+
+function updateUID(userid){
+	url="/user/index/my-profile/doctorid/"+userid;
+	$.ajax({
+		url:url,
+		success:function(){
+
+		    window.location.reload();
+            $("updateapimsg").html("Updated successfully");
+
+		}
+
+	});
+
+}
+</script>
+<!--/ADMIN CONTENT --> 

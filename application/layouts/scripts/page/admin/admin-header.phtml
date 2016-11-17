@@ -1,0 +1,19 @@
+<!-- Header Area -->
+<?php 
+		$usersNs = new Zend_Session_Namespace("members");
+        
+?>
+<div id="main">
+	<div id="header">
+		<a href='/admin' class="logo"><img border='0' src="/images/admin-images/logo.png" /></a>
+	</div>
+  
+  
+  <?php if (Zend_Auth::getInstance()->hasIdentity()){?>
+ 
+   
+<?php 
+      	}
+       ?>
+	
+  <!-- End Header Area --> 

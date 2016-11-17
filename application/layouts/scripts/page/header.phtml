@@ -1,0 +1,41 @@
+<a name="top"></a>
+<div class="full-white">
+<!--TOP SECTION -->
+	<div class="container bottom-border">
+    	<div class="row">
+        	<div class="col-sm-6">
+            	<div class="topcatchline">Welcome to <span>doctors!</span> Manage your health online and book appointments instantly!</div>
+            </div>
+            <div class="col-sm-6">
+            	<?php echo $this->render('/page/blocks/menu/menu.phtml');?>
+            </div>
+        </div>
+    </div>
+<!--/TOP SECTION -->
+<!--NAV SECTION -->
+	<div class="container">
+    	<div class="row">
+        	<div class="col-sm-6">
+            	<div class="logo"><a href="/"><img src="/images/doctors-logo.png" alt="doctors"></a></div>
+            </div>
+            <div class="col-sm-6 mainnav">
+            <nav class="nav-main pull-right">
+                <div id="menu-container">
+            	<nav id="main-menu" class="pull-right">
+                	<ul class="group">
+                		<li>
+			          		<a href="/" <?php if($this->controllerName=='index' && $this->actionName=="index" ) { ?> class="selected" <?php } ?> >Home</a>
+			          	</li>
+			          	<!--<li><a href="/features">Features</a></li>-->
+			          	<li><a href="/about">About Us</a></li>
+			          	<li><a href="/contact-us">Contact Us</a></li>
+			        </ul>
+                </nav>
+                </div>
+                </nav>
+            </div>
+        </div>
+    </div>
+<!--/NAV SECTION -->
+</div>
+

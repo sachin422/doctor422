@@ -1,0 +1,192 @@
+<?php
+$this->headScript()->appendFile('/js/autosuggest/jquery.autocomplete.min.js');
+$this->headLink()->appendStylesheet('/js/autosuggest/jquery.autocomplete.css');
+?>
+<div class="findbox<?php if($this->isReasontoVisit):?>-inner<?php endif;?>">
+    <div class="find-doc-logo"></div>
+    <form accept-charset="utf-8" action="/search/"  name="patient_search" id="patient_search">
+        <div class="search-div" id="search-div">
+            <select id="category" name="category" ><!-- sobi2Search -->
+                <option value=""><?php echo $this->lang[72]; ?></option>
+                <?php foreach ($this->categories as $category): ?>
+                    <option value="<?php echo $category->getId() ?>" <?php if ($category->getId() == $this->catid)echo 'selected="selected"'; ?>><?php echo $category->getName() ?></option>
+                <?php endforeach; ?>
+            </select>
+            <p class="in">in</p>
+            <input type="text" name="search1" id="search1" value="<?php
+                        if ($this->search1 != '')echo $this->search1;else echo 'Enter a City or Zip';
+                        ?>" onfocus="if(this.value=='Enter a City or Zip'){this.value=''}" onblur="if(this.value==''){this.value='Enter a City or Zip'}" class="doc-city">
+                 <div class="clear"></div>
+                 <p class="in"><?php echo $this->lang[64]; ?></p>
+                 <div>
+                     <span id="insurance_company">
+                         <select name="insurance" id="insurance"><!-- sobi2insurance -->
+                             <option value=""><?php echo $this->lang[67]; ?></option>
+                             <option value="-1" <?php if (-1 == $this->insuranceid)echo 'selected="selected"'; ?>><?php echo $this->lang[75]; ?></option>
+                                <?php foreach ($this->insurances as $insurance): ?>
+                            <option value="<?php echo $insurance->getId() ?>" <?php if ($insurance->getId() == $this->insuranceid)echo 'selected="selected"'; ?>><?php echo $insurance->getCompany() ?></option>
+                        <?php endforeach; ?>
+                        </select>
+                    </span>
+                    <span id="sobi2subinsurance">
+                        <select id="plan" name="plan"><!-- sobi2insurance2 -->
+                            <option value=""><?php echo $this->lang[65]; ?></option>
+                                <?php foreach ($this->insuranceplans as $plan): ?>
+                                <option value="<?php echo $plan->getId() ?>" <?php if ($plan->getId() == $this->planid)echo 'selected="selected"'; ?>><?php echo $plan->getPlan() ?></option>
+                                <?php endforeach; ?>
+                              </select>
+                                            </span> </div>
+                                        <?php if ($this->isReasontoVisit): ?>
+                                            <div class="clear"></div>
+                                            <p class="in"><?php echo $this->lang[92]; ?></p>
+                                            <div>
+                                                <span id="reason_for_visit">
+                                                    <select name="reason" id="reason"><!-- sobi2insurance -->
+                                                        <option value=""><?php echo $this->lang[93]; ?></option>
+                                                    <?php foreach ($this->reasons as $reason): ?>
+                                                            <option value="<?php echo $reason->getId() ?>" <?php if ($reason->getId() == $this->reasonid)echo 'selected="selected"'; ?>><?php echo $reason->getReason() ?></option>
+                                                    <?php endforeach; ?>
+                                                        </select>
+                                                </span>
+                                            </div>
+                                            <?php endif; ?>
+            
+            <div class="clear"></div>
+             <div class="advance-seach" id="advanced_head" rel="<?php if($this->searchText!='')echo 'hide';else echo 'show';?>"><a href="javascript:;">Search by Name <span><?if($this->searchText!='')echo '-';else echo '+';?></span></a></div>
+            <div class="search-by-name" id="advanced" style="display: <?php if($this->searchText!='')echo 'block';else echo 'none';?>;">
+             <input type="text" name="searchText" id="searchText" value="<?php if($this->searchText!='')echo $this->searchText;else echo 'Enter Practice or Doctor Last Name'?>" onfocus="if(this.value=='Enter Practice or Doctor Last Name'){this.value=''}" onblur="if(this.value==''){this.value='Enter Practice or Doctor Last Name'}" class="doc-city">
+            </div>
+            <div class="clear"></div>
+			
+<input type="submit" id="search_btn" class="<?php if ($this->isReasontoVisit): ?>begin-modify-btn<?php else:?>begin-search-btn<?php endif;?>" value="">
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript">
+<!--//--><![CDATA[
+$(document).ready(function() {
+
+    
+    $('#advanced_head').click(function(){
+        if($(this).attr('rel')=='show'){
+            $('#advanced').slideDown(500);
+            $(this).attr('rel','hide');
+            $(this).find('span').html('-');
+        }else if($(this).attr('rel')=='hide'){
+            $('#advanced').slideUp(500);
+            $(this).attr('rel','show');
+            $(this).find('span').html('+');
+            $('#searchText').val('Enter Practice or Doctor Last Name');
+        }
+        return false;
+    });
+
+    // fetch insurance companies
+    $('#category').change(function(){
+        $.post('/index/insurance/', {
+            catid:$(this).val(),isInnerPage:<?php echo $this->isReasontoVisit?>
+        },
+        function(html){
+            //alert(html);return false;
+            var decoded = $.json.decode(html);
+            if(decoded['isInnerPage']==1){
+                $('#reason').html(decoded['reasonStr']);
+            }
+            $('#insurance').html(decoded['insuranceStr']);
+            $('#plan').html('<option value="">Select My Insurance Plan</option>');
+        });
+
+    });
+
+    // fetch insurance plans
+    $('#insurance').change(function(){
+        $.post('/index/plan/', {
+            comp_id:$(this).val()
+        },
+        function(html){
+            $('#plan').html(html);
+        });
+        var comp_id = $(this).val();
+        $.post('/search/insurance', {
+            comp_id:comp_id, drids: $('#drid_data').val()
+        },
+        function(data){
+           //alert(data);return false;
+           var decoded = $.json.decode(data);
+          //alert(decoded['565403'])
+          for(var i in decoded){
+              $('#insuranse-accepted'+i).html(decoded[i]);
+          }
+          updatePaginationLink(comp_id);
+           });
+    });
+
+    function updatePaginationLink(comp_id){
+        
+        var pattern = /&insurance=[\-1-9]+/;
+          $('div.pagination div a').each(function(){
+              var href = $(this).attr('href');
+              if(href.search(pattern) > -1){
+                  var href = href.replace(pattern, '&insurance='+comp_id)
+              }else{
+                  href = href+'&insurance='+comp_id;
+              }
+              $(this).attr('href', href);
+          });
+       
+    }
+    
+    // fetch insurance plans
+    $('#plan').change(function(){
+        $.post('/index/plan-session/', {
+            plan_id:$(this).val()
+        },
+        function(html){
+            
+        });
+
+    });
+
+    // on form submit
+     $('#patient_search').submit(function(){
+
+        if(($('#searchText').val()=='' || $('#searchText').val()=='Enter Practice or Doctor Last Name') && $('#category').val()==''){
+            $('#category').val('7');
+        }
+
+        if($('#search1').val()=='Enter a City or Zip'){
+            $('#search1').val('');
+        }
+
+        if($('#searchText').val()=='Enter Practice or Doctor Last Name'){
+            $('#searchText').val('');
+        }
+
+        if($('#searchText').val()!=''){
+            $('#search1').val('');
+            $('#category').val('');
+        }
+
+        if(($('#search1').val()=='Enter a City or Zip' || $('#search1').val()=='') && $('#searchText').val()==''){
+            alert('Please Enter a City or Zip');
+            return false;
+        }
+
+    });
+});
+
+
+//]]>
+</script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+
+	$("#search1").autocomplete('/search/autoseggest/', {
+		width: 293,
+		selectFirst: false,
+		minChars: 3
+	});
+});
+</script>

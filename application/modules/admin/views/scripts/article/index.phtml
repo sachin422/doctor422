@@ -1,0 +1,86 @@
+<div id="rightsidemain">
+    <div id="rightcontentpart">
+        <div id="rightsideheading">
+            <img src="/images/admin-images/bl-tl.gif" align="left" /><img src="/images/admin-images/bl-tr.gif" align="right" />
+
+
+
+	Article - <span class='msg'>Total <?php echo $this->total ?> Article(s) found! </span>
+                  <span style="margin: 0pt 15px 0pt 0pt; float: right;"><a class="add" href="/admin/article/edit">Add</a></span>
+        </div>
+
+        <div id="rightsidecontentpart">
+            
+            <?php
+            if ($this->total > 0) {
+            ?>
+                <br><span class='red'>
+                <? echo $this->msg; ?>
+            </span>
+                
+            <br>
+            <?= $this->paginationControl($this->paginator, 'Sliding', 'pagination.phtml'); ?>
+                <br>
+
+                <table width='100%' border='0' class='dataTable' cellspacing='0' cellpadding='0'>
+                    <tr>
+                        <th>SNo.</th>
+                        <th>Title</th>
+                        <th>Summary</th>
+                        <th>Category</th>
+                        <th style="width: 10%;">Action</th>
+                    </tr>
+
+                <?php
+                $sno = 0;
+                $page = $this->paginator->getCurrentPageNumber();
+                $items_per_page = $this->paginator->getItemCountPerPage();
+                if ($page > 1) {
+                    $sno = $items_per_page * $page - $items_per_page;
+                }
+                $rowClass = 'trbg1';
+
+                foreach ($this->paginator as $row) {
+                    $sno++;
+
+                    if ($rowClass == "trbg1")
+                        $rowClass = 'trbg';
+                    else
+                        $rowClass='trbg1';
+
+                    $Category = new Application_Model_ArticleCategory();
+                    $catName = $Category->find($row['category']);
+                ?>
+                    <tr class='<?= $rowClass ?>'>
+                        <td><?= $sno ?></td>
+                        <td><?= $row['title'] ?></td>
+                        <td><?= $row['summary'] ?></td>
+                        <td><?php if (!empty($catName))
+                        echo $catName->getName() ?></td>
+                            <td>
+                        <?php
+                        $published = "false.gif";
+                        $published_title = "Click here to publish";
+                        if ($row['published'] == 1) {
+                            $published = "true.gif";
+                            $published_title = "Click here to unpublished";
+                        }
+                        ?>
+                        <a href='/admin/article/publish/id/<?= $row['id'] ?>/page/<?= $page ?>'><img src='/images/admin-images/<?php echo $published ?>' border='0' title='<?php echo $published_title ?>'/></a>&nbsp;&nbsp;
+                        <a href='/admin/article/edit/id/<?= $row['id'] ?>/page/<?= $page ?>'><img src='/images/admin-images/edit.gif' border='0' title='Edit'/></a>&nbsp;&nbsp;
+                        <a href='/admin/article/delete/id/<?= $row['id'] ?>/page/<?= $page ?>'><img src='/images/admin-images/delete.gif' border='0' title='Edit'/></a>&nbsp;&nbsp;
+                    </td>
+
+                </tr>
+                <?php
+                    }
+                ?>
+                </table><br />
+            <?= $this->paginationControl($this->paginator, 'Sliding', 'pagination.phtml'); ?><br /><br />
+            <?php
+                }
+            ?></div>
+
+    </div>
+    <div class="btm-curve"><img src="/images/admin-images/btm-r-l.gif" align="left" /><img src="/images/admin-images/btm-r-r.gif" align="right" /></div>
+</div>

@@ -1,0 +1,50 @@
+<?php
+if(count($this->componies)):
+?>
+<ul class="view-all-insurance">
+    <?php foreach($this->componies as $company=>$plans):?>
+    <li><strong><?php echo $company?></strong>
+        <?php if(count($plans)):?>
+        <ul>
+            <?php foreach($plans as $p):
+        ?>
+            <li><?php echo $p?></li>
+        <?php endforeach;?>
+        </ul>
+        <?php endif;?>
+    </li>
+    <?php endforeach;?>
+</ul>
+<?php endif;?>
+<?php /*
+    if(count($this->insurances)):?>
+    <ul class="view-all-insurance">
+    <?php
+    $company = '';
+    $j = 1;
+    $jend = 0;
+    foreach($this->insurances as $ins):
+            if($company == ''){
+                $company = $ins->company;
+            }elseif($company != $ins->company){
+                $company = $ins->company;
+                $j=1;
+                $jend = 1;
+            }else{
+                $j = 0;
+            }?>
+        <?php if($jend):?>
+                </ul>
+            </li>
+            <?php $jend = 0;?>
+        <?php endif;?>
+        <?php if($j):?>
+            <li><strong><?php echo $company;?></strong>
+                <ul>
+        <?php endif;?>
+                    <li><?php echo $ins->plan?></li>
+        
+  <?php endforeach;?>
+    </ul>
+<?php endif;?>
+<?php */?>

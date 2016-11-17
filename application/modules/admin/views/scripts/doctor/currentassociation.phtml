@@ -1,0 +1,14 @@
+<select size="10" style="width: 300px;" tabindex="6" class="select" multiple="multiple" id="doctor_association2" name="doctor_association2[]">
+
+
+    <?php
+    $AssocModel = new Application_Model_Association();
+    $arrAssociation = $AssocModel->fetchAll("category_id in ({$this->ids})");
+    foreach($arrAssociation as $assoc)
+    {
+      
+       
+        echo "<option value='".$assoc->getId()."'>".$assoc->getAssociation()."</option>";
+    }
+    ?>
+</select>

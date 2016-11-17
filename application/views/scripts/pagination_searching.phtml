@@ -1,0 +1,46 @@
+<div id="pagination" class="clearfix">
+	<div class="right">
+        <!-- First page link -->
+        <?php
+       $actual_url= $this->url();
+    
+       $arrayLink=array();
+       if(is_array($this->linkArray))
+       		$arrayLink=$this->linkArray;
+        ?>
+        <?php if (isset($this->previous)): ?>
+              <a href="<?=$this->searchUrl($actual_url,array_merge(array('page' => $this->first),$arrayLink)) ?>"><?php echo $this->lang[428]; ?></a> |
+        <?php else: ?>
+                <span class="disabled"><?php echo $this->lang[428]; ?></span> |
+        <?php endif; ?>
+
+        <!-- Previous page link -->
+
+        <?php if (isset($this->previous)): ?>
+              <a href="<?= $this->searchUrl($actual_url,array_merge(array('page' => $this->previous),$arrayLink)) ; ?>">&laquo; <?php echo $this->lang[0]; ?></a> |
+        <?php else: ?>
+            <span class="disabled">&laquo; <?php echo $this->lang[0]; ?></span> |
+        <?php endif; ?>
+        <!-- Numbered page links -->
+        <?php foreach ($this->pagesInRange as $page): ?>
+            <?php if ($page != $this->current): ?>
+                <a href="<?= $this->searchUrl($actual_url,array_merge(array('page' => $page),$arrayLink)) ; ?>"><?= $page; ?></a>  |
+            <?php else: ?>
+                <span class="current"><?= $page; ?></span> |
+            <?php endif; ?>
+        <?php endforeach; ?>
+        <!-- Next page link -->
+        <?php if (isset($this->next)): ?>
+              <a href="<?= $this->searchUrl($actual_url,array_merge(array('page' => $this->next),$arrayLink)); ?>"><?php echo $this->lang[1]; ?> &raquo;</a> |
+        <?php else: ?>
+            <span class="disabled"><?php echo $this->lang[1]; ?> &raquo;</span> |
+        <?php endif; ?>
+        <!-- Last page link -->
+        <?php if (isset($this->next)): ?>
+              <a href="<?= $this->searchUrl($actual_url,array_merge(array('page' => $this->last),$arrayLink)); ?>"><?php echo $this->lang[427]; ?></a>
+        <?php else: ?>
+            <span class="disabled"><?php echo $this->lang[427]; ?></span>
+        <?php endif; ?>
+       <!-- &nbsp; Page <?= $this->current; ?> of <?= $this->last; ?> -->
+    </div>
+ </div>

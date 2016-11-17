@@ -1,0 +1,526 @@
+<?php
+$settings = new Admin_Model_GlobalSettings();
+$locale = $settings->settingValue('locale');
+setlocale(LC_ALL, $locale);
+
+if($this->rescheduled) {
+	$Appointment = new Application_Model_Appointment();
+	$oldAppointment = $Appointment->find($this->rescheduled);
+} else {
+	$oldAppointment = null;
+}
+?>
+<script type="text/javascript" src="/js/selection/select2.js"></script>
+<script type="text/javascript" src="/js/selection/bootstrap.js"></script>
+<script type="text/javascript" src="/js/selection/prettify.js"></script>
+
+<link href="/style/selection/bootstrap.css" type="text/css" rel="stylesheet">
+<link href="/style/selection/select2.css" type="text/css" rel="stylesheet">
+
+<link href="/style/selection/font-awesome.css" type="text/css" rel="stylesheet">
+<link href="/style/selection/prettify.css" type="text/css" rel="stylesheet">
+
+<div class="container">
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="appointments-main">
+				<!--appointmentdetails-section -->
+				<div class="appointmentdetails-section">
+					<h2>Book Appointment</h2>
+					<div class="appointmentdetails-section01 clearfix">
+						<div class="appointmentdetails-section01-left"><h3><a href="#" class="active"><img src="/images/one-icon.png" alt=""> Appointment Details</a></h3></div>
+						<div class="appointmentdetails-section01-middle"><h3><a href="#"><img src="/images/two-icon.png" alt=""> Sign In</a></h3></div>
+						<div class="appointmentdetails-section01-right"><h3><a href="#"><img src="/images/three-icon.png" alt=""> Success!</a></h3></div>
+					</div>
+
+
+					<div class="appointmentdetails-main clearfix" id="initialScreen">
+						<div class="appointmentdetails-main-left clearfix">
+							<div class="appointmentdetails-main-left01">
+								<div class="appointmentdetails-main-left01-left">
+									<img src="<?php echo $this->doctor->getImage(); ?>" alt="<?php echo $this->doctor->getFname(); ?>" class="profileImage">
+								</div>
+								<div class="appointmentdetails-main-left01-right clearfix">
+									<h3><?php echo $this->doctor->getFname(); if ($this->doctor->getSpecialtyTitle()) echo ", ".$this->doctor->getSpecialtyTitle(); ?></h3>
+									<div class="appointmentdetails-main-left01-right-main clearfix">
+										<div class="appointmentdetails-main-left01-right01">
+											<img src="/images/location-icon.png" alt="">
+										</div>
+										<div class="appointmentdetails-main-left01-right02">
+											<p>
+												<?php echo $this->doctor->getStreet()?>, <?php echo $this->doctor->getCity()?>, <?php echo $this->doctor->getState()?> <?php echo $this->doctor->getZipcode()?>
+											</p>
+										</div>
+									</div>
+									<div class="appointment-time-section" id="appointmentData">
+										<div class="appointment-time-section01"><h4><img src="/images/time-icon.png" alt=""> Appointment time</h4></div>
+										<div class="appointment-time-section02 clearfix">
+											<div class="appointment-time-section02-left"><img src="/images/timeicon03.png" alt=""></div>
+											<div class="appointment-time-section02-right">
+												<p><span id="appdate"></span><br><span id="apptime"></span></p>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+
+						<form id="appoint_form"  method="post" action="">
+							<input type="hidden" value="<?php echo $this->drid;?>" id="drid" name="drid" />
+							<input type="hidden" value="" id="status" name="status" />
+							<input type="hidden" id="checkRegStatus" name="checkRegStatus" value="0" />							
+							<input type="hidden" value="" id="appointment_time" name="appointment_time" />
+							<input type="hidden" value="" id="appointment_date" name="appointment_date" />
+							<input type="hidden" name="patient_slot" value="" id="patient_slot">
+							<input type="hidden" name="rescheduled" value="<?php echo $this->rescheduled; ?>" id="rescheduled">
+
+							<div class="appointmentdetails-main-right">
+								
+
+								<?php
+								/***********************\
+										STEP 1
+								\***********************/
+								 ?>
+
+								<div id="appstep1">
+									<h3><img src="/images/one-icon-small.png" alt=""> Choose a time to book with <?php echo $this->doctor->getFname(); if ($this->doctor->getSpecialtyTitle()) echo ", ".$this->doctor->getSpecialtyTitle(); ?></h3>
+
+									
+									
+									<!--Time slot-->
+									<?php
+									$todayDate	=	mktime(0,0,0, date("m"), date("d"), date("Y"));
+									$requestDate	=	mktime(0,0,0, date("m"), date("d"), date("Y"));
+									$jd = GregorianToJD(date("m"), date("d"), date("Y")); //GregorianToJD(m, d, y);
+									$reqMM =  date("m");
+									$reqDD =  date("d");
+									$reqYY =  date("Y");
+									$requestDay = date("l", $requestDate);
+									$weekFirstDate		=	$jd;
+									$weekSecondDate		=	$jd+1;
+									$weekThirdDate		=	$jd+2;
+									$weekFourthDate		=	$jd+3;
+									$preWeekStart	=	$jd-3;
+									$nextWeekStart	=	$jd+3;
+									$preWeekStartDate = JDToGregorian($preWeekStart);
+									$nextWeekStartDate = JDToGregorian($nextWeekStart);
+									?>
+
+
+
+									<?php
+									/**      APOINTMENTS          **/
+									?>
+									<?php
+									$todayDate	=	mktime(0,0,0, date("m"), date("d"), date("Y"));
+									if(isset($_REQUEST['start_date']))
+									{
+										$start_date = $_REQUEST['start_date'];
+										$dateArr = explode("/", $start_date);
+										$requestDate	=	mktime(0,0,0, $dateArr[0], $dateArr[1], $dateArr[2]);
+										$jd = GregorianToJD($dateArr[0], $dateArr[1], $dateArr[2]); //GregorianToJD(m, d, y);
+										$reqMM =  $dateArr[0];
+										$reqDD =  $dateArr[1];
+										$reqYY =  $dateArr[2];
+									}else{
+										$requestDate	=	mktime(0,0,0, date("m"), date("d"), date("Y"));
+										$jd = GregorianToJD(date("m"), date("d"), date("Y")); //GregorianToJD(m, d, y);
+										$reqMM =  date("m");
+										$reqDD =  date("d");
+										$reqYY =  date("Y");
+									}
+									$requestDay = date("l", $requestDate);
+									$weekFirstDate		=	$jd;
+									$weekSecondDate		=	$jd+1;
+									$weekThirdDate		=	$jd+2;
+									$weekFourthDate		=	$jd+3;
+									$preWeekStart	=	$jd-4;
+									$nextWeekStart	=	$jd+4;
+									$preWeekStartDate = JDToGregorian($preWeekStart);
+									$nextWeekStartDate = JDToGregorian($nextWeekStart);
+									?>
+
+									<div class="patient-tablesection clearfix">
+										<div class="arrow-prev">
+											<a rel="<?php echo $preWeekStartDate;?>" href="#;" id="div_prev" class="info"><img src="/images/custom/table-leftarrow.png" alt=""></a>
+										</div>
+										
+										<div class="patient-table">
+											<div class="title-row clearfix"  id="appointment-head">
+
+											</div>
+											
+											<div class="data-column clearfix appint-times">
+												<div class="data-block" id="appointment-<?php echo $this->doctor->getId();?>"></div>
+											</div>
+										</div>
+										<div class="arrow-next">
+											<a rel="start_date=<?php echo $nextWeekStartDate;?>" href="#;" id="div_next" class="info"><img src="/images/custom/table-rightarrow.png" alt=""></a>
+										</div>
+									</div>
+								
+									
+													
+									<!--time-section01 -->
+									<!-- <div class="time-section01">
+										<textarea name="" cols="" rows="">Suspendisse eget ullamcorper ipsum. Vestibulum condimentum leo a justo rutrum varius. Mauris tristique in erat non elementum. Suspendisse feugiat arcu neque, eget eleifend ligula feugiat sit amet. Integer sed condimentum mi.</textarea>
+									</div> -->
+									<!--/time-section01 -->
+
+									<h3><img src="/images/two-icon-small.png" alt=""> Who is the Appointment for?</h3>
+
+									<p>
+										<?php 
+										$checked = 'checked="true"';
+										$checked2 = "";
+										if($oldAppointment) {
+											if($oldAppointment->getOnbehalf()) {
+												$checked = '';
+												$checked2 = 'checked="true"';
+											}
+										} ?>
+										<input type="radio" name="onbehalf" value="0" id="RadioGroup1_0" <?php echo $checked; ?> /> Me  <span> <input type="radio" name="onbehalf" value="1" id="RadioGroup1_1" <?php echo $checked2; ?> /> Someone else</span>
+									</p>
+									<input name="pname" type="text" placeholder="Type the patient's full name" id="pname" 
+									<?php
+										if($oldAppointment) { 
+											echo "value='".$oldAppointment->getFname()." ".$oldAppointment->getLname()."'";
+										}
+									 ?> >
+
+									<h3><img src="/images/three-icon-small.png" alt=""> What’s the reason for your visit?</h3>
+									<div class="time-section01">
+										<textarea cols="" rows="" id="reason_for_visit" name="reason_for_visit" placeholder="Type the reason of your visit">
+											<?php if($oldAppointment) { 
+												echo $oldAppointment->getNeeds();
+											} ?>
+										</textarea>
+									</div>
+
+									<h3><img src="/images/four-icon-small.png" alt=""> Have you seen this doctor before?</h3>
+									<p style="margin-bottom:24px;">
+										<?php 
+										$checked = 'checked="true"';
+										$checked2 = "";
+										if($oldAppointment) {
+											if($oldAppointment->getFirstVisit()) {
+												$checked = '';
+												$checked2 = 'checked="true"';
+											}
+										} ?>
+										<input type="radio" name="first_visit" value="radio" id="first_visit0" <?php echo $checked2; ?> /> Yes   <span> <input type="radio" name="first_visit" value="radio" id="first_visit1" <?php echo $checked; ?>/> No</span>
+									</p>
+
+									<h3><img src="/images/five-icon-small.png" alt=""> Will you use Insurance?</h3>
+								
+									<select name="insurance_company" id="insurance_company" tabindex="-1" style="display: none;" class="js-example-basic-single js-states form-control">
+										<option value="0">Choose Insurance Company</option>
+										<option value="0">No Insurance</option>
+										
+										<?php 
+										//regular insurances
+										$insurance_comp= new Application_Model_InsuranceCompany();
+										if($this->insurancedataArr) { ?>
+										<optgroup label="Regular">
+											<?php 
+											foreach($this->insurancedataArr as $key=>$value) { ?>
+											<option value="<?php echo $key;?>" <?php if($reasonNamespace->company==$key)echo "selected='selected'";?>>
+												<?php echo $value;?>
+											</option>
+											<?php } ?>
+										</optgroup>
+										<?php } ?>
+										  
+										<?php 
+										//pet insurances
+									
+										if($this->petinsurancedataArr) { ?>
+										 <optgroup label="Pet">
+										 	<?php
+											foreach($this->petinsurancedataArr as $key=>$value) { ?>
+											<option value="<?php echo $key;?>" <?php if($reasonNamespace->company==$key)echo "selected='selected'";?>>
+												<?php echo $value;?>
+											</option>
+											<?php } ?>
+										</optgroup>
+										<?php } ?>
+										  
+									</select></br></br>
+									<select name="insurance_plan" id="insurance_plan" tabindex="-1" style="display: none;" class="js-example-basic-single js-states form-control">
+										<option value="0">Choose Insurance Plan</option>
+										</select>
+									
+
+									
+
+									<input type="button" value="" id="nxtStp1"/>
+								</div><!-- step 1 -->
+
+
+								<?php
+								/***********************\
+										STEP 2
+								\***********************/
+								 ?>
+								<div id="appstep2">
+									<!--signin-section -->
+									<div class="signin-section">
+										<h4>Existing user of doctors</h4>
+										<div class="signin-section01 clearfix">
+											<div class="signin-section01-left">Email :</div>
+											<div class="signin-section01-right"><input name="username" type="text" id="username"></div>
+										</div>
+										<div class="signin-section01 clearfix">
+											<div class="signin-section01-left">Password :</div>
+											<div class="signin-section01-right"><input name="password" type="password" id="password"></div>
+										</div>
+										<div class="signin-section01 clearfix">
+											<div class="signin-section01-left">&nbsp;</div>
+											<div class="signin-section01-right"><h6><a href="/index/forgot" target="_blank">Forgot your password?</a></h6></div>
+										</div>
+
+										<div class="signin-section01 clearfix">
+											<div class="signin-section01-left">&nbsp;</div>
+											<div class="signin-section01-right"><input type="button" id="loginBtn"></div>
+										</div>
+
+										<h4>New User of doctors</h4>
+										<h5>Who will be making the Appointments?</h5>
+										<div class="signin-section01 clearfix">
+											<div class="signin-section01-left">First Name:</div>
+											<div class="signin-section01-right"><input name="firstname" type="text" id="firstname"></div>
+										</div>
+										<div class="signin-section01 clearfix">
+											<div class="signin-section01-left">last Name:</div>
+											<div class="signin-section01-right"><input name="lastname" type="text" id="lastname"></div>
+										</div>
+										<br>
+										<h5>Create your login Credentials to Manage your Appointments.</h5>
+										<div class="address-section clearfix">
+											<div class="address-section-left">E-mail Address:</div>
+											<div class="address-section-right"><input name="newemail" type="text" id="newemail"></div>
+										</div>
+										<div class="address-section clearfix">
+											<div class="address-section-left">Password:</div>
+											<div class="address-section-right"><input name="newpass" type="password" id="newpassword"></div>
+										</div>
+										<div class="address-section clearfix">
+											<div class="address-section-left">Confirm Password:</div>
+											<div class="address-section-right"><input name="newpass2" type="password" id="newpass2"></div>
+										</div>
+                                        <div class="address-section clearfix">
+                                            <p class="formlabel"><input type="checkbox" tabindex="14" class="form" value="1" id="terms" name="terms"> I have read and accept doctors’s <a href="<?php echo $this->seoUrl('/index/terms');?>" target="_blank">Terms &amp; Conditions</a></p>
+                                        </div>
+                                        <div class="address-section clearfix">
+											<input type="button" id="registerBtn">
+										</div>
+									</div>
+									<!--/signin-section -->
+								</div> <!-- /step2 -->
+
+							</div>
+						</form>
+					</div>
+
+
+					<!--appointmentdetails-section -->
+					
+					<!--succes-section -->
+					<div id="appstep3">
+						<div class="succes-section">
+							<h2> <img src="/images/blueleft-btn.png" alt=""> Please Wait Doctor’s Confirmation</h2>
+							<h5>If you have any questions, please contact the Doctor’s office directly at <span><?php echo $this->doctor->getAssignPhone(); ?></span></h5>
+							<div class="succes-section01 clearfix">
+								<div class="succes-section01-left">
+									<img src="<?php echo $this->doctor->getImage(); ?>" alt="<?php echo $this->doctor->getFname()?>" class="profileImage">
+								</div>
+								<div class="succes-section01-right">
+									<h3><?php echo $this->doctor->getFname(); ?> <?php echo $this->doctor->getSpeciality(); ?><br>
+										<span><?php
+				    						$DocCategory = new Application_Model_DoctorCategory();
+											$categoryArr = $DocCategory->getDoctorCategories("doctor_id='{$this->doctor->getId()}'");
+											asort($categoryArr);
+											$specialties = "";
+											if(!empty($categoryArr)){
+												foreach($categoryArr as $catname): 
+													$specialties .= $catname." ";
+												endforeach;
+												echo $specialties;
+											}
+											?></span>
+									</h3>
+									<p>
+										<?php echo $this->doctor->getStreet()?>, <?php echo $this->doctor->getCity()?>, <?php echo $this->doctor->getState()?> <?php echo $this->doctor->getZipcode()?>
+									</p>
+									<p><span>Date:</span> <span id="appdateFinal"></span> at <span id="apptimeFinal"></span></p>
+									<p><span>Patient:</span> <span id="patnameFinal"></span></p>
+									<p><span>Reason for visit:</span> <span id="reasonFinal"></span></p>
+								</div>
+							</div>
+							<div class="succes-section02 clearfix">
+								<div class="succes-section02-left">
+									<a href="/appointment/show-ical/id/" id="ical"><img src="/images/calender-btn.png" alt=""></a>
+								</div>
+								<div class="succes-section02-right clearfix">
+									<div class="succes-section02-right01"><p><span>Like us on facebook.</span> you’ll feel great!</p></div>
+									<div class="succes-section02-right02">
+										<ul>
+											<li>
+												<div class="fb-like" data-href="http://www.doctors.com" data-layout="box_count" data-action="like" data-show-faces="false" data-share="false"></div>
+											</li>
+											<li>
+												<a href="https://twitter.com/share" class="twitter-share-button" data-url="http://www.doctors.com" data-count="vertical">Tweet</a>
+												<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+											</li>
+											<li>
+												<div class="g-plusone" data-size="tall" data-href="http://www.doctors.com"></div>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!--succes-section -->
+
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!--/CONTENT SECTION -->
+<div id="error" style="display:none">
+	<span id="errorMessage"></span>
+</div>
+<a href="#error" id="errorLauncher"></a>
+
+
+<!--Time slot-->
+
+<script type="text/javascript">
+		jQuery(".info").click(
+		
+	        function () {
+	            //alert(1);
+	            start_date = jQuery(this).attr('rel');
+	                if(start_date!="") {
+	                    start_date_arr = start_date.split('=');
+	                    if(jQuery.trim(start_date_arr[1])!=''){
+	                       //$('#appointment-head-fancybox').block({ message: null });
+	                        jQuery.blockUI({ overlayCSS: { backgroundColor: '#000' } });
+	                        loadSlotData(start_date_arr[1], 'c');
+	                        setTimeout(jQuery.unblockUI, 2000);
+	                    }
+	                }
+	            }
+	        );
+		function loadSlotData(start_date, load_type) {
+		// load_type variable use to check if function called on page load or on click.
+			if(start_date!="") {
+				drid_val = <?php echo $this->doctor->getId();?>;
+				//jQuery("#drid_current").val(drid_val);
+				jQuery.post('/profile/timeslot/', {drid: drid_val, start_date:start_date,disp:'fancy' },
+					function(data){
+						var decoded = $.json.decode(data);
+						dr_div_id = "#appointment-"+decoded['drid'];//2
+						jQuery(dr_div_id).html(decoded['return_data']);//1
+	                    jQuery("#appointment-head").html(decoded['appointment_head']); //3
+	                    if(load_type=='c'){ // if time slot loading from on click event.
+	                        jQuery("#div_prev").attr('rel','start_date='+decoded['button_prev_date']);//4
+	                        jQuery("#div_next").attr('rel','start_date='+decoded['button_next_date']); //5
+	                    }
+	                    initiate_click();
+	                  //  bindClickTimeslot();
+	                }, false);
+			}
+		}
+		function bindClickTimeslot(){
+			jQuery('a.slots').bind({
+				click: function() {
+					window.parent.location=jQuery(this).attr('href');
+					return false;
+				}
+			});
+		}
+		jQuery(document).ready(function() {
+			loadSlotData("<?php echo date('m/d/Y')?>", 'p');
+		});
+		function initiate_click(){
+			jQuery('.moreLink').click(function(){
+				jQuery(this).hide();
+				jQuery('#'+jQuery(this).attr('rel')).fadeIn(500);
+			});
+		}
+		jQuery(document).ready(function(){
+			jQuery('#reason_to_visit').change(function(){
+				jQuery.post('/profile/set-reasonforvisit/', {
+					reason:$(this).val()
+				},
+				function(html){});
+			});
+			$('div.jqtransform').jqTransform();
+		});
+	</script>
+<script>
+function validate()
+{
+	//alert("aa");
+		
+	
+	var patientslot=document.forms["frmp"]["patient_slot"].value;
+	if(patientslot == null || patientslot == "")
+	{
+		alert("please choose one slot");
+        return false;
+	}		
+	var x = jQuery('#patient_id').val();
+	
+    if (x == null || x == "") {
+        alert("please choose patient");
+        return false;
+    }
+	
+	
+	
+}
+function changevalue(id, name)
+{
+	jQuery('.view-btn-n').each(function() {
+		var dd=this.id;
+    	//alert( this.id );
+		document.getElementById(dd).className = "view-btn";
+		jQuery("#patient_id").val('');
+	});
+	//jQuery( "#"+id ).removeClass( "view-btn noClass" ).addClass( "view-btn-n" );
+document.getElementById(id).className = "view-btn-n";
+
+	jQuery("#patient_id").val(id);
+	jQuery("#patientName").html(name);
+}
+$(document).ready(function() {
+  $(".js-example-basic-single").select2();
+});
+
+$('#insurance_company').change(function() {
+
+    var data = "";
+    $.ajax({
+        type:"GET",
+        url : "/appointment/iplanajax",
+        data : "company_id="+$(this).val(),
+        async: false,
+        success : function(response) {
+		//alert(response);
+            $("#insurance_plan").html(response);
+            //return response;
+        }
+    });
+	})
+
+</script>
+
+
+
+

@@ -1,0 +1,83 @@
+<?php
+
+    $DoctorAppointment = new Application_Model_DoctorAppointmentCal();
+    $TimeSlot = new Base_Timeslot();
+
+    $slotsForDay = array();
+    $slotsAvailable = array();
+    $object = $DoctorAppointment->fetchAll("doctor_id='{$this->docObject->getId()}' AND slot_date='{$this->date}'", "slot_time");
+    if ($object) {
+        foreach ($object as $s => $slot) {
+            $slotsForDay[] = date("h:i A", strtotime($this->date . " " . $slot->getSlotTime()));
+        }
+    }
+
+        $slotsAvailable = $TimeSlot->getDoctorTimeSlots($this->docObject->getId(), $this->date, 1);
+    
+//prexit($slotsForDay);
+?>
+<div id="rightsidemain">
+    <div id="rightcontentpart">
+        <form name="frmSlot" action="/admin/timeslot/update/" method="post">
+            <table align="left" width="100%" cellpadding="5" cellspacing="2" border="0" bgcolor="#fff">
+                <tr>
+                    <th colspan="2" align="center">Doctor: <?php echo $this->docObject->getFname(); ?><br />
+					Set time slot for: <?php echo date("D, M-j Y", strtotime($this->date)); ?></th>
+                </tr>
+                <tr>
+                    <td width="50%" align="right">Enter the time slot:<br /><br />
+					Please enter the time in 12 Hrs format only with AM/PM.<br />
+					You can enter more than one time in one go.<br />
+					Please use new line to seperate time slot.<br />
+					format: hh:mm like 08:10 AM, 03:15 PM
+                    </td>
+                    <td>
+
+                        <?php
+                            if($slotsAvailable){
+                                echo '<input type="checkbox" value="1" id="checkall" name="checkall"> <strong>Check All</strong><br />';
+                            }
+                            $isDeletedSlot = $TimeSlot->isDeletedSlot($this->docObject->getId(), $this->date);
+                            foreach($slotsAvailable as $slot){
+								$slot1 = str_replace('πμ', 'AM', $slot);
+								$slot1 = str_replace('μμ', 'PM', $slot1);
+                                $checked = "";
+                                if($isDeletedSlot===false){ // first check if all the slots had deleted for this date.
+                                    if(!empty($slotsForDay)){
+                                        if(in_array($slot1, $slotsForDay))$checked = "checked=\"checked\"";
+                                    }else{
+                                        $checked = "checked=\"checked\"";
+                                    }
+                                }
+                                echo "<input type=\"checkbox\" id=\"displayCheck\" name=\"displayCheck[]\" {$checked} value=\"{$slot}\"> {$slot}<br>";
+                            }
+                        ?>
+                        <!--textarea name="slots" cols="10" rows="20"><?php //echo $this->timeSlots; ?></textarea-->
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center" colspan="2">
+                        <input type="hidden" name="date" value="<?php echo $this->date; ?>" />
+                        <input type="hidden" name="drid" value="<?php echo $this->docObject->getId(); ?>" />
+                        <input type="button" name="back" value="<< Back" onclick="history.back();" />
+                        <input type="submit" name="submit" value="Update Time Slot" />
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+<script language="javascript">
+$(document).ready(function(){
+    $("#checkall").click(function(){
+        if($(this).attr('checked')){
+            var checked_status = true;
+        }else{
+            var checked_status = false;
+        }
+        $("input[id='displayCheck']").each(function(){
+            this.checked = checked_status;
+        });
+    });
+});
+</script>

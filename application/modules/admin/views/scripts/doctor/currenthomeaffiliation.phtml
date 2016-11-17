@@ -1,0 +1,14 @@
+<select size="10" style="width: 300px;" tabindex="6" class="select" multiple="multiple" id="doctor_affiliation2" name="doctor_affiliation2[]">
+
+
+    <?php
+    $HospitalAffiliationModel = new Application_Model_HospitalAffiliation();
+    $arrHospitalAffiliation = $HospitalAffiliationModel->fetchAll("state = '{$this->stateid}'");
+    foreach($arrHospitalAffiliation as $affiliation)
+    {
+      
+       
+        echo "<option value='".$affiliation->getId()."'>".$affiliation->getName()."</option>";
+    }
+    ?>
+</select>

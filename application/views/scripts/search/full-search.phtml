@@ -1,0 +1,242 @@
+<!--orenge-section -->
+
+<div class="orenge-section">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-sm-12" style="padding-left:0px;">
+				<div class="searchsec">
+					<input name="" type="image" src="/images/search/srch.png">
+				</div>
+				<div class="searchsec01">
+					<form action="/search" method="get" id="areaSearch">
+					<?php if ($this->selectedinsurance != '') {  
+						$insuranceName = str_replace(" ", "+", $this->selectedinsurance);
+						?>
+						<input type="hidden" name="<?php echo $this->lang[935]; ?>" value="<?php echo $insuranceName; ?>">
+					<?php } ?>
+					<?php if ($this->insurance_plan != '') {  
+						$planName = str_replace(" ", "+", $this->insurance_plan);
+						?>
+						<input type="hidden" name="<?php echo $this->lang[935]; ?>" value="<?php echo $planName; ?>">
+					<?php } ?>
+					<?php if ($this->selectedCategory != '') {  ?>
+						<input type="hidden" name="<?php echo $this->lang[933]; ?>" value="<?php echo $this->selectedCategory; ?>">
+					<?php } ?>
+					<input name="<?php echo $this->lang[934]; ?>" type="text" placeholder="Enter City" id="area"
+						<?php if ($this->area != '') {  echo 'value="'.$this->area.'"'; } ?> 
+					>
+					<input type="hidden" name="lat" id="lat" value="<?php echo $this->lat; ?>">
+					<input type="hidden" name="lon" id="lon" value="<?php echo $this->lon; ?>">
+					</form>
+				</div>
+				<div class="searchsec02 widget-hidden-on-load">
+					<h3 class="accordion " id="body-section">Specialty<span></span></h3>
+					<div class="container01 " >
+						<div class="content">
+                            <!--speciality-section -->
+							<div class="specialty-section">
+								<div class="specialty-section01 clearfix">
+									<input name="specialty_filter" id="categorySearch" type="text" placeholder="Filter Specialties">
+									<input name="" type="submit" value="" id="categorySearchSubmit">
+								</div>
+								<div class="specialty-section02">
+									
+									<div class="specialty-section02-main">
+										<h3>Popular Specialties</h3>
+										<ul id="specialtyList">   
+											<?php 
+											$categoriesSearchPrefix = "/search?";
+											if ($this->area != '') {  
+												$categoriesSearchPrefix .= $this->lang[934]."=".$this->area."&lat=".$this->lat."&lon=".$this->lon."&";
+
+											}
+											if ($this->selectedinsurance != '') {  
+												$insuranceName = str_replace(" ", "+", $this->selectedinsurance);
+												$categoriesSearchPrefix .= $this->lang[935]."=".$insuranceName."&";
+											}
+											if ($this->insurance_plan != '') {  
+												$planName = str_replace(" ", "+", $this->insurance_plan);
+												$categoriesSearchPrefix .= "insurance_plan=".$planName."&";
+											}
+											$Category = new Application_Model_Category();
+        									$categories = $Category->fetchAll("status=1 AND popular=1", "name ASC");
+											foreach($categories as $category) {
+											 ?>                    
+											<li>
+												<a href="<?php echo $categoriesSearchPrefix.$this->lang[933]."=". $category->getName(); ?>">
+													<img src="<?php echo $category->getImage(); ?>" alt="<?php echo $category->getName(); ?>"> <span><?php echo $category->getName(); ?></span>
+												</a>
+											</li>											
+											<?php } ?>
+										</ul>
+										<h3>All Specialties</h3>
+										<ul id="allSpeciatlyList">											
+											<?php
+											$categories = $Category->fetchAll("status=1 AND popular=0", "name ASC");
+											foreach($categories as $category) {
+											 ?>                    
+											<li>
+												<a href="<?php echo $categoriesSearchPrefix.$this->lang[933]."=". $category->getName(); ?>">
+													<img src="<?php echo $category->getImage(); ?>" alt="<?php echo $category->getName(); ?>"> <span><?php echo $category->getName(); ?></span>
+												</a>
+											</li>
+											<?php } ?>
+										</ul>
+									</div>
+								</div>
+							</div>
+                            <!--/speciality-section -->
+						</div>
+					</div>
+				</div>
+				<div class="searchsec02 widget-hidden-on-load">
+					<h3 class="accordion " id="body-section">Insurance Plan<span></span></h3>
+					<div class="container01">
+						<div class="content">
+							<!--insurance-section -->
+							<div class="specialty-section">
+								<div class="specialty-section01 clearfix">
+									<input name="insurance_filter" type="text" id="insuranceSearch" placeholder="Filter Insurances">
+									<input name="" type="submit" value="" id="insuranceSearchSubmit">
+								</div>
+								<div class="specialty-section02">
+									<div class="specialty-section02-main">
+										<ul id="insuranceList">
+											<li><b>Popular Insurance Providers</b></li>
+											<?php 
+											$insuranceSearchPrefix = "/search?";
+											if ($this->area != '') {  
+												$insuranceSearchPrefix .= $this->lang[934]."=".$this->area."&lat=".$this->lat."&lon=".$this->lon."&";
+											}
+											if ($this->selectedCategory != '') {  
+												$insuranceSearchPrefix .= $this->lang[933]."=".$this->selectedCategory."&";
+											}
+											$Insurance = new Application_Model_InsuranceCompany();
+											$insurances = $Insurance->fetchAll(null,"company ASC" );
+											foreach($insurances as $insurance) {
+												$insuranceName = str_replace(" ", "+", $insurance->getCompany());
+											 ?>                    
+											<li>
+												<a href="<?php echo $insuranceSearchPrefix.$this->lang[935]."=".$insuranceName; ?>">
+													<!-- <img src="/images/insurance/<?php echo $insurance->getLogo(); ?>" alt="<?php echo $insurance->getCompany(); ?>"> -->
+													<span><?php echo $insurance->getCompany(); ?></span>
+												</a>
+											</li>
+											<?php } ?>
+											<li><a href="<?php echo $insuranceSearchPrefix; ?>">All Insurance Providers</a></li>
+										</ul>
+									</div>
+									<h6 class="plan">Don't see your plan? please <a href="/contact-us"><span>contact us.</span></a></h6>
+								</div>
+							</div>
+							<!--/insurance-section -->
+						</div>
+					</div>
+				</div>
+			</div><!--/col-->
+		</div><!--/row-->
+	</div>
+</div>
+<script>
+$('#categorySearch').keyup(function(){
+   var valThis = $(this).val();
+   $('#specialtyList>li, #allSpeciatlyList li').each(function(){
+    	var text = $.trim($(this).text().toLowerCase());
+    	(text.indexOf(valThis) == 0) ? $(this).show() : $(this).hide();
+   });
+});
+
+$('#insuranceSearch').keyup(function(){
+   var valThis = $(this).val();
+   $('#insuranceList>li').each(function(){
+    	var text = $.trim($(this).text().toLowerCase());
+    	(text.indexOf(valThis) == 0) ? $(this).show() : $(this).hide();
+   });
+});
+
+//autocomplete
+/*$("#area").autocomplete('/search/autosuggest/', {
+	width: 300,
+	autoFocus: false, 
+	delay : 0,
+	minChars: 2,
+	selectFirst: false
+});*/
+</script>
+
+
+<script type="text/javascript">
+
+    $(document).ready(function() {
+        //$('.widget-hidden-on-load').show(200);
+    });
+
+
+function initSearchField() {
+	var input = document.getElementById('area');
+	var options = {
+	  types: ['geocode'],
+	  componentRestrictions: {country: 'usa'}
+	};
+	autocomplete = new google.maps.places.Autocomplete(input, options);
+	google.maps.event.addListener(autocomplete, 'place_changed', function() {
+		var place = autocomplete.getPlace();
+		console.log(place);
+		var addresses = place.address_components;
+		$(addresses).each(function(){
+			var object1 = $(this);
+		
+			var geo = new google.maps.Geocoder;
+			geo.geocode({'address':object1[0].long_name},function(results, status){
+				if (status == google.maps.GeocoderStatus.OK) {
+				  	var place = autocomplete.getPlace();
+					lat = place.geometry.location.lat();
+					lng = place.geometry.location.lng();
+					$('#lat').val(lat);
+					$('#lon').val(lng);
+					$("#areaSearch").submit();
+				  }
+		   });
+			
+		});
+	});
+	var input = document.getElementById('area'); 
+	// dojo.connect(input, 'onkeydown', function(e) { 
+	google.maps.event.addDomListener(input, 'keydown', function(e) { 
+		if (e.keyCode == 13) 
+		{ 
+				if (e.preventDefault) 
+				{ 
+						e.preventDefault(); 
+				} 
+				else 
+				{ 
+						// Since the google event handler framework does not handle 
+						//early IE versions, we have to do it by our self. :-( 
+						e.cancelBubble = true; 
+						e.returnValue = false; 
+				} 
+		} 
+	});
+}
+function add0(number){
+	var result = String(number);
+	var numDec = result.split(".")[1].length;
+	if(numDec<7) {
+		var limit = 7-numDec;
+		for(var i=0; i<limit; i++) {
+			result+="0";
+		}
+	}
+	return result;
+}
+
+function roundNumber(num, dec) {
+	var result = Math.round(num*Math.pow(10,dec))/Math.pow(10,dec);
+	return result;
+}
+google.maps.event.addDomListener(window, 'load', initSearchField);
+
+
+</script>
+<!--/orenge-section -->

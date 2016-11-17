@@ -1,0 +1,71 @@
+<!--
+<script type="text/javascript" src="/js/tooltip.js"></script>
+<style>
+
+#tooltip{
+	position:absolute;
+	border:1px solid #333;
+	background:#f7f5d1;
+	padding:2px 5px;
+	color:#333;
+	display:none;
+	z-index: 10;
+	}
+
+/*  */
+</style>
+-->
+<div class="dashboard-navi">
+   <ul class="clearfix">
+		<li>
+			<a href="/user" class="clearfix" id="synopsisLinkImage" title="<?php echo $this->lang[28]; ?>">
+				<span id="synopsisLinkText">
+					<?php echo $this->lang[29]; ?>
+				</span>
+			</a>
+			
+		</li>
+		<li>
+			<a href="/user/index/appointment/" class="clearfix">				
+				<span id="randezvousLinkText">
+					<?php echo $this->lang[30]; ?>
+				</span>
+			</a>
+		</li>
+		<li>
+			<a href="/user/index/personal" class="clearfix">
+				<span id="profileLinkText">
+					<?php echo $this->lang[31]; ?>
+				</span>
+			</a>
+		</li>
+		<li>
+			<a href="/user/index/account-details" class="clearfix">
+				<span id="accountLinkText">
+				<?php echo $this->lang[32]; ?>
+				</span>
+			</a>
+		</li>
+		<li>
+			<a href="/user/timeslot" class="clearfix" >
+				<span id="calendarLinkText">
+				<?php echo $this->lang[33]; ?>
+				</span>
+			</a>
+		</li>
+		<li>
+			<a href="/user/index/doctor-review" class="clearfix" >
+				<span id="reiviewsLinkText">
+				<?php echo $this->lang[573]; ?>
+				</span>
+			</a>
+		</li>		
+		<li>
+			<a href="/index/logout" class="clearfix">
+				<span id="logoutLinkText">
+				<?php echo $this->lang[35]; ?>
+				</span>
+			</a>
+		</li>
+  </ul>
+</div>

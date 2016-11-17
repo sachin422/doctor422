@@ -1,0 +1,17 @@
+SetEnv APPLICATION_ENV development 
+
+RewriteEngine On
+RewriteBase /
+#RewriteCond %{HTTP_HOST} !^www\. [NC]
+#RewriteRule ^(.*)$ http://www.%{HTTP_HOST}/$1 [R=301,L]
+RewriteCond %{REQUEST_FILENAME} -s [OR]
+RewriteCond %{REQUEST_FILENAME} -l [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^.*$ - [NC,L]
+RewriteRule ^.*$ index.php [NC,L]
+#RewriteCond %{HTTP_HOST} !^doctors.com/login$ [NC]
+#RewriteRule ^(.*)$ app.doctors.com/login/$1 [L,R=301]
+#RewriteRule ^/?$ "http\:\/\/app.doctors\.com\login\/" [R=301,L]
+#RewriteCond %{HTTP_HOST} ^doctors.com/login$
+#RewriteRule ^$ http://app.doctors.com/login [L,R=301]
+

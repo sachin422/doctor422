@@ -1,0 +1,130 @@
+<?php
+
+	$todayDate	=	mktime(0,0,0, date("m"), date("d"), date("Y"));
+
+	if(isset($_REQUEST['start_date']))
+	{
+		$start_date = $_REQUEST['start_date'];
+		$dateArr = explode("/", $start_date);
+		$requestDate	=	mktime(0,0,0, $dateArr[0], $dateArr[1], $dateArr[2]);
+		$jd = GregorianToJD($dateArr[0], $dateArr[1], $dateArr[2]); //GregorianToJD(m, d, y);
+		$reqMM =  $dateArr[0];
+		$reqDD =  $dateArr[1];
+		$reqYY =  $dateArr[2];
+	}else{
+
+		$requestDate	=	mktime(0,0,0, date("m"), date("d"), date("Y"));
+		$jd = GregorianToJD(date("m"), date("d"), date("Y")); //GregorianToJD(m, d, y);
+		$reqMM =  date("m");
+		$reqDD =  date("d");
+		$reqYY =  date("Y");
+	}
+
+	$requestDay = date("l", $requestDate);
+
+	$weekFirstDate		=	$jd;
+	$weekSecondDate		=	$jd+1;
+	$weekThirdDate		=	$jd+2;
+	$weekFourthDate		=	$jd+3;
+	$weekFifthDate		=	$jd+4;
+	$weekSixthDate		=	$jd+5;
+	$weekSeventhDate	=	$jd+6;
+
+	$preWeekStart	=	$jd-5;
+	$nextWeekStart	=	$jd+5;
+
+	$day1 = strftime("%A",mktime(0,0,0, $reqMM,$reqDD,$reqYY))." <span>".JDToGregorian($weekFirstDate)."</span>";
+	$day2 = strftime("%A",mktime(0,0,0, $reqMM,$reqDD+1,$reqYY))." <span>".JDToGregorian($weekSecondDate)."</span>";
+	$day3 = strftime("%A",mktime(0,0,0, $reqMM,$reqDD+2,$reqYY))." <span>".JDToGregorian($weekThirdDate)."</span>";
+	$day4 = strftime("%A",mktime(0,0,0, $reqMM,$reqDD+3,$reqYY))." <span>".JDToGregorian($weekFourthDate)."</span>";
+	$day5 = strftime("%A",mktime(0,0,0, $reqMM,$reqDD+4,$reqYY))." <span>".JDToGregorian($weekFifthDate)."</span>";
+	$day6 = strftime("%A",mktime(0,0,0, $reqMM,$reqDD+5,$reqYY))." <span>".JDToGregorian($weekSixthDate)."</span>";
+	$day7 = strftime("%A",mktime(0,0,0, $reqMM,$reqDD+6,$reqYY))." <span>".JDToGregorian($weekSeventhDate)."</span>";
+
+	$preWeekStartDate = JDToGregorian($preWeekStart);
+	$nextWeekStartDate = JDToGregorian($nextWeekStart);
+
+	?>
+
+    <!--  start floating table header bar -->
+    <script type="text/javascript">
+		/*jQuery(function () {
+
+		  var msie6 = jQuery.browser == 'msie' && jQuery.browser.version < 7;
+
+		  if (!msie6) {
+			var top = jQuery('#comment').offset().top - parseFloat(jQuery('#comment').css('margin-top').replace(/auto/, 0));
+			jQuery(window).scroll(function (event) {
+			  // what the y position of the scroll is
+			  var y = jQuery(this).scrollTop();
+
+			  // whether that's below the form
+			  if (y >= top) {
+				// if so, ad the fixed class
+				jQuery('#comment').addClass('fixed');
+			  } else {
+				// otherwise remove it
+				jQuery('#comment').removeClass('fixed');
+			  }
+			});
+		  }
+		});
+		*/
+	</script>
+
+
+
+
+        <?php
+        if($todayDate < $requestDate){
+            $rel_startdate= "start_date=$preWeekStartDate";
+        } else {
+            $rel_startdate = "";
+        }
+        
+	?>
+	<?php /*
+      <div id="commentWrapper">
+      <div id="comment">
+        <div id="header_menu" class="search-header">
+            <div class="arrow-left"><a rel="<?php echo $rel_startdate;?>" href="javascript:;" id="div_prev" class="info">Previous</a></div>
+            <div class="arrow-right"><a rel="start_date=<?php echo $nextWeekStartDate;?>" href="javascript:;" id="div_next" class="info">Next</a></div>
+            <div class="doc-info f-left">Doctor / Office Information</div>
+            <div class="acpt-insur f-left">Accepts Your <br />
+                Insurance</div>
+            <div id="appointment-head" class="search-head-day f-left">
+                <ul>
+                    <li><span><?php echo $day1; ?></span></li>
+                    <li><span><?php echo $day2; ?></span></li>
+                    <li><span><?php echo $day3; ?></span></li>
+                    <li><span><?php echo $day4; ?></span></li>
+                    <li><span><?php echo $day5; ?></span></li>
+                </ul>
+            </div>
+        </div>
+      </div>
+      </div>
+	*/ ?>
+      <?php
+        if($todayDate < $requestDate){
+            $rel_startdate= "start_date=$preWeekStartDate";
+        } else {
+            $rel_startdate = "";
+        }
+	?>
+      <!--div id="header_menu" class="search-header">
+            <div class="arrow-left"><a rel="<?php echo $rel_startdate;?>" href="javascript:void(0);" id="div_prev" class="info">Previous</a></div>
+            <div class="arrow-right"><a rel="<?php echo $nextWeekStartDate;?>" href="javascript:void(0);" id="div_next" class="info">Next</a></div>
+            <div class="doc-info f-left">Doctor / Office Information</div>
+            <div class="acpt-insur f-left">Accepts Your <br />
+                Insurance</div>
+            <div id="appointment-head" class="search-head-day f-left">
+                <ul>
+                    <li><span><?php echo $day1; ?></span></li>
+                    <li><span><?php echo $day2; ?></span></li>
+                    <li><span><?php echo $day3; ?></span></li>
+                    <li><span><?php echo $day4; ?></span></li>
+                    <li><span><?php echo $day5; ?></span></li>
+                </ul>
+            </div>
+        </div-->

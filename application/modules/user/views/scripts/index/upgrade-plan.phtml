@@ -1,0 +1,108 @@
+<?php    
+        echo $this->headTitle();
+        echo $this->headMeta();
+		
+		$this->headLink()->appendStylesheet('/style/bootstrap.css');
+		$this->headLink()->appendStylesheet('/style/bootstrap-theme.css');
+		$this->headLink()->appendStylesheet('/style/style-doctor-signin-reg.css');
+		
+		?>
+		<!--[if IE]><script src="js/html5.js"></script><![endif]-->
+		<?php
+				
+        echo $this->headLink(); 
+
+		$this->headScript()->appendFile('/js/modernizr.custom.79639.js'); 
+
+		echo $this->headScript();
+?>
+<div id="admin-content-profile">
+	<div class="emailnews-all">
+	<h2 class="email-heading">My Plan</h2>
+		<div class="container-fluid">
+	    	<div class="row">
+	        	<div class="col-sm-12">
+	            	<div class="whiteemail clearfix">
+	        	        <div class="fetprice-all clearfix">
+	        	        	<div class="fetpricebox01">
+                                <div class="top01">KEY FEATURES</div>
+                                <div class="top02">Featured Profile</div>
+                                <div class="top03">Online Appointment Booking</div>
+                                <div class="top02">Important Task Management</div>
+                                <div class="top03">Social Media Setup</div>
+                                <div class="top02">Patient Reviews</div>
+                                <div class="top03">Doctor to Doctor Referrals</div>
+                                <div class="top02">Patient Referrals</div>
+                                <div class="top03">Social & Website Widgets</div>
+                                <div class="top02">Practice Statistics</div>
+                                <div class="top03">Patient Medical History</div>
+                                <div class="top02">Secure Messaging</div>
+                                <div class="top03">Past Due Reminders</div>
+                                <div class="top02">Email Campaigns</div>
+	        	            </div>
+                            <div class="fetpricebox02">
+                                <div class="top04">FREE</div>
+                                <div class="top02 text-center"><img src="/images/tick.png" alt="doctors"></div>
+                                <div class="top03 text-center"><img src="/images/tick.png" alt="doctors"></div>
+                                <div class="top02 text-center"><img src="/images/tick.png" alt="doctors"></div>
+                                <div class="top03 text-center"><img src="/images/tick.png" alt="doctors"></div>
+                                <div class="top02 text-center"><img src="/images/cross.png" alt="doctors"></div>
+                                <div class="top03 text-center"><img src="/images/cross.png" alt="doctors"></div>
+                                <div class="top02 text-center"><img src="/images/cross.png" alt="doctors"></div>
+                                <div class="top03 text-center"><img src="/images/cross.png" alt="doctors"></div>
+                                <div class="top02 text-center"><img src="/images/cross.png" alt="doctors"></div>
+                                <div class="top03 text-center"><img src="/images/cross.png" alt="doctors"></div>
+                                <div class="top02 text-center"><img src="/images/cross.png" alt="doctors"></div>
+                                <div class="top03 text-center"><img src="/images/cross.png" alt="doctors"></div>
+                                <div class="top02 text-center"><img src="/images/cross.png" alt="doctors"></div>
+                                <?php if($this->membership->membershipLevelNo==1){ ?>
+                                    <div class="top07"><a href="#"><img src="/images/your-plan.png" alt="doctors"></a></div>
+                                <?php } ?>
+
+                            </div>
+                            <div class="fetpricebox02">
+                                <div class="top06">
+                                    <h2>Premium </h2>
+                                    <h2>$100 / month</h2>
+                                    <p>$1000 / annually (2 months free)</p>
+                                </div>
+                                <input type="hidden" name="plan" value="3">
+                                <div class="top02 text-center"><img src="/images/blue-tickk.png" alt="doctors"></div>
+                                <div class="top03 text-center"><img src="/images/blue-tickk.png" alt="doctors"></div>
+                                <div class="top02 text-center"><img src="/images/blue-tickk.png" alt="doctors"></div>
+                                <div class="top03 text-center"><img src="/images/blue-tickk.png" alt="doctors"></div>
+                                <div class="top02 text-center"><img src="/images/blue-tickk.png" alt="doctors"></div>
+                                <div class="top03 text-center"><img src="/images/blue-tickk.png" alt="doctors"></div>
+                                <div class="top02 text-center"><img src="/images/blue-tickk.png" alt="doctors"></div>
+                                <div class="top03 text-center"><img src="/images/blue-tickk.png" alt="doctors"></div>
+                                <div class="top02 text-center"><img src="/images/blue-tickk.png" alt="doctors"></div>
+                                <div class="top03 text-center"><img src="/images/blue-tickk.png" alt="doctors"></div>
+                                <div class="top02 text-center"><img src="/images/blue-tickk.png" alt="doctors"></div>
+                                <div class="top03 text-center"><img src="/images/blue-tickk.png" alt="doctors"></div>
+                                <div class="top02 text-center"><img src="/images/blue-tickk.png" alt="doctors"></div>
+                                <div class="top08">
+                                    <a href="#"><?php if($this->membership->membershipLevelNo==3){ ?>
+                                            <img src="/images/your-plan.png" alt="doctors">
+                                    <?php
+                                    } else { ?>
+                                        <a href="<?php echo $this->yearly;?>"  data-toggle="modal12" data-target=".bs-example-modal-lg"><img src="/images/premiumplan.png" alt="doctors"></a>
+                                        <br><img src="/images/sep.png" alt="doctors"><br>
+                                            <a href="<?php echo $this->premium_upgrade;?>"><img src="/images/premiumplan01.png" alt="doctors"></a>
+                                    <?php
+                                     } ?>
+                                    <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg">
+                                            <div class="modal-content">
+                                                <p align="right" style="padding:10px;"><a aria-label="Close" data-dismiss="modal" href="#"><img src="/images/closetick.png" alt="doctors"></a></p>
+                                                <h2>you have successfully <br><span>upgraded to the Premium Plan</span></h2>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

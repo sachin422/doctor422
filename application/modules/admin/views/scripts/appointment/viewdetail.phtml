@@ -1,0 +1,195 @@
+
+<div class="patient-dashboard">
+  
+  <div class="patient-dash-right">
+    <h2 class="article-title">View Appointment Details</h2>
+    <?php
+    if(!empty($this->appObject)){
+    $category = new Application_Model_DoctorCategory();
+    $dob = date('d-M-Y', strtotime("{$this->appObject->getDateDob()}-{$this->appObject->getMonthDob()}-{$this->appObject->getYearDob()}"));
+    $cat_res = $category->getDoctorCategories("doctor_id='{$this->appObject->getDoctorId()}'");
+    $str = implode(', ', $cat_res);
+    ?>
+    <table width="100%" cellspacing="0" cellpadding="0" border="0" class="doctor-appoint-list">
+        <tr><td colspan="2">Appointment Status :
+      	<?php
+      	if($this->appObject->getApprove() == -1){
+      		echo "Deactive";
+      	}elseif($this->appObject->getApprove() == 0){
+      		echo "New Appointment";
+      	}elseif($this->appObject->getApprove() == 1){
+      		echo "Approved";
+      	}elseif($this->appObject->getApprove() == 2){
+      		echo "Cancelled";
+      	}
+        elseif($this->appObject->getApprove() == 3){
+      		echo "Sent to Doctor";
+      	}
+      	?>
+      </td></tr>
+      <tbody>
+        <tr>
+          <!-------Left------>
+          <td width="50%" valign="top" align="left">
+		  	<table width="97%" cellspacing="0" cellpadding="0" border="0" class="doctor-appoint-list">
+              <tbody>
+                <tr>
+                  <th align="left" colspan="2">DOCTOR DETAILS &nbsp;&nbsp; <?php echo  "Membership Level -".$this->docObject->getMembershipLevel();?></th>
+                </tr>
+                <tr>
+                  <td><b>With</b></td>
+                  <td><img width="100px" align="top" src="<?php echo $this->profileImage; ?>">&nbsp;&nbsp;<b><?php echo $this->docObject->getFname();?>&nbsp;(<?php echo  $str;?>)</b></td>
+                </tr>
+                <tr class="even">
+                  <td><b>When</b></td>
+                  <td><?php echo date("l M d, Y",strtotime($this->appObject->getappointmentDate()))." ".$this->appObject->getappointmentTime();?><br></td>
+                </tr>
+                <tr>
+                  <td><b>Booking Date</b></td>
+                  <td><?php echo date("l M d, Y",$this->appObject->getbookingDate());?></td>
+                </tr>
+                <tr class="even">
+                  <td><b>Where</b></td>
+                  <td>
+                      <?php
+                    echo  $this->docObject->getCompany()."<br>".$this->docObject->getStreet()."<br>".$this->docObject->getCity().", ".$this->docObject->getState()." ".$this->docObject->getZipcode();
+                      ?>
+                  </td>
+                </tr>
+                <tr >
+                  <td><b>Phone</b></td>
+                  <td>
+                      <?php
+                    echo  $this->docObject->getactualPhone();
+                      ?>
+                  </td>
+                </tr>
+                <tr >
+                  <td><b>Called Status</b></td>
+                  <td>
+                      <?php
+                    if($this->appObject->getCalledStatus() == "Y"){
+                    	echo "Already Called";
+                    }else{
+                    	echo "Not Yet Called";
+                    }
+                      ?>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+		  </td>
+          <!-------Right------>
+          <td width="50%" valign="top" align="left">
+			  <table width="97%" cellspacing="0" cellpadding="0" border="0" class="doctor-appoint-list">
+				  <tbody>
+					<tr>
+					  <th colspan="2">PATIENT DETAILS</th>
+					</tr>
+					<tr class="even">
+					  <td width="100"><b>Name</b></td>
+					  <td><?php echo $this->appObject->getFname();
+                                          ?></td>
+					</tr>
+					<tr>
+					  <td><b>Email</b></td>
+					  <td><?php echo $this->appObject->getEmail();?></td>
+					</tr>
+					<tr class="even">
+					  <td><b>Phone</b></td>
+					  <td><?php echo $this->appObject->getPhone();?></td>
+					</tr>
+					<tr>
+					  <td><b>Zipcode</b></td>
+					  <td><?php echo $this->appObject->getZipcode();?></td>
+					</tr>
+					<tr class="even">
+					  <td><b>Date of Birth</b></td>
+					  <td><?php echo $dob;?></td>
+					</tr>
+					<tr>
+					  <td><b>Gender</b></td>
+					  <td>
+                                              <?php
+                                              echo $this->appGender;
+                                              ?>
+                                          </td>
+					</tr>
+					<tr class="even">
+					  <td><b>Insurance </b></td>
+					  <td><?php 
+                                          if(is_object($this->insuranceObject))
+                                          echo $this->insuranceObject->getCompany(); ?></td>
+					</tr>
+					<tr>
+					  <td><b>Reason to visit</b></td>
+					  <td><?php
+                                          if(!empty($this->visitObject))
+                                          echo $this->visitObject;
+                                          else
+                                          echo $this->appObject->getNeeds();
+                                          ?></td>
+					</tr>
+				  </tbody>
+				</table>
+			</td>
+        </tr>
+      </tbody>
+    </table>
+    <?php }else{?>
+    <div style="padding: 100px 10px; text-align: center">No Appointment!</div>
+    <?php }?>
+  </div>
+    <?php if(!empty($this->appObject)){?>
+  <script language = "javascript">
+  function go_to(url){
+	  window.location.href = url;
+  }
+  </script>
+    <div class="app-dpp">
+                    <?php
+                    if($this->appObject->getApprove() != 2) {
+                        ?>
+        <input type="button" class="signup" value="Cancel" onclick="if(confirm(' Do you want to cancel this appointment ?')){ window.location.href = '/admin/appointment/cancel/id/<?php echo $this->ids?>'; return true;}else{ return false;}">
+        <?php
+                        
+                    }
+              if($this->appObject->getApprove() == 0) {
+                  ?>
+        <input type="button" class="signup" value="Send App. to Doc." onclick="if(confirm(' Do you want to send this appointment to doctor ?')){ window.location.href = '/admin/appointment/sendtodoctor/ids/<?php echo $this->ids?>'; return true;}else{ return false;}">
+        <?php
+              }
+                       /* if($this->appObject->getApprove() == 0) {
+                        	?>
+                        	<input type="button" class="signup" value="Approve" onclick="javascript:go_to('/admin/appointment/publish/ids/<?php echo $this->ids?>');">
+                        	<input type="button" class="signup" value="Unapprove" onclick="javascript:go_to('/admin/appointment/unpublish/ids/<?php echo $this->ids?>');">
+                        	<input type="button" class="signup" value="Cancel" onclick="if(confirm(' Do you want to cancel this appointment ?')){ window.location.href = '/admin/appointment/cancel/id/<?php echo $this->ids?>'; return true;}else{ return false;}">
+                        	<?php 
+                        }elseif($this->appObject->getApprove() == 1){
+                        	?>                        	
+                        	<input type="button" class="signup" value="Unapprove" onclick="javascript:go_to('/admin/appointment/unpublish/ids/<?php echo $this->ids?>');">
+                        	<input type="button" class="signup" value="Cancel" onclick="if(confirm(' Do you want to cancel this appointment ?')){ window.location.href = '/admin/appointment/cancel/id/<?php echo $this->ids?>'; return true;}else{ return false;}">
+                        	<?php 
+                        }elseif($this->appObject->getApprove() == -1){
+                        	?>                        	
+                        	<input type="button" class="signup" value="Approve" onclick="javascript:go_to('/admin/appointment/publish/ids/<?php echo $this->ids?>');">
+                        	<input type="button" class="signup" value="Cancel" onclick="if(confirm(' Do you want to cancel this appointment ?')){ window.location.href = '/admin/appointment/cancel/id/<?php echo $this->ids?>'; return true;}else{ return false;}">
+                        	<?php 
+                        }*/
+                        ?>
+                        <?php if($this->appObject->getCalledStatus() != "Y") { ?>
+                        <input type="button" class="signup" value="Set Called" onclick="javascript:go_to('/admin/appointment/set_as_called/ids/<?php echo $this->ids?>');">
+                        <?php }?>
+                        
+    <?php //echo "<pre>";print_r($this->appObject);
+    /*if($this->appObject->getApprove() == 1){ ?>
+        <input type="button" class="signup" value="Cancel" onclick="if(confirm(' Do you want to cancel this appointment ?')){ window.location.href = '/admin/appointment/cancel/id/<?php echo $this->ids?>'; return true;}else{ return false;}">
+        <?php }else{?>
+        <input type="button" class="signup" value="Approve" onclick="javascript:go_to('/admin/appointment/publish/ids/<?php echo $this->ids?>');">
+        <input type="button" class="signup" value="Unapprove" onclick="javascript:go_to('/admin/appointment/unpublish/ids/<?php echo $this->ids?>');">
+        
+		<?php }*/?>
+       <input type="button" name="button" id="submit" value="Back" class="signup" tabindex="20" onClick = "go_to('/admin/appointment');">
+    </div>
+    <?php }?>
+</div>

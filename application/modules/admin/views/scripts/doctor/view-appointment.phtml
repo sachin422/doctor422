@@ -1,0 +1,173 @@
+<div id="mainDiv">
+    <style type="text/css">
+        input.styled { display: none; } select.styled { position: relative; width: 190px; opacity: 0; filter: alpha(opacity=0); z-index: 5; } .disabled { opacity: 0.5; filter: alpha(opacity=50); }
+    </style>
+
+   
+    <h2 class="page-heading"><?php echo $this->lang[492]; ?></h2>
+    <div class="appointment-content">
+
+         <?php
+         if(!empty($this->object)){
+            $dob = strftime('%d-%b-%Y', strtotime("{$this->object->getDateDob()}-{$this->object->getMonthDob()}-{$this->object->getYearDob()}"));
+    $status = $this->object->getNewAppointmentStatus("id ={$this->object->getId()}");
+        ?>
+        <table width="50%" cellspacing="10" cellpadding="5" border="0" align="left">
+            <tbody><tr class="app-for">
+                    <td colspan="2"><b><?php echo $this->lang[351]; ?>:</b>&nbsp;&nbsp; <?php echo strftime('%A %e %b, %Y',strtotime($this->object->getAppointmentDate()))?> at <?php echo $this->object->getAppointmentTime()?></td>
+                </tr>
+                <tr>
+                    <td colspan="2"></td>
+                </tr>
+                <tr>
+                    <td width="30%"><label><?php echo $this->lang[352]; ?></label> </td><td width="70%"> <?php echo $status?></td>
+                </tr>
+                <?php
+                $cancelled_by ="";
+                if($this->object->getApprove()==2)
+                {
+                                   
+                   $getCancelledBy = $this->object->getCancelledBy();
+                   
+                   switch($getCancelledBy)
+                   {
+                       case 3://Now get Doctors Name
+                        $doctor_id = $this->object->getDoctorId();
+                        $Doctor = new Application_Model_Doctor();
+                        
+                        if($doctor_id>0)
+                        {
+                        $objDoc = $Doctor->find($doctor_id);
+                        if(!empty($objDoc))
+                        {
+                         $cancelled_by = $objDoc->getFname();
+                        }
+                        
+                        }
+                       break;
+                       case 1://Now get Patient Name
+                         $User =  new Application_Model_User();
+                         $user_id = $this->object->getUserId();
+                        if((int)$user_id>0)
+                        {
+                            $objUser = $User->find($user_id);
+                            if(!empty($objUser))
+                            {
+                                $cancelled_by = $objUser->getFirstName();
+                            }
+                        }
+                       break;
+                       case 2://patient admin
+                           $cancelled_by = "Admin";
+                       break;
+                   }
+                }
+                if(!empty($cancelled_by))
+                {
+                ?>
+                <tr>
+                    <td width="30%"><label><?php echo $this->lang[353]; ?></label> </td><td width="70%"> <?php echo $cancelled_by; ?></td>
+                </tr>
+                <?php
+                }
+                ?>
+                <tr>
+                    <td width="30%"><label><?php echo $this->lang[112]; ?></label> </td><td width="70%"> <?php echo $this->object->getFname()?></td>
+                </tr>
+                <tr>
+                    <td><label><?php echo $this->lang[104]; ?></label></td><td> <?php echo $this->object->getEmail()?></td>
+                </tr>
+                <tr>
+                    <td><label><?php echo $this->lang[113]; ?></label></td><td> <?php echo $this->object->getPhone()?></td>
+                </tr>
+                <tr>
+                    <td><label><?php echo $this->lang[450]; ?></label></td><td> <?php echo $this->object->getZipcode()?></td>
+                </tr>
+                <tr>
+                    <td><label><?php echo $this->lang[114]; ?></label></td><td> <?php echo $dob;//echo $this->object->getAge()?></td>
+                </tr>
+                <tr>
+                    <td><label><?php echo $this->lang[116]; ?></label></td><td> <?php if($this->object->getGender()=='m')echo $this->lang[117];elseif($this->object->getGender()=='f')echo $this->lang[118];?></td>
+                </tr>
+                <tr>
+                    <td><label><?php echo $this->lang[354]; ?></label></td><td> <?php if($this->object->getPatientStatus()=='n')echo $this->lang[355];elseif($this->object->getPatientStatus()=='e')echo $this->lang[356];?></td>
+                </tr>
+
+                <tr>
+                    <td><label><?php echo $this->lang[54]; ?></label></td>
+                    <td><?php if($this->object->getReasonForVisit()!=''){
+                            $ReasonForVisit = new Application_Model_ReasonForVisit();
+                            $reasonObj = $ReasonForVisit->find($this->object->getReasonForVisit());
+                            if(!empty($reasonObj))echo $reasonObj->getReason();
+                        }else{
+                            echo $this->object->getNeeds();
+                        }
+                        ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label><?php echo $this->lang[52]; ?></label></td>
+                    <td><?php if($this->object->getInsurance()!=''){
+                            $Company = new Application_Model_InsuranceCompany();
+                            $insuranceObj = $Company->find($this->object->getInsurance());
+                            if(!empty($insuranceObj))echo $insuranceObj->getCompany();
+                        }
+                        ?></td>
+                </tr>
+				<!--
+                <tr>
+                    <td><label>Insurance Plan</label></td>
+                    <td><?php if($this->object->getInsurance()!='' && $this->object->getPlan()!=''){
+                            $Plan = new Application_Model_InsurancePlan();
+                            $planObj = $Plan->find($this->object->getPlan());
+                            if(!empty($planObj))echo $planObj->getPlan();
+                        }
+                        ?>
+                    </td>
+                </tr>
+				-->
+                <?php
+                /**                 
+                 * New =>  a) Approve b) Decline c)Cancel
+                 * Approved => Cancel
+                 * Canceled => Display who has cancelled and also status and no button
+                 *
+                 */
+                ?>
+                
+
+                <tr>
+                    <td colspan="2">
+                        <?php if($this->object->getApprove()!= 2 && $this->object->getApprove()!= 1){ ?>
+                        <a class="myButton" onclick="if(confirm('<?php echo $this->lang[359]; ?>')) return true; else return false;" href="/admin/doctor/confirm-decline-cancel/appid/<?php echo $this->object->getId()?>/tab/<?php echo $this->tab?>/type/1/docid/<?php echo $this->docid; ?>"><?php echo $this->lang[357]; ?></a>
+                        <?php }?>
+                        <?php if($this->object->getApprove()!= 1 ){ ?>
+                        <a class="myButton" onclick="if(confirm('<?php echo $this->lang[522]; ?>')) return true; else return false;" href="/admin/doctor/confirm-decline-cancel/appid/<?php echo $this->object->getId()?>/tab/<?php echo $this->tab?>/type/2/docid/<?php echo $this->docid; ?>"><?php echo $this->lang[358]; ?></a>
+                        <?php }?>
+                        <?php 
+						$timeAppoint = $this->object->getAppointmentTime();
+						$appTime = strtotime($this->object->getAppointmentDate()." ".$timeAppoint);?>
+                        <?php if($appTime > time() && $this->object->getApprove()!= 3){ ?>
+                        <a class="myButton" onclick="if(confirm('<?php echo $this->lang[518]; ?>')) return true; else return false;" href="/admin/doctor/delete-appointment/appid/<?php echo $this->object->getId()?>/tab/<?php echo $this->tab?>/type/3/docid/<?php echo $this->docid; ?>"><?php echo $this->lang[360]; ?></a>
+                        <?php }?>
+                        
+                    </td>
+                </tr>
+                
+                <tr><td colspan="2">
+
+
+                
+                        <?php $Calendar = new Zend_Session_Namespace("calendar");
+                            if($Calendar->TODAY)$today = $Calendar->TODAY;
+                            else $today = time();
+                        ?>
+                        <a class="back" href="/admin/doctor/appointment/docid/<?php echo $this->docid; ?>"><?php echo $this->lang[361]; ?></a>
+                    </td></tr>
+            </tbody></table>
+
+        <?php }else{?>
+        <div style="padding: 100px 10px; text-align: center"><?php echo $this->lang[523]; ?></div>
+        <?php }?>
+    </div>
+  </div>

@@ -1,0 +1,190 @@
+<?php
+$this->custom_head .= "<link type='text/css' rel='stylesheet' href='/js/calendar/src/css/jscal2.css' />";
+$this->custom_head .= "<link type='text/css' rel='stylesheet' href='/js/calendar/src/css/border-radius.css' />";
+$this->custom_head .= "<link id='skin-win2k' title='Win 2K' type='text/css' rel='alternate stylesheet' href='/js/calendar/src/css/win2k/win2k.css' />";
+$this->custom_head .= "<script language='javascript' type='text/javascript' src='/js/calendar/src/js/jscal2.js'></script>";
+$this->custom_head .= "<script language='javascript' type='text/javascript' src='/js/calendar/src/js/lang/en.js'></script>";
+?>
+<script language="javascript">
+    jQuery(document).ready(function(){
+        jQuery('#copy').click(function(){
+            jQuery('#frmSlot').attr('action','/admin/timeslot/copy/');
+        })
+        jQuery('#show').click(function(){
+            jQuery('#frmSlot').attr('action','/admin/timeslot/');
+        })
+    });
+function checkstartdate()
+{
+    if(jQuery('#startdate').val()=="")
+        {
+            alert("Please select any start date");
+            return false;
+        }
+    else
+        {
+
+       
+        return true;
+        }
+}
+</script>
+<div id="rightsidemain">
+    <div id="rightcontentpart">
+        <div class="m">
+
+            <style type="text/css">
+                .td-date {width:50px; height:50px; text-align:left; vertical-align:top; background-color:#f2f2f2;font-size:12px;}
+                .td-date div{width:100p%; text-align:right;}
+                .td-date-blank {width:50px; height:50px; text-align:center; vertical-align:top; background-color:#fff;}
+            </style>
+
+
+
+            <form name="frmSlot" id="frmSlot" action="/admin/timeslot/weekly/" method="post">
+
+                <table align="right" width="100%" cellpadding="5" cellspacing="2" border="0" bgcolor="#fff">
+                    <tr>
+                        <th>
+                            <?php echo $this->docObject->getFname(); ?>
+                        </th>
+                        <th>
+					To set weekly slots(yyyy-mm-dd): <input type="text" name="startdate" id="startdate" readonly="true" />
+                            <input type="submit" name="submit" value="Set Weekly Slots" onclick ="return checkstartdate()"/>
+                            <script type="text/javascript">
+                                Calendar.setup({
+                                    trigger: "startdate",
+                                    inputField: "startdate",
+                                    onSelect: function(cal) {
+                                        cal.hide();
+                                    },
+                                    dateFormat: '%Y-%m-%d'
+                                });
+                            </script>
+                        </th>
+                        <th>
+					Copy appointment data to next
+                            <input type="text" name="no_of_week" value="1" size="2"/> week(s)
+                            <input type="submit" name="copy" id="copy" value="Copy" />
+                        </th>
+                        <th align="right">
+                            <a href="/admin/doctor/">&lt;&lt;Back to listing</a>&nbsp;
+                            <select name="month" id="month">
+                                <?php
+                                foreach ($this->monthArr as $m => $mName) {
+                                    $sel = "";
+                                    if ($m == $this->month)
+                                        $sel = "selected='true'";
+                                ?><option value='<?php echo $m; ?>' <?php echo $sel; ?>><?php echo $mName; ?></option><?php
+                                }
+                                ?>
+                            </select>
+                            <select name="year" id="year">
+                                <?php
+                                for ($y = date("Y"); $y <= (date("Y") + 1); $y++) {
+                                    $sel = "";
+                                    if ($y == $this->year)
+                                        $sel = "selected='true'";
+                                ?>
+                                    <option value='<?php echo $y; ?>' <?php echo $sel; ?>><?php echo $y; ?></option>
+                                <?php } ?>
+                            </select>
+                            <input type="submit" name="submit" value="Select" id="show" />
+                            <input type="hidden" name="drid" id="drid" value="<?php echo $this->docObject->getId(); ?>" />
+                        </th>
+                    </tr>
+                </table>
+            </form>
+
+
+            <br><br>
+
+
+
+
+            <div id="monthview">
+                <table width="100%" cellpadding="5" cellspacing="2" border="0" bgcolor="#fff" style="border: 1px solid #0f0;">
+                    <tr bgcolor="#88f299">
+                        <th height="50px">Monday</th>
+                        <th>Tuesday</th>
+                        <th>Wednesday</th>
+                        <th>Thursday</th>
+                        <th>Friday</th>
+                        <th>Saturday</th>
+                        <th>Sunday</th>
+                    </tr>
+
+                    <?php
+                                $DoctorAppointment = new Application_Model_DoctorAppointmentCal();
+                                $isTrStart = false;
+                                $isTrEnd = false;
+                                $isBlank = true;
+                                $tdCtr = 0;
+
+                                for ($day = 1; $day <= date("t"); $day++) {
+                                    $tdCtr++;
+                                    if ($tdCtr % 7 == 1)
+                                        $isTrStart = true;
+                                    if ($tdCtr % 7 == 0)
+                                        $isTrEnd = true;
+                                    $slotDate = $this->year . "-" . $this->month . "-" . $day;
+                                    $blankTd = date("w", strtotime($slotDate));
+
+                                    //Set the monday as firstday of the week
+                                    if ($blankTd == 0)
+                                        $blankTd = 6;
+                                    else
+                                        $blankTd -= 1;
+
+                                    if ($isTrStart) {
+                                        echo "<tr>";
+                                        $isTrStart = false;
+                                    }
+                                    if ($isBlank) {
+                                        $isBlank = false;
+                                        for ($loop = 0; $loop < $blankTd; $loop++) {
+                                            $tdCtr++;
+                                            echo "<td class='td-date-blank'>&nbsp;</td>";
+                                        }
+                                    }
+                                    //######## Fetch slot data ##############
+                                    $slotsAvailable = array();
+                                    $object = $DoctorAppointment->fetchAll("doctor_id='{$this->docObject->getId()}' AND slot_date='{$slotDate}'", "slot_time");
+                                    //$query = "SELECT slot_time FROM #__appointment_slot_master WHERE dr_id = " . $drid . " AND slot_date='" . $slotDate . "' ORDER BY slot_time";
+                                    if ($object) {
+                                        foreach ($object as $s => $slot) {
+                                            $slotsAvailable[] = date("h:i A", strtotime($slotDate . " " . $slot->getSlotTime()));
+                                        }
+                                    }
+                                    //######## Fetch slot data end ##############
+
+                                    echo "<td class='td-date'>";
+
+                                    if (strtotime($this->year . "-" . $this->month . "-" . $day) >= strtotime(date("Y-n-j"))) {
+                                        $href = "/admin/timeslot/edit/drid/" . $this->docObject->getId() . "/date/" . $this->year . "-" . $this->month . "-" . $day;
+                    ?>
+                                        <a href='<?php echo $href; ?>' style='display:block'><b><?php echo $day; ?></b>
+                        <?php if (count($slotsAvailable))
+                                            echo "<div>" . implode("<br />", $slotsAvailable) . "</div>"; ?>
+                                    </a>
+                    <?php
+                                    }
+                                    else {
+                                        echo "<b>" . $day . "</b>";
+                                        if (count($slotsAvailable))
+                                            echo "<div>" . implode("<br />", $slotsAvailable) . "</div>";
+                                    }
+                                    echo "</td>";
+                                    if ($isTrEnd) {
+                                        $isTrEnd = false;
+                                        echo "</tr>";
+                                    }
+                                }
+                    ?>
+                </table>
+            </div>
+
+            <div class="clr"></div>
+        </div>
+    </div>
+</div>

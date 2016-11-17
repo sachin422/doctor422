@@ -1,0 +1,655 @@
+<?php 
+			$user_id=$this->userid;
+			
+			$usersNs = new zend_Session_Namespace("members");
+			$Patient_history = new Application_Model_PatientHistory();
+			$patient_history = $Patient_history->fetchRow("patient_id='{$user_id}'");			
+			
+			$physician_details = new Application_Model_PhysicianDetails();
+			$physician_detailsdata = $physician_details->fetchRow("patient_id='{$user_id}'");						
+			
+			$allergic_subtances = new Application_Model_AllergicSubstances();
+			$allergic_subtances = $allergic_subtances->fetchRow("patient_id='{$user_id}'");			
+			
+			$family_medical_history = new Application_Model_FamilyMedicalHistory();
+			$family_medical_history = $family_medical_history->fetchRow("patient_id='{$user_id}'");
+			
+?>
+
+	<div id="rightcontentpart">
+		<div id="rightsidecontentpart">
+			<h2 class="page-heading"></h2>      
+			<!--Code added by Deve on 04 Jan 2010 for tab based forms-->
+			<div class="appointment-content">
+				
+			</div>
+		</div>
+	</div>
+	<div id="rightcontentpart">
+		<div id="rightsidecontentpart">
+			<h2 class="page-heading"></h2>      
+			<!--Code added by Deve on 04 Jan 2010 for tab based forms-->
+			<div class="appointment-content">
+				
+			</div>
+		</div>
+	</div>
+	
+	<div id="rightcontentpart">
+		<div id="rightsidecontentpart">
+			<h2 class="page-heading"></h2>      
+			<!--Code added by Deve on 04 Jan 2010 for tab based forms-->
+			<div class="appointment-content">
+				
+			</div>
+		</div>
+	</div>
+	
+	<div id="rightcontentpart">
+		<div id="rightsidecontentpart">
+			<h2 class="page-heading"></h2>      
+			<!--Code added by Deve on 04 Jan 2010 for tab based forms-->
+			<div class="appointment-content">
+				
+			</div>
+		</div>
+	</div>
+	
+	<div id="rightcontentpart">
+		<div id="rightsidecontentpart">
+			<h2 class="page-heading"></h2>      
+			<!--Code added by Deve on 04 Jan 2010 for tab based forms-->
+			<div class="appointment-content">
+				
+			</div>
+		</div>
+	</div>
+	
+	<div id="rightcontentpart">
+		<div id="rightsidecontentpart">
+			<h2 class="page-heading"></h2>      
+			<!--Code added by Deve on 04 Jan 2010 for tab based forms-->
+			<div class="appointment-content">
+				
+			</div>
+		</div>
+	</div>
+	<div id="rightcontentpart">
+		<div id="rightsidecontentpart">
+			<h2 class="page-heading"></h2>      
+			<!--Code added by Deve on 04 Jan 2010 for tab based forms-->
+			<div class="appointment-content">
+				<img src="http://localhost/images/doctors-logo.png">
+			</div>
+		</div>
+	</div>	
+	<?php 
+	
+	$allergic_subtances = new Application_Model_AllergicSubstances();
+	$allergic_subtances = $allergic_subtances->fetchRow("patient_id='{$user_id}'");
+	
+			?>
+	<table width="100%" style="border:1px solid #1596DB;" cellspacing="10">
+	<tr><td colspan="4"><h1>Patient History</h1></td></tr>	
+		<tr>
+				<td><h5>Physician:</h5></td> 
+				<td><?php echo $patient_history->physicianName;?></td>
+				<td><h5>Date of Visit:</h5></td>
+				<td><?php echo $patient_history->dateOfVisit;?></td>
+		</tr>
+		<tr>
+				<td><h5>Name of Patient:</h5></td> 
+				<td><?php echo $patient_history->patientName;?></td>
+				<td><h5>Address:</h5></td>
+				<td><?php echo $patient_history->patientAddress;?></td>
+		</tr>
+		<tr>
+				<td><h5>Telephone: Day:</h5></td> 
+				<td><?php echo $patient_history->telephoneDay;?></td>
+				<td><h5>Evening:</h5></td>
+				<td><?php echo $patient_history->telephoneEvening;?></td>
+		</tr>
+		<tr>
+				<td><h5>Fax:</h5></td> 
+				<td><?php echo $patient_history->fax;?></td>
+				<td><h5>Email address:</h5></td>
+				<td><?php echo $patient_history->emaiId;?></td>
+		</tr>
+		<tr>
+				<td><h5>Social Security Number:</h5></td> 
+				<td><?php echo $patient_history->socialSecurityNumber;?></td>
+				<td><h5>Date of Birth:</h5></td>
+				<td><?php echo $patient_history->dob;?></td>
+		</tr>
+		<tr>
+				<td><h5>Birthplace:</h5></td> 
+				<td><?php echo $patient_history->birthPlace;?></td>
+				<td><h5>Are you employed?:</h5></td>
+				<td><?php echo $patient_history->employed;?></td>
+		</tr>
+		<tr><td colspan="4"><h4>Who should be contacted regarding appointments and other matters?</h4></td></tr>
+		<tr>
+				<td><h5>Retired?:</h5></td> 
+				<td><?php echo $patient_history->retired;?></td>
+				<td><h5>Self:</h5></td>
+				<td><?php echo $patient_history->self;?></td>
+		</tr>
+		<tr>
+				<td><h5>Other person:</h5></td> 
+				<td><?php echo $patient_history->otherPerson;?></td>
+				<td><h5>Marital status:</h5></td>
+				<td><?php echo $patient_history->maritalstatus;?></td>
+		</tr>
+		<tr>
+				<td><h5>Case of an emergency?</h5></td> 
+				<td><?php echo $patient_history->caseOfEmergency;?></td>
+				<td><h5>Contact Person Name:</h5></td>
+				<td><?php echo $patient_history->contactPersonName;?></td>
+		</tr>
+		<tr>
+				<td><h5>Address:</h5></td> 
+				<td><?php echo $patient_history->contactPersonAddress;?></td>
+				<td><h5>Telephone: Day</h5></td>
+				<td><?php echo $patient_history->contactPersonTelephoneDay;?></td>
+		</tr>
+		<tr>
+				<td><h5>Evening:</h5></td> 
+				<td><?php echo $patient_history->contactPersonTelephoneEvening;?></td>
+				<td><h5>Relationship to you:</h5></td>
+				<td><?php echo $patient_history->relationshipToYou;?></td>
+		</tr>		
+	</table>
+	<?php 	
+		$physician_details = new Application_Model_PhysicianDetails();
+		$physicianE=$physician_details->explodeString($physician_detailsdata->physicianName);
+		$Specialty=$physician_details->explodeString($physician_detailsdata->speciality);
+		$Address=$physician_details->explodeString($physician_detailsdata->address);
+		$Telephone=$physician_details->explodeString($physician_detailsdata->telephone);
+		$RceiveReport=$physician_details->explodeString($physician_detailsdata->receiveReport);		
+   ?>
+   <table><tr><td>&nbsp;</td></tr><table>
+	<table width="100%" style="border:1px solid #1596DB;" cellspacing="10">
+	<tr><td colspan="5"><h1>Physician Details</h1></td></tr>
+	
+		<tr>
+				<td><h5>Physician</h5></td> 
+				<td><h5>Specialty</h5></td>
+				<td><h5>Address</h5></td>
+				<td><h5>Telephone</h5></td>
+				<td><h5>Receive Report</h5></td>
+		</tr>
+		<tr>
+				<td><?php echo $physicianE[0];?></td> 
+				<td><?php echo $Specialty[0];?></td>
+				<td><?php echo $Address[0];?></td>
+				<td><?php echo $Telephone[0];?></td>
+				<td><?php echo $RceiveReport[0];?></td>
+		</tr>
+		<tr>
+				<td><?php echo $physicianE[1];?></td> 
+				<td><?php echo $Specialty[1];?></td>
+				<td><?php echo $Address[1];?></td>
+				<td><?php echo $Telephone[1];?></td>
+				<td><?php echo $RceiveReport[1];?></td>
+		</tr>
+		<tr>
+				<td><?php echo $physicianE[1];?></td> 
+				<td><?php echo $Specialty[1];?></td>
+				<td><?php echo $Address[1];?></td>
+				<td><?php echo $Telephone[1];?></td>
+				<td><?php echo $RceiveReport[1];?></td>
+		</tr>
+		<tr>
+				<td><?php echo $physicianE[2];?></td> 
+				<td><?php echo $Specialty[2];?></td>
+				<td><?php echo $Address[2];?></td>
+				<td><?php echo $Telephone[2];?></td>
+				<td><?php echo $RceiveReport[2];?></td>
+		</tr>
+		<tr>
+				<td><?php echo $physicianE[3];?></td> 
+				<td><?php echo $Specialty[3];?></td>
+				<td><?php echo $Address[3];?></td>
+				<td><?php echo $Telephone[3];?></td>
+				<td><?php echo $RceiveReport[3];?></td>
+		</tr>
+		<tr>
+				<td colspan="5">Physician’s care for any ailment or injury</td> 				
+		</tr>		
+		<tr>
+				<td colspan="5"><?php if($physician_detailsdata->physicianCare==1){ echo "Yes";} else{ echo "No";}?></td> 				
+		</tr>		
+		<tr>
+				<td colspan="5">reason why you are under a physician’s care?</td> 			
+		</tr>
+		<tr>
+				<td colspan="5"><?php echo $physician_detailsdata->reasonPhysicianCare;?></td> 			
+		</tr>		
+	</table>
+	<?php 
+	//print_r($prescription_detail);
+		$prescription_details = new Application_Model_PatientPrescription();
+		$prescription_details = $prescription_details->fetchRow("patient_id='{$user_id}'");	
+		$prescription_detaildata = new Application_Model_PhysicianDetails();
+		
+		$Name_of_Supplement=$prescription_detaildata->explodeString($prescription_details->nameOfSupplement);
+		$Dosage=$prescription_detaildata->explodeString($prescription_details->dosage);
+		$Freqency=$prescription_detaildata->explodeString($prescription_details->freqency);
+		$Side_Effects=$prescription_detaildata->explodeString($prescription_details->sideEffects);	
+		
+		$Name_of_nonSupplement=$prescription_detaildata->explodeString($prescription_details->nonPrescriptionSupplement);
+		$nonDosage=$prescription_detaildata->explodeString($prescription_details->nonPrescriptionDosage);
+		$nonFreqency=$prescription_detaildata->explodeString($prescription_details->nonPrescriptionFreqency);
+		$nonSide_Effects=$prescription_detaildata->explodeString($prescription_details->nonPrescriptionSideEffects);
+
+		$vitaminName_of_Supplement=$prescription_detaildata->explodeString($prescription_details->vitaminSupplement);
+		$vitaminDosage=$prescription_detaildata->explodeString($prescription_details->vitaminDosage);
+		$vitaminFreqency=$prescription_detaildata->explodeString($prescription_details->vitaminFreqency);
+		$vitaminSide_Effects=$prescription_detaildata->explodeString($prescription_details->vitaminSideEffects);
+
+		$bad_reaction_supplement=$prescription_detaildata->explodeString($prescription_details->badReactionSuppliment);
+		$reaction=$prescription_detaildata->explodeString($prescription_details->reaction);		
+   ?>
+	  <table><tr><td>&nbsp;</td></tr><table>
+	<table width="100%" style="border:1px solid #1596DB;" cellspacing="10">
+	<tr><td colspan="5"><h1>Prescription Details</h1></td></tr>
+	<tr><td colspan="5">Are you taking any prescription medications?:</td></tr>
+	<tr><td><?php if($prescription_details->medication==1){ echo "Yes";} else { echo "No"; }?></td></tr>
+	<tr>
+				<td><h5>Name of supplement</h5></td> 
+				<td><h5>Dosage</h5></td>
+				<td><h5>Frequency</h5></td>
+				<td><h5>Any Side Effects?</h5></td>				
+		</tr>
+		<tr>
+				<td><?php echo $Name_of_Supplement[0];?></td> 
+				<td><?php echo $Dosage[0];?></td>
+				<td><?php echo $Freqency[0];?></td>
+				<td><?php echo $Side_Effects[0];?></td>
+				
+		</tr>
+		<tr>
+				<td><?php echo $Name_of_Supplement[1];?></td> 
+				<td><?php echo $Dosage[1];?></td>
+				<td><?php echo $Freqency[1];?></td>
+				<td><?php echo $Side_Effects[1];?></td>
+				
+		</tr>
+		<tr>
+				<td><?php echo $Name_of_Supplement[2];?></td> 
+				<td><?php echo $Dosage[2];?></td>
+				<td><?php echo $Freqency[2];?></td>
+				<td><?php echo $Side_Effects[2];?></td>
+				
+		</tr>
+		<tr>
+				<td><?php echo $Name_of_Supplement[3];?></td> 
+				<td><?php echo $Dosage[3];?></td>
+				<td><?php echo $Freqency[3];?></td>
+				<td><?php echo $Side_Effects[3];?></td>
+				
+		</tr>
+		<tr>
+				<td><?php echo $Name_of_Supplement[4];?></td> 
+				<td><?php echo $Dosage[4];?></td>
+				<td><?php echo $Freqency[4];?></td>
+				<td><?php echo $Side_Effects[4];?></td>
+				
+		</tr>
+		<tr>
+				<td><?php echo $Name_of_Supplement[5];?></td> 
+				<td><?php echo $Dosage[5];?></td>
+				<td><?php echo $Freqency[5];?></td>
+				<td><?php echo $Side_Effects[5];?></td>				
+		</tr>
+		<tr><td colspan="5">Are you taking any OTC/non-prescription medications?:</td></tr>
+	<tr><td><?php if($prescription_details->nonPrescription==1){ echo "Yes";} else { echo "No"; }?></td></tr>
+	<tr>
+				<td><h5>Name of supplement</h5></td> 
+				<td><h5>Dosage</h5></td>
+				<td><h5>Frequency</h5></td>
+				<td><h5>Any Side Effects?</h5></td>
+				
+		</tr>
+		<tr>
+				<td><?php echo $nonName_of_Supplement[0];?></td> 
+				<td><?php echo $nonDosage[0];?></td>
+				<td><?php echo $nonFreqency[0];?></td>
+				<td><?php echo $nonSide_Effects[0];?></td>
+				
+		</tr>
+		<tr>
+				<td><?php echo $nonName_of_Supplement[1];?></td> 
+				<td><?php echo $nonDosage[1];?></td>
+				<td><?php echo $nonFreqency[1];?></td>
+				<td><?php echo $nonSide_Effects[1];?></td>
+				
+		</tr>
+		<tr>
+				<td><?php echo $nonName_of_Supplement[2];?></td> 
+				<td><?php echo $nonDosage[2];?></td>
+				<td><?php echo $nonFreqency[2];?></td>
+				<td><?php echo $nonSide_Effects[2];?></td>
+				
+		</tr>
+		<tr>
+				<td><?php echo $nonName_of_Supplement[3];?></td> 
+				<td><?php echo $nonDosage[3];?></td>
+				<td><?php echo $nonFreqency[3];?></td>
+				<td><?php echo $nonSide_Effects[3];?></td>
+				
+		</tr>
+		<tr>
+				<td><?php echo $nonName_of_Supplement[4];?></td> 
+				<td><?php echo $nonDosage[4];?></td>
+				<td><?php echo $nonFreqency[4];?></td>
+				<td><?php echo $nonSide_Effects[4];?></td>
+				
+		</tr>
+		<tr>
+				<td><?php echo $nonName_of_Supplement[5];?></td> 
+				<td><?php echo $nonDosage[5];?></td>
+				<td><?php echo $nonFreqency[5];?></td>
+				<td><?php echo $nonSide_Effects[5];?></td>
+				
+		</tr>		
+			<tr><td colspan="5">Are you taking any vitamins, homeopathics, herbal medicines or supplements?:</td></tr>
+	<tr><td><?php if($prescription_details->medicines==1){ echo "Yes";} else { echo "No"; }?></td></tr>
+	<tr>
+				<td><h5>Name of supplement</h5></td> 
+				<td><h5>Dosage</h5></td>
+				<td><h5>Frequency</h5></td>
+				<td><h5>Any Side Effects?</h5></td>
+				
+		</tr>
+		<tr>
+				<td><?php echo $vitaminName_of_Supplement[0];?></td> 
+				<td><?php echo $vitaminDosage[0];?></td>
+				<td><?php echo $vitaminFreqency[0];?></td>
+				<td><?php echo $vitaminSide_Effects[0];?></td>
+				
+		</tr>
+		<tr>
+				<td><?php echo $vitaminName_of_Supplement[1];?></td> 
+				<td><?php echo $vitaminDosage[1];?></td>
+				<td><?php echo $vitaminFreqency[1];?></td>
+				<td><?php echo $vitaminSide_Effects[1];?></td>
+				
+		</tr>
+		<tr>
+				<td><?php echo $vitaminName_of_Supplement[2];?></td> 
+				<td><?php echo $vitaminDosage[2];?></td>
+				<td><?php echo $vitaminFreqency[2];?></td>
+				<td><?php echo $vitaminSide_Effects[2];?></td>
+				
+		</tr>
+		<tr>
+				<td><?php echo $vitaminName_of_Supplement[3];?></td> 
+				<td><?php echo $vitaminDosage[3];?></td>
+				<td><?php echo $vitaminFreqency[3];?></td>
+				<td><?php echo $vitaminSide_Effects[3];?></td>
+				
+		</tr>
+		<tr>
+				<td><?php echo $vitaminName_of_Supplement[4];?></td> 
+				<td><?php echo $vitaminDosage[4];?></td>
+				<td><?php echo $vitaminFreqency[4];?></td>
+				<td><?php echo $vitaminSide_Effects[4];?></td>
+				
+		</tr>
+		<tr>
+				<td><?php echo $vitaminName_of_Supplement[5];?></td> 
+				<td><?php echo $vitaminDosage[5];?></td>
+				<td><?php echo $vitaminFreqency[5];?></td>
+				<td><?php echo $vitaminSide_Effects[5];?></td>				
+		</tr>	
+	<tr><td colspan="5"> Have you ever had a bad reaction to any medication or supplement?:</td></tr>
+	<tr><td><?php echo $prescription_details->badReactionSuppliment;?></td></tr>
+	<tr>
+				<td colspan="2"><h5>Name of Medication</h5></td>				
+				<td colspan="2"><h5>Frequency</h5></td>						
+		</tr>
+		<tr>
+				<td colspan="2"><?php echo $bad_reaction_supplement[0];?></td> 
+				<td colspan="2"><?php echo $reaction[0];?></td>					
+		</tr>
+		<tr>
+			<td colspan="2"><?php echo $bad_reaction_supplement[1];?></td> 
+				<td colspan="2"><?php echo $reaction[1];?></td>					
+		</tr>
+		<tr>
+				<td colspan="2"><?php echo $bad_reaction_supplement[2];?></td> 
+				<td colspan="2"><?php echo $reaction[2];?></td>					
+		</tr>
+	</table>
+	 <table><tr><td>&nbsp;</td></tr><table>
+		<?php 
+			$prescription_detail = new Application_Model_PhysicianDetails();		
+			$Name_of_medication=$prescription_detail->explodeString($allergic_subtances->nameOfMedication);
+			$Reaction=$prescription_detail->explodeString($allergic_subtances->reaction);		
+		?>
+	<table width="100%" style="border:1px solid #1596DB;" cellspacing="10">
+	<tr><td colspan="5"><h1>Allergic Substances Details</h1></td></tr>
+		<tr>
+				<td colspan="5">Are you allergic to any other substances?</td> 				
+		</tr>		
+		<tr>
+				<td colspan="5"><?php echo $allergic_subtances->allergicSubstancesStatus;?></td> 				
+		</tr>	
+		<tr>
+				<td colspan="2"><h5>Name of Medication</h5></td>				
+				<td colspan="2"><h5>Reaction</h5></td>					
+		</tr>
+		<tr>
+				<td  colspan="2"><?php echo $Name_of_medication[0];?></td> 
+				<td  colspan="2"><?php echo $Reaction[0];?></td>
+				
+		</tr>
+		<tr>
+				<td  colspan="2"><?php echo $Name_of_medication[1];?></td> 
+				<td  colspan="2"><?php echo $Reaction[1];?></td>
+				
+		</tr>	
+		<tr>
+				<td  colspan="2"><?php echo $Name_of_medication[2];?></td> 
+				<td  colspan="2"><?php echo $Reaction[2];?></td>
+				
+		</tr>	
+		<tr><td colspan="5"><h1>CONSTITUTIONAL/SYSTEMIC:</h1></td></tr>
+		<tr>
+				<td><h5>Current Weight:</h5></td> 
+				<td><?php echo $allergic_subtances->currentWeight;?></td>
+				<td><h5>Current height:</h5></td>
+				<td><?php echo $allergic_subtances->height;?></td>
+		</tr>
+		<tr>
+				<td><h5>Least you have weighed in the past 5 years:</h5></td> 
+				<td><?php echo $allergic_subtances->leastWeighed;?></td>
+				<td><h5>The most you have weighed in the past 5 years:</h5></td>
+				<td><?php echo $allergic_subtances->mostWeighed;?></td>
+		</tr>
+		<tr>
+				<td><h5>Recent unexplained weight gain?:</h5></td> 
+				<td><?php echo $allergic_subtances->weightGain;?></td>
+				<td><h5>Recent unexplained weight loss? :</h5></td>
+				<td><?php echo $allergic_subtances->weightLoss;?></td>
+		</tr>
+		<tr>
+				<td><h5>Hours do you sleep on average at night?:</h5></td> 
+				<td><?php echo $allergic_subtances->sleepTime;?></td>
+				<td><h5>Are you frequently tired?:</h5></td>
+				<td><?php echo $allergic_subtances->frequentlyTired;?></td>
+		</tr>
+		<tr>
+				<td><h5>Are you having trouble sleeping?:</h5></td> 
+				<td><?php echo $allergic_subtances->troubleSleeping;?></td>
+				<td><h5>If yes, please explain:</h5></td>
+				<td><?php echo $allergic_subtances->yesExplain;?></td>
+		</tr>
+		<tr>
+				<td><h5>Recent fevers, night sweats or chills?:</h5></td> 
+				<td><?php echo $allergic_subtances->recentFevers;?></td>
+				<td><h5>Regularly use a seatbelt in automobiles? </h5></td>
+				<td><?php echo $allergic_subtances->useAutomobile;?></td>
+		</tr>
+		<tr>
+				<td colspan="5"><h5> Have you had any major illnesses or surgeries?:</h5></td> 				
+		</tr>
+		<tr>
+				<td colspan="5"><?php echo $allergic_subtances->majorIllness;?></td> 				
+		</tr>
+		<?php 
+		$prescription_detail = new Application_Model_PhysicianDetails();		
+		$condition=$prescription_detail->explodeString($allergic_subtances->illnessCondition);
+		$year=$prescription_detail->explodeString($allergic_subtances->illnessYear);
+		$where_treated=$prescription_detail->explodeString($allergic_subtances->illnessWhereTreated);				
+   ?>		
+		<tr>
+				<td><h5>Condition</h5></td> 				
+				<td><h5>Year</h5></td>
+				<td><h5>Where Treated</h5></td>
+		</tr>
+		<tr>
+				<td><?php echo $condition[0];?></td> 				
+				<td><?php echo $year[0];?></td>
+				<td><?php echo $where_treated[0];?></td>
+		</tr>
+		<tr>
+				<td><?php echo $condition[0];?></td> 				
+				<td><?php echo $year[0];?></td>
+				<td><?php echo $where_treated[0];?></td>
+		</tr>
+		<tr>
+				<td><?php echo $condition[0];?></td> 				
+				<td><?php echo $year[0];?></td>
+				<td><?php echo $where_treated[0];?></td>
+		</tr>
+		<tr>
+				<td><?php echo $condition[0];?></td> 				
+				<td><?php echo $year[0];?></td>
+				<td><?php echo $where_treated[0];?></td>
+		</tr>
+		<tr>
+				<td colspan="5"><h5>Please characterize your current diet, describing your typical breakfast, lunch and dinner:</h5></td> 				
+		</tr>
+		<tr>
+				<td colspan="5"><?php echo $allergic_subtances->currentDiet;?></td> 				
+		</tr>
+		<tr>
+				<td colspan="5"><h5>Do you have intolerance of any particular foods (lactose, gluten, etc.)?:</h5></td> 				
+		</tr>
+		<tr>
+				<td colspan="5"><?php echo $allergic_subtances->particularFood;?></td> 				
+		</tr>
+		<tr>
+				<td colspan="5"><h5> Do you exercise regularly?:</h5></td> 				
+		</tr>
+		<tr>
+				<td colspan="5"><?php echo $allergic_subtances->exerciseRegularly;?></td> 				
+		</tr>
+		
+		<tr>
+				<td colspan="5"><h5>What type of exercise and how often?:</h5></td> 				
+		</tr>
+		<tr>
+				<td colspan="5"><?php echo $allergic_subtances->typeOfExercise;?></td> 				
+		</tr>
+		
+		<tr>
+				<td colspan="5"><h5> 
+
+Do you know of any health reason that should limited you from participating in physical activity?:</h5></td> 				
+		</tr>
+		<tr>
+				<td colspan="5"><?php echo $allergic_subtances->physicalActivity;?></td> 				
+		</tr>
+		<tr>
+				<td colspan="5"><?php echo $allergic_subtances->physicalActivityContent;?></td> 				
+		</tr>
+	</table>
+	
+	 <table><tr><td>&nbsp;</td></tr><table>
+	<style>
+	.box{
+	color:#ff0000;
+	}
+	.bk{background-color:#1495DA;
+	color:#ffffff;
+	}
+</style>	
+ <?php 		$prescription_detail = new Application_Model_PhysicianDetails();
+				/*Sister Brother data*/
+				$brother_sister_living=$prescription_detail->explodeString($family_medical_history->sistersBrothersLiving);
+				$sistersBrothersDiceased=$prescription_detail->explodeString($family_medical_history->sistersBrothersDiceased);
+				$sistersBrothersAge=$prescription_detail->explodeString($family_medical_history->sistersBrothersAge);
+				$sistersBrothersMajorIllness=$prescription_detail->explodeString($family_medical_history->sistersBrothersMajorIllness); 
+				/*Uncle Aunt data*/
+				$auntsUnclesLiving=$prescription_detail->explodeString($family_medical_history->auntsUnclesLiving);
+				$auntsUnclesDiceased=$prescription_detail->explodeString($family_medical_history->auntsUnclesDiceased);
+				$auntsUnclesAge=$prescription_detail->explodeString($family_medical_history->auntsUnclesAge);
+				$auntsUnclesMajorIllness=$prescription_detail->explodeString($family_medical_history->auntsUnclesMajorIllness); 
+				/*Children data*/
+				$childrenLiving=$prescription_detail->explodeString($family_medical_history->childrenLiving);
+				$childrenDiceased=$prescription_detail->explodeString($family_medical_history->childrenDiceased);
+				$childrenAge=$prescription_detail->explodeString($family_medical_history->childrenAge);
+				$childrenMajorIllness=$prescription_detail->explodeString($family_medical_history->childrenMajorIllness); 				
+				
+				?>
+	<table width="100%" style="border:1px solid #1596DB;" cellspacing="10">
+	<tr><td colspan="5"><h1>Family Medical History</h1></td></tr>
+	<tr><td><h5></h5></td><td ><h5>Living</h5></td><td ><h5>Deceased</h5></td><td><h5>Age</h5></td><td ><h5>Major Illnesses / Cause of Death</h5></td></tr>
+	<tr><td class="bk"><h5>Mother</h5></td><td ><?php echo $family_medical_history->motherLiving;?></td><td ><?php echo $family_medical_history->motherDiceased;?></td><td><?php echo $family_medical_history->motherAge;?></td><?php echo $family_medical_history->motherMajorIllness;?><td ></td></tr>
+	<tr><td class="bk"><h5>Father</h5></td><td ><?php echo $family_medical_history->fatherLiving;?></td><td ><?php echo $family_medical_history->fatherDiceased;?></td><td><?php echo $family_medical_history->fatherAge;?></td><?php echo $family_medical_history->fatherMajorIllness;?><td ></td></tr>
+	<tr><td class="bk"><h5>Maternal Grandmother</h5></td><td ><?php echo $family_medical_history->maternalGrandmotherLiving;?></td><td ><?php echo $family_medical_history->maternalGrandmotherDiceased;?></td><td><?php echo $family_medical_history->maternalGrandmotherAge;?></td><td ><?php echo $family_medical_history->maternalGrandmotherMajorIllness;?></td></tr>
+	<tr><td class="bk"><h5>Maternal Grandfather</h5></td><td ><?php echo $family_medical_history->maternalGrandfatherLiving;?></td><td ><?php echo $family_medical_history->maternalGrandfatherDiceased;?></td><td><?php echo $family_medical_history->maternalGrandfatherAge;?></td><td ><?php echo $family_medical_history->maternalGrandfatherMajorIllness;?></td></tr>
+	<tr><td class="bk"><h5>Paternal Grandmother</h5></td><td ><?php echo $family_medical_history->paternalGrandmotherLiving;?></td><td ><?php echo $family_medical_history->paternalGrandmotherDiceased;?></td><td><?php echo $family_medical_history->paternalGrandmotherAge;?></td><td ><?php echo $family_medical_history->paternalGrandmotherMajorIllness;?></td></tr>
+	<tr><td class="bk"><h5>Paternal Grandfather</h5></td><td ><?php echo $family_medical_history->paternalGrandfatherLiving;?></td><td ><?php echo $family_medical_history->paternalGrandfatherDiceased;?></td><td><?php echo $family_medical_history->paternalGrandfatherAge;?></td><td ><?php echo $family_medical_history->paternalGrandfatherMajorIllness;?></td></tr>
+	<tr><td class="bk"><h5>Sisters, Brothers (please specify):</h5></td><td ><?php echo array_shift($brother_sister_living);?></td><td ><?php echo array_shift($sistersBrothersDiceased);?></td><td><?php echo array_shift($sistersBrothersAge);?></td><td ><?php echo $sistersBrothersMajorIllness[$i];?></td></tr>
+	<?php 
+	$countsister_brother=max(count($brother_sister_living),count($sistersBrothersDiceased),count($sistersBrothersAge),count($sistersBrothersMajorIllness));
+	if(!empty($brother_sister_living) || !empty($sistersBrothersDiceased) || !empty($sistersBrothersAge) || !empty($sistersBrothersMajorIllness)){ for($i=0;$i<=$countsister_brother;$i++)		
+	{ ?>
+	<tr><td class="bk"><h5></h5></td><td ><?php echo $brother_sister_living[$i];?></td><td ><?php echo$sistersBrothersDiceased[$i];?></td><td><?php echo $sistersBrothersAge[$i];?></td><td ><?php echo $sistersBrothersMajorIllness[$i];?></td></tr>
+	<?php }} ?>
+	<tr><td class="bk"><h5>Aunts, Uncles (please specify):</h5></td><td ><?php echo array_shift($auntsUnclesLiving);?></td><td ><?php echo array_shift($auntsUnclesDiceased);?></td><td><?php echo array_shift($auntsUnclesAge);?></td><td ><?php echo array_shift($auntsUnclesMajorIllness);?></td></tr>
+	<?php 
+	$countuncle_aunt=max(count($auntsUnclesLiving),count($auntsUnclesDiceased),count($auntsUnclesAge),count($auntsUnclesMajorIllness));
+	if(!empty($auntsUnclesLiving) || !empty($auntsUnclesDiceased) || !empty($auntsUnclesAge) || !empty($auntsUnclesMajorIllness)){ for($i=0;$i<=$countuncle_aunt;$i++)
+		
+{ ?>
+	<tr><td class="bk"><h5></h5></td><td ><?php echo $auntsUnclesLiving[$i];?></td><td ><?php echo $auntsUnclesDiceased[$i];?></td><td><?php echo $auntsUnclesAge[$i];?></td><td ><?php echo $auntsUnclesMajorIllness[$i];?></td></tr>
+<?php }} ?>	
+	<tr><td class="bk"><h5>Children (please specify):</h5></td><td ><?php echo array_shift($childrenLiving);?></td><td ><?php echo array_shift($childrenDiceased);?></td><td><?php echo array_shift($childrenAge);?></td><td ><?php echo array_shift($childrenMajorIllness);?></td></tr>
+	<?php 
+	$countchildren=max(count($childrenLiving),count($childrenDiceased),count($childrenAge),count($childrenMajorIllness));
+	if(!empty($childrenLiving) || !empty($childrenDiceased) || !empty($childrenAge) || !empty($childrenMajorIllness)){ for($i=0;$i<=$countchildren;$i++)
+		
+{ ?>
+<tr><td class="bk"><h5></h5></td><td ><?php echo $childrenLiving[$i];?></td><td ><?php echo $childrenDiceased[$i];?></td><td><?php echo $childrenAge[$i];?></td><td ><?php echo $childrenMajorIllness[$i];?></td></tr>
+
+<?php } } ?>
+	
+	<tr><td colspan="5"><h1>Have you had the following immunizations?</h1></td></tr>
+	<tr><td><h5>Immunizations</h5></td><td><h5>Year</h5></td><td><h5>Immunizations</h5></td><td><h5>Year</h5></td></tr>
+	<tr><td><?php echo $family_medical_history->influeza;?></td><td><?php echo $family_medical_history->influezaYear;?></td><td><?php echo $family_medical_history->tuberculin;?></td><td><?php echo $family_medical_history->tuberculinYear;?></td></tr>
+	<tr><td><?php echo $family_medical_history->bcg;?></td><td><?php echo $family_medical_history->bcgYear;?></td><td><?php echo $family_medical_history->diptheria;?></td><td><?php echo $family_medical_history->diptheriaYear;?></td></tr>
+	<tr><td><?php echo $family_medical_history->measles;?></td><td><?php echo $family_medical_history->measlesYear;?></td><td><?php echo $family_medical_history->hepatitis;?></td><td><?php echo $family_medical_history->hepatitisYear;?></td></tr>
+	<tr><td><?php echo $family_medical_history->hepatitisB;?></td><td><?php echo $family_medical_history->hepatitisBYear;?></td><td><?php echo $family_medical_history->pneumoniaVaccine;?></td><td><?php echo $family_medical_history->pneumoniaVaccineYear;?></td></tr>
+	<tr><td colspan="5"><h1>Have you ever had or tested positive for:</h1></td></tr>
+	<tr><td><?php echo $family_medical_history->testedChickenPox;?></td><td><?php echo $family_medical_history->testedTuberculosis;?></td><td><?php echo $family_medical_history->testedHiv;?></td><td><?php echo $family_medical_history->testedHepatitis;?></td><td><?php echo $family_medical_history->testedVenereal;?></td></tr>
+	<tr><td colspan="4"><h5>Type:</h5></td><td><?php echo $family_medical_history->type;?></td></tr>
+	<tr><td colspan="4"><h5>Specify:</h5></td><td><?php echo $family_medical_history->specify;?></td></tr>
+	<tr><td colspan="5"><h1>Other tests::</h1></td></tr>
+	<tr><td><h5></h5></td><td><h5>Date</h5></td><td><h5>Result</h5></td></tr>
+	<tr><td><h5>Chest X-Ray:</h5></td><td><?php echo $family_medical_history->chestXRayDate;?></td><td><?php echo $family_medical_history->chestXRayResult;?></td></tr>
+	<tr><td><h5>Cholesterol Level:</h5></td><td><?php echo $family_medical_history->cholesterolLevelDate;?></td><td><?php echo $family_medical_history->cholesterolLevelResult;?></td></tr>
+	<tr><td><h5>Triglyceride Level:</h5></td><td><?php echo $family_medical_history->triglycerideLevelDate;?></td><td><?php echo $family_medical_history->triglycerideLevelResult;?></td></tr>
+	<tr><td><h5>Other Lipid Data:</h5></td><td><?php echo $family_medical_history->otherLipidDataDate;?></td><td><?php echo $family_medical_history->otherLipidDataResult;?></td></tr>
+	<tr><td><h5>Colonoscopy:</h5></td><td><?php echo $family_medical_history->colonoscopyDate;?></td><td><?php echo $family_medical_history->otherLipidDataResult;?></td></tr>
+	<tr><td><h5>Mammogram:</h5></td><td><?php echo $family_medical_history->mammogramDate;?></td><td><?php echo $family_medical_history->mammogramResult;?></td></tr>
+	<tr><td><h5>Pap Test:</h5></td><td><?php echo $family_medical_history->papTestDate;?></td><td><?php echo $family_medical_history->papTestResult;?></td></tr>
+	<tr><td><h5>Bone Density Test:</h5></td><td><?php echo $family_medical_history->boneDensityTestDate;?></td><td><?php echo $family_medical_history->boneDensityTestResult;?></td></tr>
+	
+	</table>
+	
+	

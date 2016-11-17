@@ -1,0 +1,138 @@
+<!--ADMIN CONTENT -->
+<div id="admin-content-inner">
+	<div class="help-list">
+		<h2 class="help-heading">Customer Service</h2>
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-sm-12">
+					<div class="faqlist">
+						<h2>Frequently Asked Questions</h2>
+						<div id="accordion" class="faqsec01">
+							<?php echo stripslashes($this->object->getContent());?>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-sm-12">
+					<div class="container-fluid">
+						<div class="row">
+							<div class="col-sm-6 message-box">
+								<h2 class="messagehead">Send Message to Customer Service</h2>
+								<form name="supportForm" method="post" id="supportForm">
+									<?php echo $this->form->first_name; ?>
+									<?php echo $this->form->email; ?>
+									<?php echo $this->form->enquiry; ?>
+									<input name="Send" type="submit" value="Send" id="sendSupportForm">
+								</form>
+							</div>
+							<div class="col-sm-6">
+								<div class="chat-customer">
+									<div class="container-fluid">
+										<div class="row">
+											<div class="col-sm-3"><img src="/images/user/chatall.png" alt="Chat"></div>
+											<div class="col-sm-9">
+												<div class="bluebg"><a href="https://docs.google.com/document/d/1rlLSnBYaRifvFGozFg057bUYMScMmmAdjlPJiO-nJ1U/edit?usp=sharing" target="_blank">doctors user manual</a></div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="chat-customer">
+									<div class="container-fluid">
+										<div class="row">
+											<div class="col-sm-3"><img src="/images/user/call.png" alt="Call"></div>
+											<div class="col-sm-9">
+												<div class="orangebg" id="customer_service_panel"><a href="#" id="customer_service_btn">Call Customer Service</a></div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="container-fluid">
+		<div class="row">
+		</div>
+	</div>
+</div>
+
+<div class="container-fluid div-space">
+	<div class="row">
+		<div class="col-sm-6">
+		</div>
+		<div class="col-sm-6">
+		</div>
+	</div>
+</div>
+<script>
+  $(function () {
+    $('#myTab a:first').tab('show')
+  })
+</script> 
+<script>
+  $(function () {
+    $('#myTab01 a:first').tab('show')
+  })
+</script>
+<script>
+  $(function () {
+    $('#myTab02 a:first').tab('show')
+  })
+</script>  
+<script type="text/javascript">
+	$(document).ready(function() {
+
+		//syntax highlighter
+		hljs.tabReplace = '    ';
+		hljs.initHighlightingOnLoad();
+
+		//accordion
+		$('#accordion').accordion({
+			defaultOpen: 'body-section1',
+			cookieName: 'accordion_nav',
+			speed: 'slow',
+			animateOpen: function (elem, opts) { //replace the standard slideUp with custom function
+				elem.next().slideFadeToggle(opts.speed);
+			},
+			animateClose: function (elem, opts) { //replace the standard slideDown with custom function
+				elem.next().slideFadeToggle(opts.speed);
+			}
+		});
+
+		//custom animation for open/close
+		$.fn.slideFadeToggle = function(speed, easing, callback) {
+			return this.animate({opacity: 'toggle', height: 'toggle'}, speed, easing, callback);
+		};
+
+		jQuery("#sendSupportForm").click(function(event){
+			event.preventDefault();
+			var first_name = jQuery("#first_name").val();
+			var email = jQuery("#email").val();
+			var enquiry = jQuery("#enquiry").val();
+
+			$.post("/user/index/contact-support", {first_name:first_name, email:email, enquiry:enquiry },
+				function(html){			
+					jQuery("#supportForm").append(html);
+					jQuery("#first_name").val("");
+					jQuery("#email").val("");
+					jQuery("#enquiry").val("");
+				}
+			);
+		});
+		jQuery("#customer_service_btn").click(function(event){
+			event.preventDefault();
+			var phoneNumber = '<?php echo '(888) 508-5778'; ?>';
+			jQuery("#customer_service_panel").html(phoneNumber);
+		});
+		
+
+	});
+</script>
+<!--/ADMIN CONTENT --> 

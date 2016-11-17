@@ -1,0 +1,78 @@
+<div id="rightsidemain">
+    <div id="rightcontentpart">
+        <div id="rightsideheading">
+            <img src="/images/admin-images/bl-tl.gif" align="left" /><img src="/images/admin-images/bl-tr.gif" align="right" />
+            <span style="margin: 0pt 15px 0pt 0pt; float: right;">
+                <a href="/admin/patient/index/page/<?php echo $this->page?>" class="add">Back</a>
+            </span>
+	Patient - Add/Edit</div>
+        <div id="rightsidecontentpart">
+            <span class='red'><?php echo $this->msg; ?></span>
+            <form method="post" action="<?php echo $this->form->action?>">
+    <table cellspacing="0" cellpadding="0" border="0" class="profile-edit">
+        <tbody>
+            <tr><td colspan="2"><span class='red'><?php echo $this->msg; ?></span></td></tr>
+
+            <tr>
+                <td width="130" id="firstname-label"><label for="name">Name:</label></td>
+                <td class="element"><?php echo $this->form->name;?></td>
+            </tr>
+            <tr>
+                <td width="130" id="last_name-label"><label for="last_name">Surname:</label></td>
+                <td class="element"><?php echo $this->form->last_name;?></td>
+            </tr>
+            <tr>
+                <td id="lastname-label"><label for="zipcode">Zipcode:</label></td>
+                <td class="element"><?php echo $this->form->zipcode;?></td>
+            </tr>
+           
+             <tr>
+                <td id="lastname-label"><label for="phone">Phone:</label></td>
+                <td class="element"><?php echo $this->form->phone;?></td>
+            </tr>
+            <tr>
+                <td id="lastname-label"><label for="gender">Gender:</label></td>
+                <td class="element"><?php echo $this->form->gender;?></td>
+            </tr>
+            <tr>
+                <td id="lastname-label"><label for="gender">Date of Birth:</label></td>
+                <td class="element">
+                <?php echo $this->form->month_dob . "&nbsp;" . $this->form->date_dob . "&nbsp;" . $this->form->year_dob; ?>
+                        <ul class="errors">
+                        <?php
+                            if(isset($errors['month']))echo "<li>" . $errors['month'] . "</li>";
+                            if(isset($errors['day']))echo "<li>" . $errors['day'] . "</li>";
+                            if(isset($errors['year']))echo "<li>" . $errors['year'] . "</li>";
+                            ?>
+                        </ul>
+                </td>
+            </tr>
+            <tr>
+                <td id="lastname-label"><label for="password">Email:</label></td>
+                <td class="element"><?php echo $this->form->email;?></td>
+            </tr>
+             <tr>
+                 <td></td>
+                 <td >
+                     <ul class="errors">
+
+            <?php $errors = $this->form->getErrorMessages();
+                        if(!empty($errors))foreach($errors as $error)echo "<li>".$error."</li>";
+                        ?>
+                     </ul></td></tr>
+             
+           
+             <tr>
+                <td></td>
+                <td class="element"  align="center"><?php echo $this->form->submit;?></td>
+            </tr>
+
+
+
+        </tbody>
+    </table>
+</form>
+        </div>
+    </div>
+    <div class="btm-curve"><img src="/images/admin-images/btm-r-l.gif" align="left" /><img src="/images/admin-images/btm-r-r.gif" align="right" /></div>
+</div>

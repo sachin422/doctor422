@@ -1,0 +1,180 @@
+<div id="rightsidemain">
+    <div id="rightcontentpart">
+
+        <?php
+        $time_interval = '
+				<option value="10">10 Min</option>
+				<option value="15">15 Min</option>
+				<option value="30" selected>30 Min</option>
+				<option value="45">45 Min</option>
+				<option value="60">60 Min</option>
+			';
+        ?>
+        <form name="frmSlot" action="/admin/timeslot/create-weekly/" method="post">
+
+            <table border="0" cellpadding="0" cellspacing="0" width="98%" class="slot_master">
+                <tr>
+                    <td width="20%" rowspan="100%"></td>
+                </tr>
+
+                <tr>
+                    <th colspan="2" align="center">Doctor: <?php echo $this->docObject->getFname(); ?><br /></th>
+                </tr>
+                <tr>
+                    <td align="center" colspan="2">
+                        <input type="hidden" name="drid" value="<?php echo $this->docObject->getId(); ?>" />
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+<?php
+        $times = array(
+            "12:00 AM", "12:30 AM",
+            "01:00 AM", "01:30 AM",
+            "02:00 AM", "02:30 AM",
+            "03:00 AM", "03:30 AM",
+            "04:00 AM", "04:30 AM",
+            "05:00 AM", "05:30 AM",
+            "06:00 AM", "06:30 AM",
+            "07:00 AM", "07:30 AM",
+            "08:00 AM", "08:30 AM",
+            "09:00 AM", "09:30 AM",
+            "10:00 AM", "10:30 AM",
+            "11:00 AM", "11:30 AM",
+            "12:00 PM", "12:30 PM",
+            "01:00 PM", "01:30 PM",
+            "02:00 PM", "02:30 PM",
+            "03:00 PM", "03:30 PM",
+            "04:00 PM", "04:30 PM",
+            "05:00 PM", "05:30 PM",
+            "06:00 PM", "06:30 PM",
+            "07:00 PM", "07:30 PM",
+            "08:00 PM", "08:30 PM",
+            "09:00 PM", "09:30 PM",
+            "10:00 PM", "10:30 PM",
+            "11:00 PM", "11:30 PM"
+        );
+        $timeSlotOptions1 = "";
+        $timeSlotOptions2 = "";
+        foreach ($times as $k => $time) {
+            $sel1 = "";
+            if ($time == "09:00 AM")
+                $sel1 = "selected";
+            $timeSlotOptions1 .= "<option value='" . $time . "' " . $sel1 . ">" . $time . "</option>";
+
+            $sel2 = "";
+            if ($time == "05:00 PM")
+                $sel2 = "selected";
+            $timeSlotOptions2 .= "<option value='" . $time . "' " . $sel2 . ">" . $time . "</option>";
+        }
+
+        $weekno = date("W", strtotime($this->startdate));
+        $year = date("Y", strtotime($this->startdate));
+
+        $weekday1 = strtotime($year . 'W' . $weekno . "1");
+        $weekday2 = strtotime($year . 'W' . $weekno . "2");
+        $weekday3 = strtotime($year . 'W' . $weekno . "3");
+        $weekday4 = strtotime($year . 'W' . $weekno . "4");
+        $weekday5 = strtotime($year . 'W' . $weekno . "5");
+        $weekday6 = strtotime($year . 'W' . $weekno . "6");
+        $weekday7 = strtotime($year . 'W' . $weekno . "7");
+?>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="2"><h2>Select Your Days</h2></td>
+                    <td width="25%"><h2>Enter Start & End Time</h2></td>
+                    <td><h2>Select Time Interval</h2></td>
+                </tr>
+
+                <tr>
+                    <td><?php echo date("D, M d-Y", $weekday1); ?></td>
+                    <td><input type="checkbox" name="day1" id="day1" value="<?php echo date("Y-m-d", $weekday1); ?>" /></td>
+                    <td>
+                        <select name="stime1" id="stime1" ><?php echo $timeSlotOptions1; ?></select> to
+                        <select name="etime1" id="etime1"><?php echo $timeSlotOptions2; ?></select>
+                    </td>
+                    <td>
+                        <select name="time1" id="time1"><?php echo $time_interval; ?></select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><?php echo date("D, M d-Y", $weekday2); ?></td><td>
+                        <input type="checkbox" name="day2" id="day2" value="<?php echo date("Y-m-d", $weekday2); ?>" /></td>
+                    <td>
+                        <select name="stime2" id="stime2" ><?php echo $timeSlotOptions1; ?></select> to
+                        <select name="etime2" id="etime2" ><?php echo $timeSlotOptions2; ?></select>
+                    </td>
+                    <td>
+                        <select name="time2" id="time2"><?php echo $time_interval; ?></select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><?php echo date("D, M d-Y", $weekday3); ?></td>
+                    <td><input type="checkbox" name="day3" id="day3" value="<?php echo date("Y-m-d", $weekday3); ?>" /></td>
+                    <td>
+                        <select name="stime3" id="stime3" ><?php echo $timeSlotOptions1; ?></select> to
+                        <select name="etime3" id="etime3" ><?php echo $timeSlotOptions2; ?></select>
+                    </td>
+                    <td>
+                        <select name="time3" id="time3"><?php echo $time_interval; ?></select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><?php echo date("D, M d-Y", $weekday4); ?></td>
+                    <td><input type="checkbox" name="day4" id="day4" value="<?php echo date("Y-m-d", $weekday4); ?>" /></td>
+                    <td>
+                        <select name="stime4" id="stime4" ><?php echo $timeSlotOptions1; ?></select> to
+                        <select name="etime4" id="etime4" ><?php echo $timeSlotOptions2; ?></select>
+                    </td>
+                    <td>
+                        <select name="time4" id="time4"><?php echo $time_interval; ?></select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><?php echo date("D, M d-Y", $weekday5); ?></td>
+                    <td><input type="checkbox" name="day5" id="day5" value="<?php echo date("Y-m-d", $weekday5); ?>" /></td>
+                    <td>
+                        <select name="stime5" id="stime5" ><?php echo $timeSlotOptions1; ?></select> to
+                        <select name="etime5" id="etime5" ><?php echo $timeSlotOptions2; ?></select>
+                    </td>
+                    <td>
+                        <select name="time5" id="time5"><?php echo $time_interval; ?></select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><?php echo date("D, M d-Y", $weekday6); ?></td>
+                    <td><input type="checkbox" name="day6" id="day6" value="<?php echo date("Y-m-d", $weekday6); ?>" /></td>
+                    <td>
+                        <select name="stime6" id="stime6" ><?php echo $timeSlotOptions1; ?></select> to
+                        <select name="etime6" id="etime6" ><?php echo $timeSlotOptions2; ?></select>
+                    </td>
+                    <td>
+                        <select name="time6" id="time6"><?php echo $time_interval; ?></select>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="10%"><?php echo date("D, M d-Y", $weekday7); ?></td>
+                    <td><input type="checkbox" name="day7" id="day7" value="<?php echo date("Y-m-d", $weekday7); ?>" /></td>
+                    <td>
+                        <select name="stime7" id="stime7" ><?php echo $timeSlotOptions1; ?></select> to
+                        <select name="etime7" id="etime7" ><?php echo $timeSlotOptions2; ?></select>
+                    </td>
+                    <td>
+                        <select name="time7" id="time7"><?php echo $time_interval; ?></select>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="100%">
+                        <input type="button" onclick="history.back();" name="back" value="<< back" />
+                        <input type="submit" name="submit" value="Set Time Slot" /></td>
+                </tr>
+
+            </table>
+
+
+        </form>
+    </div>
+</div>

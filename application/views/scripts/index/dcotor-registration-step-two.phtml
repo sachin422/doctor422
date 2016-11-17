@@ -1,0 +1,198 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>:: Doc Mate-Doctor Sign Up ::</title>
+
+<?php    
+        echo $this->headTitle();
+        echo $this->headMeta();
+		
+		$this->headLink()->appendStylesheet('/style/bootstrap.css');
+		$this->headLink()->appendStylesheet('/style/bootstrap-theme.css');
+		$this->headLink()->appendStylesheet('/style/style-doctor-signin-reg.css');
+		
+		?>
+		<!--[if IE]><script src="js/html5.js"></script><![endif]-->
+		<?php
+				
+        echo $this->headLink(); 
+
+		$this->headScript()->appendFile('/js/modernizr.custom.79639.js'); 
+
+		echo $this->headScript();
+?>
+</head>
+
+<body>
+	<div class="sign-reg-box lesspad01 month-pricing clearfix">
+    	<p class="registration-text text-center">Register with</p>
+    	<div class="admin-logo"><a href="index.html"><img src="/images/doctors-admin-logo.png" alt="doctors"></a></div>
+        
+        <div class="label-heading space" style="margin-left:0px; margin-right:0px;">
+        	<div class="wrapper-demo">
+					<div id="dd" class="wrapper-dropdown-5" tabindex="1"><p class="blueform">Select Plan <span>Page 2 of 4</span></p>
+						<ul class="dropdown">
+							<li class="form-opt"><a href="#">Create Profile <span>Page 1 of 4</span></a></li>
+							<li class="form-opt"><a href="#">Almost There <span>Page 3 of 4</span></a></li>
+							<li class="form-opt"><a href="#">Welcome to doctors <span>Page 4 of 4</span></a></li>
+						</ul>
+					</div>
+				​</div>
+        </div>
+        <div class="row"><div class="col-md-12"><center><font color="red"><?php echo $this->error_stripe_msg;?></font></center></div></div>
+        <div class="fetprice-all clearfix">
+        	<div class="fetpricebox01">
+            	<div class="top01">KEY FEATURES</div>
+                <div class="top02">Featured Profile</div>                
+                <div class="top03">Online Appointment Booking</div>
+                <div class="top02">Important Task Management</div>
+                <div class="top03">Social Media Setup</div>
+                <div class="top02">Patient Reviews</div>
+                <div class="top03">Doctor to Doctor Referrals</div>
+                <div class="top02">Patient Referrals</div>
+                <div class="top03">Social & Website Widgets</div>
+                <div class="top02">Practice Statistics</div>
+                <div class="top03">Patient Medical History</div>
+                <div class="top02">Secure Messaging</div>
+                <div class="top03">Past Due Reminders</div>
+                <div class="top02">Email Campaigns</div>
+            </div>
+            <form id="monthly" name="monthly" action="" method="post" enctype="multipart/formdata"> 
+	            <div class="fetpricebox02">
+	            	<div class="top06" style="background:rgba(115,210,6,1);background:-moz-linear-gradient(top,rgba(115,210,6,1) 0%,rgba(88,154,2,1) 100%);background:-webkit-gradient(left top,left bottom,color-stop(0%,rgba(115,210,6,1)),color-stop(100%,rgba(88,154,2,1)));background:-webkit-linear-gradient(top,rgba(115,210,6,1) 0%,rgba(88,154,2,1) 100%);background:-o-linear-gradient(top,rgba(115,210,6,1) 0%,rgba(88,154,2,1) 100%);background:-ms-linear-gradient(top,rgba(115,210,6,1) 0%,rgba(88,154,2,1) 100%);background:linear-gradient(to bottom,rgba(115,210,6,1) 0%,rgba(88,154,2,1) 100%);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#73d206',endColorstr='#589a02',GradientType=0);border-bottom:1px solid #5ba203;height:96px;line-height:96px;text-align:center;color:#fff;font-size:43px;font-family:'montserratbold';border-radius:7px 7px 0 0;-moz-border-radius:7px 7px 0 0;-webkit-border-radius:7px 7px 0 0;">
+						<h2>Monthly</h2>
+						<h2>$199/Month</h2>
+	            	</div> 
+					<input type="hidden" name="plantime" value="monthly">
+                    <input type="hidden" name="plan" value="3">
+					<input type="hidden" name="tempdocid" value="<?php echo $this->tempdocid;?>">
+
+	                <div class="top02 text-center"><img src="/images/tick.png" alt="doctors"></div>
+	                <div class="top03 text-center"><img src="/images/tick.png" alt="doctors"></div>
+	                <div class="top02 text-center"><img src="/images/tick.png" alt="doctors"></div>
+	                <div class="top03 text-center"><img src="/images/tick.png" alt="doctors"></div>
+	                <div class="top02 text-center"><img src="/images/tick.png" alt="doctors"></div>
+	                <div class="top03 text-center"><img src="/images/tick.png" alt="doctors"></div>
+	                <div class="top02 text-center"><img src="/images/tick.png" alt="doctors"></div>
+	                <div class="top03 text-center"><img src="/images/tick.png" alt="doctors"></div>
+	                <div class="top02 text-center"><img src="/images/tick.png" alt="doctors"></div>
+	                <div class="top03 text-center"><img src="/images/tick.png" alt="doctors"></div>
+	                <div class="top02 text-center"><img src="/images/tick.png" alt="doctors"></div>
+	                <div class="top03 text-center"><img src="/images/tick.png" alt="doctors"></div>
+	                <div class="top02 text-center"><img src="/images/tick.png" alt="doctors"></div>
+	                <div class="top07">
+						<div class="subscription-con">
+							  <script
+								src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+								data-key="pk_live_WL8QL1YTy5KFo4okm8DpH1q0"
+								data-amount="19900"
+								data-email="<?php echo $this->dataEmail; ?>"
+								data-name="doctors"
+								data-description="Monthly Subscription $199/Month"
+								data-image="http://app.doctors.com/images/doctors-stripe-logo.png"
+								data-allow-remember-me = "false"
+								data-label="Monthly Subscription"
+								data-locale="auto">
+							  </script>
+							  <input type="hidden" value="<?php echo $this->tempdocid;?>" name="doctor_id">
+							  <input type="hidden" value="19900" name="payment_amount">
+                        </div>
+					</div>
+	            </div>
+			</form>
+            <div class="fetpricebox02">
+                <form id="premium" name="premium" action="" method="post" enctype="multipart/formdata">
+                    <div class="top06">
+                        <h2>Annually </h2>
+                        <h2>$149/Month</h2>
+                        <p>Paid Annually (Save $600 Dollars)</p>
+                    </div>
+					<input type="hidden" name="plantime" value="yearly">
+                    <input type="hidden" name="plan" value="3">
+					<input type="hidden" name="tempdocid" value="<?php echo $this->tempdocid;?>">
+                    <div class="top02 text-center"><img src="/images/blue-tickk.png" alt="doctors"></div>
+                    <div class="top03 text-center"><img src="/images/blue-tickk.png" alt="doctors"></div>
+                    <div class="top02 text-center"><img src="/images/blue-tickk.png" alt="doctors"></div>
+                    <div class="top03 text-center"><img src="/images/blue-tickk.png" alt="doctors"></div>
+                    <div class="top02 text-center"><img src="/images/blue-tickk.png" alt="doctors"></div>
+                    <div class="top03 text-center"><img src="/images/blue-tickk.png" alt="doctors"></div>
+                    <div class="top02 text-center"><img src="/images/blue-tickk.png" alt="doctors"></div>
+                    <div class="top03 text-center"><img src="/images/blue-tickk.png" alt="doctors"></div>
+                    <div class="top02 text-center"><img src="/images/blue-tickk.png" alt="doctors"></div>
+                    <div class="top03 text-center"><img src="/images/blue-tickk.png" alt="doctors"></div>
+                    <div class="top02 text-center"><img src="/images/blue-tickk.png" alt="doctors"></div>
+                    <div class="top03 text-center"><img src="/images/blue-tickk.png" alt="doctors"></div>
+                    <div class="top02 text-center"><img src="/images/blue-tickk.png" alt="doctors"></div>
+                    <div class="top07"> <div class="subscription-con">
+                             <script
+								src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+								data-key="pk_live_WL8QL1YTy5KFo4okm8DpH1q0"
+								data-amount="178800"
+								data-email="<?php echo $this->dataEmail; ?>"
+								data-name="doctors"
+								data-description="Annually Subscription $149/Month"
+								data-image="http://app.doctors.com/images/doctors-stripe-logo.png"
+								data-allow-remember-me = "false"
+								data-label="Annually Subscription"
+								data-locale="auto">
+							  </script>
+							  <input type="hidden" value="<?php echo $this->tempdocid;?>" name="doctor_id">
+							  <input type="hidden" value="178800" name="payment_amount">
+                        </div><!--<input type="image" src="/images/signup-blue.png">--></div>
+                </form>
+             </div>
+        </div>
+        <div id="policyNotes">
+        	<p>
+        		<h3>Return Policy:</h3>
+        		<ul>
+        			<li>No Commitment or Contract required</li>
+        			<li>Free Plans – No credit card or payment required</li>
+        			<li>30 day money back guarantee with full refund for monthly and annual plans.</li>
+        		</ul>
+        	</p>
+        	<p>
+        		<h3>Cancellation Policy:</h3>
+        		<ul>
+        			<li>1 week notice before the next billing cycle is required to cancel the service for monthly and annual plans.</li>
+        		</ul>
+        	</p>
+        </div>
+    </div>
+    
+    <p class="copyright-text">Copyright © A1 Healthcare Technologies LLC 2015. All rights reserved.</p>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+		<script type="text/javascript">
+
+			function DropDown(el) {
+				this.dd = el;
+				this.initEvents();
+			}
+			DropDown.prototype = {
+				initEvents : function() {
+					var obj = this;
+
+					obj.dd.on('click', function(event){
+						$(this).toggleClass('active');
+						event.stopPropagation();
+					});	
+				}
+			}
+
+			$(function() {
+
+				var dd = new DropDown( $('#dd') );
+
+				$(document).click(function() {
+					// all dropdowns
+					$('.wrapper-dropdown-5').removeClass('active');
+				});
+
+			});
+
+		</script>
+</body>
+</html>

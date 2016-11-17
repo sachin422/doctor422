@@ -1,0 +1,213 @@
+<?php
+$settings = new Admin_Model_GlobalSettings();
+$locale = $settings->settingValue('locale');
+setlocale(LC_ALL, $locale);
+$Calendar = new Zend_Session_Namespace("calendar");
+$usersNs = new Zend_Session_Namespace("members");
+if ($this->tab != '') {
+    $Calendar->BACKPAGE = $_SERVER['QUERY_STRING'];
+} else {
+    $Calendar->BACKPAGE = $_SERVER['QUERY_STRING'] . '/tab/day';
+}
+$hours = $settings->settingValue('hours');
+if($hours) {
+	$timeFormat = "%I:%M %P";
+} else {
+	$timeFormat = "%H:%M";
+}
+
+$date = date('Y-m-d', $Calendar->TODAY);
+//$PHPCalendar = new Base_PHPCalendar();
+$Doctor = new Application_Model_Doctor();
+$docObject = $Doctor->fetchRow("user_id='{$usersNs->userId}'");
+$Appointment = new Application_Model_Appointment();
+
+$TimeSlot = new Base_Timeslot();
+$DocAppointment = new Application_Model_DoctorAppointmentCal();
+$slotsAvailable = array();
+$slotObject = $DocAppointment->fetchAll("slot_date='" . $date . "' AND  doctor_id='{$docObject->getId()}'", "slot_time");
+if(empty($slotObject)){
+    $slotsAvailable = $TimeSlot->getDoctorTimeSlots($docObject->getId(), $date);
+}else{
+    foreach ($slotObject as $s => $slot) {
+        $slotsAvailable[] = strftime($timeFormat, strtotime($date . " " . $slot->getSlotTime()));
+    }
+}
+$slotArray = array();
+$weekDay = date('D', $Calendar->TODAY);
+
+$nextDay = strtotime('+1 day', $Calendar->TODAY);
+$prevDay = strtotime('-1 day', $Calendar->TODAY);
+
+//get slot duration for this day
+$interval = 0;
+$MasterSlot = new Application_Model_MasterTimeslot();
+$slot = $MasterSlot->fetchRow("doctor_id='".$docObject->getId()."' AND week_number='1' AND is_checked='1' AND slot_day='{$weekDay}'", "id ASC");
+if($slot) {
+	$interval = $slot->getSlotInterval();
+} else {
+	$slot = $MasterSlot->fetchRow("doctor_id='-1' AND week_number='1' AND is_checked='1' AND slot_day='{$weekDay}'", "id ASC");
+	if($slot) {
+		$interval = $slot->getSlotInterval();
+	}
+}
+$interval -=1;
+?>
+
+
+<!--ADMIN CONTENT -->
+
+
+
+<div class="daily-calendar">
+
+	<div class="days clearfix">
+		<a href="#" onclick="nextDay('/user/index/ajax-appointment/today/<?php print $prevDay;?>/tab/day','<?php print $prevDay;?>');return false;" rel="<?php print $prevDay; ?>">
+			<img src="/images/user/arrow-before.png" alt="" class="arr-before">
+		</a>
+		<?php print strftime('%b %d, %Y', $Calendar->TODAY); ?>
+		<a href="#" onclick="nextDay('/user/index/ajax-appointment/today/<?php print $nextDay;?>/tab/day','<?php print $nextDay;?>'); return false;">
+			<img src="/images/user/arrow-after.png" alt="" class="arr-after">
+		</a>
+	</div>
+	<?php
+	$class = 'daily-default1';
+	if(!empty($slotsAvailable)){
+		foreach ($slotsAvailable as $slotTime) {
+			$from = date('H:i', strtotime($slotTime));
+			$to = date('H:i', strtotime($slotTime." + ".$interval." minutes"));
+			$from .= ":00";
+			$to .= ":59";
+			?>
+	<div class="dc-bodyrow clearfix">
+		<div class="dc-time"><?php echo strftime($timeFormat, strtotime($slotTime)); ?></div>	
+		<?php
+		$class = 'daily-default1';
+		$query = "appointment_date='" . $date . "' AND ( STR_TO_DATE(appointment_time, '%H:%i') BETWEEN '{$from}' AND '{$to}') AND doctor_id='{$docObject->getId()}'  AND deleted!=1";
+		$apps = $Appointment->fetchAll($query);
+		//echo '<pre>';print_r($apps);
+		if(!empty($apps)){
+			foreach($apps as $appObj) {
+				$css_style = '';
+				$link = true;
+				if($appObj->getApprove()=="0"){
+					$class = 'busy';
+				}elseif($appObj->getApprove()=="1"){
+					$class = 'bluebox';
+				}elseif($appObj->getApprove()=="2"){
+					$class = 'redbox';
+				}
+				$Patient = new Application_Model_Patient();
+				$patient = $Patient->fetchRow('user_id='.$appObj->getUserId());
+				?>
+				
+				<?php 
+
+							$call_type = $appObj->calltype;
+							
+							switch($call_type){
+
+								case 'text':
+
+									if($appObj->apiinboundreply==1 || strtoupper($appObj->apiinboundreply)=='C'){
+
+									//if(strtoupper($row->apiinboundreply)=='C'){
+
+										$css_style= 'background:#8AC640 !important;border:#8AC640 !important;';
+
+									//}else if($row->apiinboundreply==2 || strtoupper($row->apiinboundreply)=='N'){
+
+									}//else if($row->apiinboundreply==2 || strtoupper($row->apiinboundreply)=='N'){
+
+									//	echo '<font color="red">Cancelled</font>';
+
+									//														}else if($row->apiinboundreply !='' && $row->apiinboundreply !=1 && $row->apiinboundreply !=2 && strtoupper($row->apiinboundreply) !='C' && strtoupper($row->apiinboundreply) !='N'){
+
+									// }
+
+									else if($appObj->apiinboundreply !='' && strtoupper($appObj->apiinboundreply) !='C'){
+
+									$css_style= 'background:#FFA500 !important;border:#FFA500 !important;';
+
+
+																																		}else if($appObj->apiinboundreply==2){ 
+									$css_style= 'background:#FFA500 !important;border:#FFA500 !important;';
+																																				//echo 'Cancelled';
+
+										
+
+									}else{
+
+										$css_style= 'background:#25A6EA !important;border:#25A6EA !important;';
+
+									}
+
+								break;
+
+								case 'voice':
+
+									if($appObj->apiinboundreply !=''){
+
+										if($appObj->apiinboundreply==1){
+
+											$css_style= 'background:#8AC640 !important;border:#8AC640 !important;';
+
+										}else if($appObj->apiinboundreply==2){
+
+											$css_style= 'background:#FFA500 !important;border:#FFA500 !important;';
+
+										}
+
+									}else{
+
+										$css_style= 'background:#25A6EA !important;border:#25A6EA !important;';
+
+									}
+
+								break;
+
+								default :
+
+									$css_style= 'background:#D9534F !important;border:#D9534F !important;';
+
+								break;
+
+							}
+
+						?>
+		<div class="dc-block" style="<?php echo $css_style; ?>">		
+			<a href='#;' class="tt"><?php echo $appObj->getFname()." ". $appObj->getLname(); ?>
+				<div class="tooltip1">
+	                <div class="contect-tooltip">
+	                	<div class="appo-reg">New Appointment</div>
+	                    <div class="in-text1">
+	                    <h5>Patients Name:</h5>
+	                    <p><?php echo $appObj->getFname()." ". $appObj->getLname(); ?></p>
+	                    <h5>Email:</h5>
+	                    <p><?php echo $appObj->getEmail(); ?></p>
+	                    <h5>Phone:</h5>
+	                    <p><?php echo $patient->getMobile(); ?></p>
+	                    </div>
+	                </div>
+            	</div>
+            </a>
+		</div>
+		<?php } 
+		}else { ?>
+		<div class="dc-block">
+		</div>
+		<?php } ?>
+	</div>
+    		<?php
+            }
+        } else {
+        ?>
+            <div class="dc-block">
+            	<?php echo $this->lang[284]; ?>
+            </div>
+        <?php } 
+    ?>
+</div>
+			
+	
+<!--/ADMIN CONTENT --> 

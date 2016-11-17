@@ -1,0 +1,6 @@
+<?php
+$config = new Zend_Config_Ini(APPLICATION_PATH.'/configs/'.APPLICATION_INI, APPLICATION_ENV);
+
+?>
+<META HTTP-EQUIV="Refresh" CONTENT="1;URL=<?php echo $config->gd->siteurl;?>">
+<div class="errors-msg"><h2><?php echo $this->lang[130]; ?></h2><?php echo $this->lang[131]; ?> <a href="<?php echo $config->gd->siteurl;?>"><?php echo $config->gd->siteurl;?></a>.</div>

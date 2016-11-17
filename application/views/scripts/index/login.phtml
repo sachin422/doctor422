@@ -1,0 +1,20 @@
+<div class="sign-reg-box">
+	<div class="admin-logo"><a href="/login"><img src="/images/doctors-admin-logo.png" alt="doctors"></a></div>
+	<form name="login" method="post" action="<?php echo $this->form->getAction() ?>">
+		<?php 
+		$errors = $this->form->getErrorMessages();
+		
+		if(!empty($errors)){echo "<ul class='errors'>";foreach($errors as $error){echo "<li>{$error}</li>";}echo "</ul>";}
+		?>
+		<div class="formname">Email</div>
+		<?php echo $this->form->email; ?>
+		<p class="smalltext">Please enter your email address.</p>
+		<div class="formname">Password</div>
+		<?php echo $this->form->password; ?><br/>
+		<!--<div class="remeberme-text"><label><?php echo $this->form->rememberMe; ?> Remember my email on this computer</label></div>-->
+		<input name="Sign In" type="submit" value="Sign In">
+	</form>
+</div>
+<p class="center-boldtext">Don't have an account?  <a href="/register">Sign up now for free</a></p>
+<p class="center-boldtext">Forgot your password?  <a href="/forgot">Reset it here</a></p>
+<p class="copyright-text">Copyright © A1 Healthcare Technologies LLC 2016. All rights reserved.</p>

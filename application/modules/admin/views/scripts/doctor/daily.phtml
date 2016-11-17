@@ -1,0 +1,91 @@
+<?php
+$Calendar = new Zend_Session_Namespace("calendar");
+$usersNs = new Zend_Session_Namespace("members");
+if ($this->tab != '') {
+    $Calendar->BACKPAGE = $_SERVER['QUERY_STRING'];
+} else {
+    $Calendar->BACKPAGE = $_SERVER['QUERY_STRING'] . '/tab/day';
+}
+
+$date = date('Y-m-d', $Calendar->TODAY);
+$PHPCalendar = new Base_PHPCalendar();
+$Doctor = new Application_Model_Doctor();
+$docObject = $Doctor->fetchRow("id='{$this->docid}'");
+$Appointment = new Application_Model_Appointment();
+
+
+$slotsAvailable = array();
+$DocAppointment = new Application_Model_DoctorAppointmentCal();
+$slotObject = $DocAppointment->fetchAll("slot_date='" . $date . "' AND  doctor_id='{$docObject->getId()}'", "slot_time");
+//error_log("slot_date='" . $date . "' AND  doctor_id='{$docObject->getId()}'");
+if(empty($slotObject)){
+    $TimeSlot = new Base_Timeslot();
+    $slotsAvailable = $TimeSlot->getDoctorTimeSlots($docObject->getId(), $date);
+}else{
+    foreach ($slotObject as $s => $slot) {
+        $slotsAvailable[] = date("h:i A", strtotime($date . " " . $slot->getSlotTime()));
+    }
+}
+
+$slotArray = array();
+$weekDay = date('D', $Calendar->TODAY);
+
+$nextDay = strtotime('+1 day', $Calendar->TODAY);
+$prevDay = strtotime('-1 day', $Calendar->TODAY);
+?>
+<div id="divDay">
+    <!-- DAY_DATA -->
+
+    <div class="cal-navi">
+        <div class="f-left">
+            <a href="javascript:;" class="smallButton left" id="nextButton" rel="<?php print $prevDay; ?>" onclick="nextDay('/admin/doctor/ajax-appointment/today/<?php print $prevDay; ?>/docid/<?php echo $this->docid; ?>/tab/day','<?php print $prevDay; ?>'); return false;"> « </a>
+            <a href="javascript:;" class="smallButton left" id="prevButton" rel="<?php print $nextDay; ?>" onclick="nextDay('/admin/doctor/ajax-appointment/today/<?php print $nextDay; ?>/docid/<?php echo $this->docid; ?>/tab/day','<?php print $nextDay; ?>'); return false;"> » </a>
+            <span class="date" id="selected_date"><?php print strftime('%d %b, %Y', $Calendar->TODAY); ?></span>
+        </div>
+        <div class="f-right"><img src="/images/color-menu.png" alt="" /></div>
+    </div>
+
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" class="daily-view">
+        <tr><th colspan="2" align="left"><?php print strftime('%d %b, %Y', $Calendar->TODAY); ?></th></tr>
+    </table>
+    <div class="scrolldailyview">
+        <table width="100%" cellpadding="0" cellspacing="0" border="0" class="daily-view">
+        <?php
+        $class = 'daily-default1';
+        if(!empty($slotsAvailable)){
+            foreach ($slotsAvailable as $slotTime) {
+                $class = 'daily-default1';
+				$appObj = $Appointment->fetchRow("appointment_date='" . $date . "' AND appointment_time='{$slotTime}' AND doctor_id='{$docObject->getId()}'  AND deleted!=1");
+                if(!empty($appObj)){
+                    $link = "<a href='/admin/doctor/view-appointment/appid/" . $appObj->getId() . "/tab/day/docid/".$this->docid."'>" . $appObj->getFname() . "</a>";
+                    if($appObj->getApprove()=="0"){
+                        $class = 'busy';
+                    }elseif($appObj->getApprove()=="1"){
+                        $class = 'daily-approved';
+                    }elseif($appObj->getApprove()=="2"){
+                        $class = 'daily-unapproved';
+                    }
+                }else{
+                   $link = "<a href='/admin/doctor/new-appointment/time/{$slotTime}/date/" . $date . "/tab/daily/docid/".$this->docid."'>".$this->lang[604]."</a>";
+                }
+            ?>
+                
+				<tr>
+					<td width="60px" class="day-week-heading"><?php print $slotTime; ?></td>
+					<td class="<?php print $class; ?>">
+						<?php echo $link; ?>
+					</td>
+				</tr>
+		<?php
+                }
+        }else{
+        ?>
+				<tr>
+					<td width="60px" class="day-week-heading">&nbsp;</td>
+					<td <?php print $class; ?> style="text-align: center;"><strong><?php echo $this->lang[284]; ?></strong></td>
+				</tr>
+        <?php }
+?>
+        </table>
+    </div>
+</div>

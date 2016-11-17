@@ -1,0 +1,183 @@
+<?php
+
+	$locale = new Zend_Locale();
+    $Calendar = new Zend_Session_Namespace("calendar");
+    $PHPCalendar = new Base_PHPCalendar();
+    
+    $usersNs = new Zend_Session_Namespace("members");
+    $Doctor = new Application_Model_Doctor();
+    $docObject = $Doctor->fetchRow("user_id='{$usersNs->userId}'");
+    $profileImage = "/images/doctor_image/" . $docObject->getCompanylogo();
+    if (!file_exists(getcwd() . $profileImage) || $docObject->getCompanylogo()=='')$profileImage = "/images/doctor_image/png.png";
+    
+?>
+<div style="float:left;display:none" id="loading"></div>
+<div class="left">
+	
+	<div id="left-side">
+		<img width="185" alt="<?php echo $docObject->getFname()?>" src="<?php echo $profileImage?>" title="<?php echo $docObject->getFname()?>"> 
+		<div id="minical">
+			<?php $PHPCalendar->initCalendar();?>
+		</div>
+		<?php echo $this->lang[587]; ?><br/>
+		
+		<?php 
+		//enable or disable ical plugin
+		$settings = new Admin_Model_GlobalSettings();
+		$ical = $settings->settingValue('ical_plugin');
+		if($ical) {
+			$usersNs = new Zend_Session_Namespace("members"); $userid = $usersNs->userId; ?>
+			<a href="/profile/show-ical/id/<?php echo $userid; ?>"><?php echo $this->lang[588]; ?></a>
+		<?php } ?>
+	</div>
+</div>
+
+<script language="javascript">
+    
+function miniCalMove(calday){
+
+    jQuery('#loading').fadeIn(100);
+    jQuery.post('/user/index/calendar-move/', { calday: calday },
+
+        function(data){
+            //alert(data);return false;
+            //var decoded = $.json.decode(data);
+            jQuery('#minical').html(data);
+            jQuery('#loading').fadeOut(100);
+
+        }, false);
+}
+
+//currently use less
+function getCal(){
+document.getElementById('loading').style.display='block';
+var pageUrl='index.php?option=com_appointment&task=calendar&Itemid=66';
+$.ajax({
+  url: pageUrl,
+  success: function(data) {
+  alert(data);
+   var content=data.split("<!-- CALENDAR_DATA -->");
+   if(content.length > 1){
+   		document.getElementById('mainDiv').innerHTML=content[1];
+   }
+   document.getElementById('loading').style.display='none';
+  }
+});
+}
+
+
+function nextDay(pageUrl, today){
+
+    jQuery('#loading').fadeIn(100);
+    jQuery.post(pageUrl, { today: today },
+
+        function(data){
+            
+            //alert(data);return false;
+            var decoded = $.json.decode(data);
+            jQuery('#daily').html(decoded['daily']);
+            jQuery('#weekly').html(decoded['weekly']);
+            jQuery('#monthly').html(decoded['monthly']);
+            jQuery('#loading').fadeOut(100);
+
+        }, false);
+    jQuery('#loading').fadeOut(100);
+}
+
+function getDashboard(){
+document.getElementById('loading').style.display='block';
+var pageUrl='index.php?option=com_appointment&task=dashboard&Itemid=66';
+$.ajax({
+  url: pageUrl,
+  success: function(data) {
+   var content=data.split("<!-- DASHBOARD_DATA -->");
+   if(content.length > 1){
+   		document.getElementById('mainDiv').innerHTML=content[1];
+
+   }
+   document.getElementById('loading').style.display='none';
+  }
+});
+}
+
+function getAppointments(){
+//alert('hi');
+document.getElementById('loading').style.display='block';
+var pageUrl='index.php?option=com_appointment&task=calendar_template&Itemid=66';
+$.ajax({
+  url: pageUrl,
+  success: function(data) {
+
+   var content=data.split("<!-- CALENDAR_DATA -->");
+   if(content.length > 1){
+   		document.getElementById('mainDiv').innerHTML=content[1];
+   //day
+   pageUrl='index.php?option=com_appointment&task=daily&Itemid=66&today=<?php print $Calendar->CALDAY;?>&tab=day';
+	$.ajax({
+	  url: pageUrl,
+	  success: function(data) {
+	   var content=data.split("<!-- DAY_DATA -->");
+	   if(content.length > 1){
+			document.getElementById('divDay').innerHTML=content[1];
+	   }
+	   document.getElementById('loading').style.display='none';
+	  }
+	});
+	//month
+	pageUrl='index.php?option=com_appointment&task=monthly&Itemid=66&today=<?php print $Calendar->CALDAY;?>&tab=month';
+	$.ajax({
+	  url: pageUrl,
+	  success: function(data) {
+	   var content=data.split("<!-- MONTH_DATA -->");
+	   if(content.length > 1){
+			document.getElementById('divMonth').innerHTML=content[1];
+	   }
+		document.getElementById('loading').style.display='none';
+
+	  }
+	});
+   	pageUrl='index.php?option=com_appointment&task=weekly&Itemid=66&today=<?php print $Calendar->CALDAY;?>&tab=week';
+	$.ajax({
+	  url: pageUrl,
+	  success: function(data) {
+	   var content=data.split("<!-- WEEK_DATA -->");
+	   //alert(content.length );
+	   if(content.length > 1){
+			document.getElementById('divWeek').innerHTML=content[1];
+	   }
+	   document.getElementById('loading').style.display='none';
+	  }
+	});
+
+   }
+   document.getElementById('loading').style.display='none';
+  }
+});
+}
+
+function getCalendarSetting(url){
+document.getElementById('loading').style.display='block';
+//var pageUrl='index.php?option=com_appointment&task=cal_set&Itemid=66';
+var pageUrl=url;
+
+$.ajax({
+  url: pageUrl,
+  success: function(data) {
+
+//   var content=data.split("<!-- CALENDAR_SETTING_DATA -->");
+   var content=data.split("<!-- CALENDAR_TIMESLOT_DEFAULT -->");
+   //alert(content);return false;
+   if(content.length > 1){
+   		document.getElementById('mainDiv').innerHTML=content[1];
+                Calendar.setup({ trigger: "calendar-trigger", inputField: "startdate",dateFormat: '%Y-%m-%d'  });
+
+   }
+   document.getElementById('loading').style.display='none';
+  }
+});
+
+}
+//
+
+
+</script>

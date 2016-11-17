@@ -1,0 +1,41 @@
+<?php
+$this->headScript()->appendFile('/js/jquery-1.7.1.min.js');
+$this->headScript()->appendFile("/js/jquery.accordion.js");
+$this->headScript()->appendFile("/js/jquery-ui.js");
+$this->headLink()->appendStylesheet('/style/jquery-ui.css');
+?>
+<script type="text/javascript">
+    $(document).ready(function() {
+        //accordion
+        $('#accordion').accordion({
+            defaultOpen: 'body-section1',
+            cookieName: 'accordion_nav',
+            speed: 'slow',
+            animateOpen: function (elem, opts) { //replace the standard slideUp with custom function
+                elem.next().slideFadeToggle(opts.speed);
+            },
+            animateClose: function (elem, opts) { //replace the standard slideDown with custom function
+                elem.next().slideFadeToggle(opts.speed);
+            },
+            cssClose: 'accordion2-close', //class you want to assign to a closed accordion header
+            cssOpen: 'accordion2-open',
+            collapsible: true,
+            heightStyle: "content"
+        });
+        //custom animation for open/close
+        $.fn.slideFadeToggle = function(speed, easing, callback) {
+            return this.animate({opacity: 'toggle', height: 'toggle'}, speed, easing, callback);
+        };
+
+    });
+</script>
+<div class="inner_wrapperReg">
+    <div id="content_section" class="clearfix">
+        <div class="whiteportion">
+            <h1><?php echo stripslashes($this->object->getTitle());?></h1>
+            <div id="accordion">
+                <?php echo stripslashes($this->object->getContent());?>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,14 @@
+<select size="10" style="width: 300px;" tabindex="6" class="select" multiple="multiple" id="doctor_reason_for_visit2" name="doctor_reason_for_visit2[]">
+
+
+    <?php
+    $ReasonforvisitModel = new Application_Model_ReasonForVisit();
+    $arrReasonForVisit = $ReasonforvisitModel->fetchAll("category_id in ({$this->ids})");
+    foreach($arrReasonForVisit as $reason)
+    {
+      
+       
+        echo "<option value='".$reason->getId()."'>".$reason->getReason()."</option>";
+    }
+    ?>
+</select>

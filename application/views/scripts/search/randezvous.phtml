@@ -1,0 +1,153 @@
+<?php
+        $todayDate	=	mktime(0,0,0, date("m"), date("d"), date("Y"));
+
+		if(isset($_REQUEST['start_date']))
+		{
+			$start_date = $_REQUEST['start_date'];
+			$dateArr = explode("/", $start_date);
+			$requestDate	=	mktime(0,0,0, $dateArr[0], $dateArr[1], $dateArr[2]);
+			$jd = GregorianToJD($dateArr[0], $dateArr[1], $dateArr[2]); //GregorianToJD(m, d, y);
+			$reqMM =  $dateArr[0];
+			$reqDD =  $dateArr[1];
+			$reqYY =  $dateArr[2];
+		}else{
+
+			$requestDate	=	mktime(0,0,0, date("m"), date("d"), date("Y"));
+			$jd = GregorianToJD(date("m"), date("d"), date("Y")); //GregorianToJD(m, d, y);
+			$reqMM =  date("m");
+			$reqDD =  date("d");
+			$reqYY =  date("Y");
+		}
+
+		$requestDay = date("l", $requestDate);
+
+		$weekFirstDate		=	$jd;
+		$weekSecondDate		=	$jd+1;
+		$weekThirdDate		=	$jd+2;
+		$weekFourthDate		=	$jd+3;
+		$weekFifthDate		=	$jd+4;
+		$weekSixthDate		=	$jd+5;
+		$weekSeventhDate	=	$jd+6;
+
+		$preWeekStart	=	$jd-7;
+		$nextWeekStart	=	$jd+7;
+
+		/*$day1 = date("l",mktime(0,0,0, $reqMM,$reqDD,$reqYY))." <span>".JDToGregorian($weekFirstDate)."</span>";
+		$day2 = date("l",mktime(0,0,0, $reqMM,$reqDD+1,$reqYY))." <span>".JDToGregorian($weekSecondDate)."</span>";
+		$day3 = date("l",mktime(0,0,0, $reqMM,$reqDD+2,$reqYY))." <span>".JDToGregorian($weekThirdDate)."</span>";
+		$day4 = date("l",mktime(0,0,0, $reqMM,$reqDD+3,$reqYY))." <span>".JDToGregorian($weekFourthDate)."</span>";
+		$day5 = date("l",mktime(0,0,0, $reqMM,$reqDD+4,$reqYY))." <span>".JDToGregorian($weekFifthDate)."</span>";
+		$day6 = date("l",mktime(0,0,0, $reqMM,$reqDD+5,$reqYY))." <span>".JDToGregorian($weekSixthDate)."</span>";
+		$day7 = date("l",mktime(0,0,0, $reqMM,$reqDD+6,$reqYY))." <span>".JDToGregorian($weekSeventhDate)."</span>";
+			 */
+
+		$preWeekStartDate = JDToGregorian($preWeekStart);
+		$nextWeekStartDate = JDToGregorian($nextWeekStart);
+		  ?>
+		<div class="profile-appoint main_box" id="dates">
+			<div class="arrow-right-app"> <a rel="<?php echo $rel_startdate;?>" href="#;" id="div_prev" class="info"><span>Previous</span></a> </div>
+			<ul id="apointWrapper">
+				<li class="appoint-heading">
+					<ul id="appointment-head" class="appoint-list">
+						  <!--li class="appoint-1"><?php //echo $day1; ?></li>
+						  <li class="appoint-1"><?php //echo $day2; ?></li>
+						  <li class="appoint-1"><?php //echo $day3; ?></li>
+						  <li class="appoint-1"><?php //echo $day4; ?></li>
+						  <li class="appoint-1"><?php //echo $day5; ?></li>
+						  <li class="appoint-1"><?php //echo $day6; ?></li>
+					  <li class="appoint-1"><?php //echo $day7; ?></li-->
+					</ul>					
+				</li>
+				<li class="appoint-body">
+					<ul class="appint-times">
+						<li id="appointment-<?php echo $docId;?>">
+							<ul class="apointments">					
+							</ul>
+						</li>
+					</ul>
+				</li>
+			</ul>
+			<div class="arrow-left-app"> <a rel="start_date=<?php echo $nextWeekStartDate;?>" href="#;" id="div_next" class="info"><span>Next</span></a> </div>
+		</div>
+		
+		
+
+<!-----------------------------------------------Timeslot js ----------------------------------------------->
+<script type="text/javascript">
+
+     jQuery(".info").click(
+        function () {
+            //alert(1);
+            start_date = jQuery(this).attr('rel');
+                if(start_date!="") {
+
+                    start_date_arr = start_date.split('=');
+
+                    if(jQuery.trim(start_date_arr[1])!=''){
+                        jQuery.blockUI({ overlayCSS: { backgroundColor: '#000' } });
+                        loadSlotData(start_date_arr[1], 'c');
+                        setTimeout(jQuery.unblockUI, 4000);
+                    }
+
+                }
+            }
+        );
+
+    function loadSlotData(start_date, load_type)
+    {
+        // load_type variable use to check if function called on page load or on click.
+        if(start_date!="") {
+            
+                drid_val = <?php echo $docId;?>;
+                //jQuery("#drid_current").val(drid_val);
+                jQuery.post('/profile/timeslot/', {drid: drid_val, start_date:start_date },
+
+                function(data){
+                    //alert(data);//return false;
+                    var decoded = $.json.decode(data);
+//alert(decoded['return_data']);
+//return false;
+                    dr_div_id = "#appointment-"+decoded['drid'];//2
+                    jQuery(dr_div_id).html(decoded['return_data']);//1
+                    //alert(ret_data_arr[1]);
+                    jQuery("#appointment-head").html(decoded['appointment_head']); //3
+                    if(load_type=='c'){ // if time slot loading from on click event.
+                        //if(decoded['button_prev_date']!="")
+                            jQuery("#div_prev").attr('rel','start_date='+decoded['button_prev_date']);//4
+                        jQuery("#div_next").attr('rel','start_date='+decoded['button_next_date']); //5
+                    }
+
+                    initiate_click();
+
+                }, false);
+            
+        }
+    }
+
+    jQuery(document).ready(function() {
+        loadSlotData("<?php echo date('d/m/Y')?>", 'p');
+
+
+    } );
+
+   function initiate_click(){
+       jQuery('.moreLink').click(function(){
+            jQuery(this).hide();
+            jQuery('#'+jQuery(this).attr('rel')).fadeIn(500);
+        });
+   }
+
+
+jQuery(document).ready(function(){
+     
+     jQuery('#reason_to_visit').change(function(){
+        $.post('/profile/set-reasonforvisit/', {
+                reason:$(this).val()
+            },
+            function(html){
+            });
+     });
+     
+});
+
+</script>

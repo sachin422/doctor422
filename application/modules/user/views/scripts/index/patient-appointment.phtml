@@ -1,0 +1,268 @@
+<?php 
+$settings = new Admin_Model_GlobalSettings();
+$locale = $settings->settingValue('locale');
+setlocale(LC_ALL, $locale);
+
+$hours = $settings->settingValue('hours');
+if($hours) {
+	$timeFormat = "%I:%M %P";
+} else {
+	$timeFormat = "%H:%M";
+}
+?>
+<!--ADMIN CONTENT -->
+<div id="admin-content-inner">
+  
+  
+  <div class="appointment-all">
+    	<div class="container-fluid">
+        	<div class="row">
+            	<div class="col-sm-6">
+                	<div class="appo-heading">My Appointments</div>
+                </div>
+                <div class="col-sm-6">
+                	<div class="schl-right pull-right">
+                    	<div class="schbtn">
+                        	<a href="/"><img src="/images/custom/img/newapp-btn.png" alt="New app"></a>
+                        </div>
+                    	<div class="icon">
+                        	<img src="/images/custom/img/exam-icon.png" alt="doctors">
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        
+        <div class="container-fluid">
+        	<div class="row">
+            	<div class="col-sm-12">
+                	<div class="whitebg">
+                    	<h3 class="grey-heading">Upcoming Appointments</h3>
+						<?php
+					$Doctor=new Application_Model_Doctor();
+					$Appointment=new Application_Model_Appointment();
+					if($this->upcomingObject) {
+						foreach($this->upcomingObject as $row) {
+							$docObject=$Doctor->find($row->doctorId);
+							$where="id={$row->getId()}";
+							$status=$Appointment->getAppointmentStatus($where);
+							//print_r($docObject);
+					?>
+                        <div class="appoinment-table clearfix">
+                        	<div class="appo-pic">
+                            	<img src="<?php echo $docObject->getImage(); ?>" alt="Doctor">
+                            </div>
+                            <div class="appo-content">
+                            	<div class="topc clearfix">
+                                	<div class="docname">Doctor Name: <span><?php echo $docObject->fname;?> <?php //echo $docObject->lname;?></span></div>
+									
+                                    <div class="docdate">Date: <span><?php echo date('F j, Y',strtotime($row->appointmentDate));?>   </span></div>
+                                    <div class="docclock">Time: <span><?php echo date('h:i A',strtotime($row->appointmentTime)); ?></span></div>
+                                </div>
+                                <div class="topc clearfix">
+                                	<div class="doclocation">
+                                    	<img src="/images/custom/img/loc-icon.png" alt="location" class="imgleft"> 
+                                        Location: <span> <?php echo $docObject->street;?>, <?php echo $docObject->city;?>, <?php echo $docObject->zipcode;?>, <?php echo $docObject->state;?></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="appo-icon">
+                            	<div class="ico">
+                                	<ul class="clearfix">
+                                        <li>
+                                        	<a href="#" onClick="decline(this, 'del_<?php echo $row->getId(); ?>'); return false;" title="cancel appointment">
+                                        		<img src="/images/custom/img/close-icon.png" alt="Close">
+                                        	</a>
+                                        </li>
+                                    </ul>
+                                    <div class="orange-btn"><a href="/appointment/index/drid/<?php echo $docObject->getId(); ?>/rescheduled/<?php echo $row->id; ?>">Reschedule</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <?php } } else { ?>
+						 <div class="appoinment-table clearfix">
+						<div class="orange-btn"><a href="#">No Upcoming Appointments</a>
+                                    </div>
+									</div>
+						<?php } ?>
+                        
+                        
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        
+        <div class="container-fluid">
+        	<div class="row">
+            	<div class="col-sm-12">
+                	<div class="whitebg">
+                    	<h3 class="grey-heading">Past Appointments</h3>
+						<?php
+					if($this->pastObject) {
+						foreach($this->pastObject as $pastrow) {
+							$doctor_id = $pastrow->getDoctorId();    
+							$docObject=$Doctor->find($doctor_id);
+							$where="id={$pastrow->id}";
+							$status=$Appointment->getAppointmentStatus($where);
+					?>
+                        <div class="appoinment-table clearfix">
+                        	<div class="appo-pic">
+                            	<img src="<?php echo $docObject->getImage(); ?>" alt="Doctor">
+                            </div>
+                            <div class="appo-content">
+                            	<div class="topc clearfix">
+                                	<div class="docname">Doctor Name: <span><?php echo $docObject->fname;?></span></div>
+                                    <div class="docdate">Date: <span><?php echo date('F j, Y',strtotime($pastrow->appointmentDate));?> </span></div>
+                                    <div class="docclock">Time: <span><?php echo date('h:i A',strtotime($pastrow->appointmentTime)); ?></span></div>
+                                </div>
+                                <div class="topc clearfix">
+                                	<div class="doclocation">
+                                    	<img src="/images/custom/img/loc-icon.png" alt="location" class="imgleft"> 
+                                        Location: <span><?php echo $docObject->street;?>, <?php echo $docObject->city;?>, <?php echo $docObject->zipcode;?>, <?php echo $docObject->state;?></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="appo-icon">
+                            	<div class="ico">
+                                	<ul class="clearfix">
+                                    	<li><a href="/index/review/patientid/<?php echo $this->Patient->getId(); ?>/doctorid/<?php echo $docObject->getId(); ?>" title="leave review" target="_blank"><img src="/images/custom/img/editicon.png" alt="Leave review"></a></li>
+                                        <!--<li><a href="#"><img src="/images/custom/img/pinned-icon.png" alt="Pin"></a></li>-->
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+						
+						<?php }} else { ?>
+						 <div class="appoinment-table clearfix">
+						<div class="orange-btn"><a href="#">No Past Appointments</a>
+                                    </div>
+									</div>
+						<?php } ?>
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        
+        
+        
+        <div class="container-fluid">
+        	<div class="row">
+            	<div class="col-sm-12">
+                	<div class="whitebg">
+                    	<h3 class="grey-heading">Cancelled Appointments</h3>
+						<?php
+					if($this->cancelObjects) {
+						foreach($this->cancelObjects as $pastrow) {
+							$doctor_id = $pastrow->getDoctorId();    
+							$docObject=$Doctor->find($doctor_id);
+							$where="id={$pastrow->id}";
+							$status=$Appointment->getAppointmentStatus($where);
+					?>
+                        <div class="appoinment-table clearfix">
+                        	<div class="appo-pic">
+                            	<img src="<?php echo $docObject->getImage(); ?>" alt="Doctor">
+                            </div>
+                            <div class="appo-content">
+                            	<div class="topc clearfix">
+                                	<div class="docname">Doctor Name: <span><?php echo $docObject->fname;?></span></div>
+                                    <div class="docdate">Date: <span><?php echo date('F j, Y',strtotime($pastrow->appointmentDate));?> </span></div>
+                                    <div class="docclock">Time: <span><?php echo date('h:i A',strtotime($pastrow->appointmentTime)); ?></span></div>
+                                </div>
+                                <div class="topc clearfix">
+                                	<div class="doclocation">
+                                    	<img src="/images/custom/img/loc-icon.png" alt="location" class="imgleft"> 
+                                        Location: <span><?php echo $docObject->street;?>, <?php echo $docObject->city;?>, <?php echo $docObject->zipcode;?>, <?php echo $docObject->state;?></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="appo-icon">
+                            	<div class="ico">
+                                	<div class="orange-btn"><a href="/appointment/index/drid/<?php echo $docObject->getId(); ?>/rescheduled/<?php echo $row->id; ?>">Reschedule</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                       <?php } } else {?>
+
+<?php } ?>					   
+                        
+                                               
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        
+        
+    </div>
+  
+  
+  
+  <div class="container-fluid">
+  	<div class="row">
+    </div>
+  </div>
+  
+  
+  
+
+
+</div>
+
+
+  
+  
+  
+  
+  <div class="container-fluid div-space">
+    <div class="row">
+      <div class="col-sm-6">
+        
+      </div>
+      <div class="col-sm-6">
+        
+      </div>
+    </div>
+  </div>
+  <script>
+  $(function () {
+    $('#myTab a:first').tab('show')
+  })
+</script> 
+<script>
+  $(function () {
+    $('#myTab01 a:first').tab('show')
+  })
+</script>
+<script>
+  $(function () {
+    $('#myTab02 a:first').tab('show')
+  })
+
+  function decline(element, id) {
+	//console.log(id);
+	$.post("/user/index/patient-decline-appointment", {"appointid" : id},
+		function(data) { 
+			decoded = $.parseJSON(data);
+			if(decoded['err'] == 0) {
+				jQuery(element).closest(".appoinment-table").remove();
+			} else {
+				console.log("problem deleting");
+			}
+		}
+	);
+	return false;
+}
+</script>  
+</div>

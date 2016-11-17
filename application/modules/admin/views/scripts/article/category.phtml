@@ -1,0 +1,132 @@
+<script language="javascript">
+    $(document).ready(function()
+    { 
+        $("#checkall").click(function()
+        {
+            var checked = false;
+            if(this.checked)checked = true;
+            
+            $("input:checkbox.cid").each(function()
+            {
+                this.checked = checked;
+            });
+        });
+        
+        $(".actions").click(function()
+        {
+            var ids = Array();
+            var i = 0;
+            $("input:checkbox.cid").each(function()
+            {
+                if(this.checked==true){
+                    ids[i] = this.value;
+                    i++;
+                }
+            });
+            if(ids.length < 1){alert('Please make a selection from the list for '+$(this).attr('title')+'.');return false;}
+            $("#ids").val(ids);
+            if($(this).attr('rel')=='delete-category'){
+                if(!confirm("Are you sure you want to delete the record(s)?")){
+                    return false;
+                }
+            }
+            $("#multiaction").attr('action', '/admin/article/'+$(this).attr('rel')).submit();
+
+        });
+    });
+</script>
+
+<?php $page = $this->paginator->getCurrentPageNumber();?>
+
+<div id="rightsidemain">
+    <div id="rightcontentpart">
+        <div id="rightsideheading">
+            <img src="/images/admin-images/bl-tl.gif" align="left" /><img src="/images/admin-images/bl-tr.gif" align="right" />
+
+
+
+	Article Category - <span class='msg'>Total <?php echo $this->total ?> Record(s) found! </span>
+                  <span style="margin: 0pt 15px 0pt 0pt; float: right;"><a class="add" href="/admin/article/add-edit-Category/page/<?php echo $page?>">Add</a></span>
+        </div>
+
+        <div style="text-align:center;background-color: #fff;">
+            <form id="multiaction" action="" method="post">
+                <input type="hidden" name="ids" id="ids" />
+                <input type="hidden" name="page" value="<?php echo $page?>" />
+                <img border="0" class="actions" style="cursor: pointer" title="Publish" rel="publish-category" src="/images/admin-images/true.gif">&nbsp;&nbsp;
+                <img border="0" class="actions" style="cursor: pointer" title="Unpublish" rel="unpublish-category" src="/images/admin-images/false.gif">&nbsp;&nbsp;
+                <img border="0" class="actions" style="cursor: pointer" title="Delete" rel="delete-category" src="/images/admin-images/delete.gif">&nbsp;
+            </form>
+        </div>
+        <div id="rightsidecontentpart">
+            
+            <?php
+            if ($this->total > 0) {
+            ?>
+                <br><span class='red'>
+                <? echo $this->msg; ?>
+            </span>
+                
+            <br>
+            <?= $this->paginationControl($this->paginator, 'Sliding', 'pagination.phtml'); ?>
+                <br>
+
+                <table width='100%' border='0' class='dataTable' cellspacing='0' cellpadding='0'>
+                    <tr>
+                        <th>#</th>
+                        <th><input type="checkbox" name="checkall" id="checkall" value="" /></th>
+                        <th>Category Name</th>
+                        <th>Description</th>
+                        <th style="width: 10%;">Action</th>
+                    </tr>
+
+                <?php
+                $sno = 0;
+                
+                $items_per_page = $this->paginator->getItemCountPerPage();
+                if ($page > 1) {
+                    $sno = $items_per_page * $page - $items_per_page;
+                }
+                $rowClass = 'trbg1';
+
+                foreach ($this->paginator as $row) {
+                    $sno++;
+
+                    if ($rowClass == "trbg1")
+                        $rowClass = 'trbg';
+                    else
+                        $rowClass='trbg1';
+
+                ?>
+                    <tr class='<?= $rowClass ?>'>
+                        <td><?= $sno ?></td>
+                        <td><input type="checkbox" name="cid[]" class="cid" value="<?= $row['id'] ?>" /></td>
+                        <td><?= $row['name'] ?></td>
+                        <td><?= $row['description'] ?></td>
+                        <td>
+                        <?php
+                        $published = "false.gif";
+                        $published_title = "Click here to publish";
+                        if ($row['published'] == 1) {
+                            $published = "true.gif";
+                            $published_title = "Click here to unpublished";
+                        }
+                        ?>
+                        <a href='/admin/article/publish/id/<?= $row['id'] ?>/page/<?= $page ?>'><img src='/images/admin-images/<?php echo $published ?>' border='0' title='<?php echo $published_title ?>'/></a>&nbsp;&nbsp;
+                        <a href='/admin/article/add-edit-Category/id/<?= $row['id'] ?>/page/<?= $page ?>'><img src='/images/admin-images/edit.gif' border='0' title='Edit'/></a>&nbsp;&nbsp;
+                        <a href='/admin/article/delete-category/ids/<?= $row['id'] ?>/page/<?= $page ?>'><img src='/images/admin-images/delete.gif' border='0' title='Delete'/></a>&nbsp;&nbsp;
+                    </td>
+
+                </tr>
+                <?
+                    }
+                ?>
+                </table><br />
+            <?= $this->paginationControl($this->paginator, 'Sliding', 'pagination.phtml'); ?><br /><br />
+            <?
+                }
+            ?></div>
+
+    </div>
+    <div class="btm-curve"><img src="/images/admin-images/btm-r-l.gif" align="left" /><img src="/images/admin-images/btm-r-r.gif" align="right" /></div>
+</div>
